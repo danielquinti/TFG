@@ -35,34 +35,54 @@ def none_check(elem):
     return elem is not None
 
 
-def find(l, condition=None):
-    for idx, elem in enumerate(l):
+def find(lst, condition=None):
+    for idx, elem in enumerate(lst):
         if condition(elem):
             return idx
     return None
 
 
-def process_beat(beat):
-    beat_vector = np.zeros(12)
-    duration = 1 / (2 ** int.from_bytes(beat.duration, byteorder='big', signed=True))
-    g_string = find(beat.strings, none_check)
-    if g_string is None or beat.strings[g_string].noteType is None:
-        beat_vector.fill(-1)
-    else:
-        base_note = string_to_base_note(g_string)
-        offset = beat.strings[g_string].noteType[1]
-        final_note = (base_note + offset) % 12
-        beat_vector[final_note] = duration
-    return beat_vector
+# def process_beat(beat):
+#     beat_vector = np.zeros(12)
+#     duration = 1 / (2 ** int.from_bytes(beat.duration, byteorder='big', signed=True))
+#     g_string = find(beat.strings, none_check)
+#     if g_string is None or beat.strings[g_string].noteType is None:
+#         beat_vector.fill(-1)
+#     else:
+#         base_note = string_to_base_note(g_string)
+#         offset = beat.strings[g_string].noteType[1]
+#         final_note = (base_note + offset) % 12
+#         beat_vector[final_note] = duration
+#     return beat_vector
 
 
 def extract_sequence(beat_lists):
     pattern = []
+    chords=0
+    silence = False
     for measure in beat_lists:
         for beat in measure[0]:
-            pattern.append(process_beat(beat))
+            beat_vector = np.zeros(12)
+            duration = 1 / (2 ** int.from_bytes(beat.duration, byteorder='big', signed=True))
+            #TODO change to normal list search
+            g_string = find(beat.strings, none_check)
+            if sum(x is not None for x in beat.strings)>=1:
+                chords+=1
+            if (g_string is None or beat.strings[g_string].noteType is None):
+                if(not silence):
+                    silence = True
+                    beat_vector.fill(-1)
+                    pattern.append(beat_vector)
+            else:
+                silence = False
+                base_note = string_to_base_note(g_string)
+                offset = beat.strings[g_string].noteType[1]
+                final_note = (base_note + offset) % 12
+                beat_vector[final_note] = duration
+                pattern.append(beat_vector)
     pattern = np.asarray(pattern)
-    return pattern
+    return (pattern, chords)
+
 
 def get_files(route):
     file_list = []
@@ -72,8 +92,12 @@ def get_files(route):
             file_list.append(os.path.join(root, file))
     return file_list
 
+
 if __name__ == "__main__":
     path = "../data"
+    sequences = []
+    chords_list=[]
+    new_song = np.full(12, -2)
     samples = get_files(path)
     for sample in samples:
         try:
@@ -83,4 +107,13 @@ if __name__ == "__main__":
         i = find(g.tracks, condition=track_name_match)
         if i is not None:
             g.dropAllTracksBut(i)
-            sequence = extract_sequence(g.beatLists)
+            sequence,num_chords=extract_sequence(g.beatLists)
+            [sequences.append(bt) for bt in sequence]
+            chords_list.append(num_chords)
+            sequences.append(new_song)
+            sequences=np.vstack(sequences)
+            chords_list=np.array(chords_list)
+            os.chdir("../data")
+            np.savetxt("all.csv",sequences,delimiter=",", fmt='%1.2f')
+            np.savetxt("chords.csv",chords_list,delimiter=",", fmt='%4d')
+            exit(0)
