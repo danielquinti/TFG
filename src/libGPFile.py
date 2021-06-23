@@ -37,7 +37,7 @@ class Reader:
         def readString(self):
                 length=int.from_bytes(self.readBytes(1), byteorder="big")
                 s=self.readBytes(length)
-                return s.decode("utf8")
+                return s.decode("ISO-8859-1")
 
         def readInt(self,signed=False):
                 return int.from_bytes(self.readBytes(4), byteorder="little", signed=signed)

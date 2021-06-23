@@ -58,15 +58,11 @@ def process_beat(beat):
 
 def extract_sequence(beat_lists):
     pattern = []
-    beatcount=0
     for measure in beat_lists:
         for beat in measure[0]:
-            #pattern.append(process_beat(beat))
-            beatcount+=1
+            pattern.append(process_beat(beat))
     pattern = np.asarray(pattern)
-    #return pattern
-    return beatcount
-
+    return pattern
 
 def get_files(route):
     file_list = []
