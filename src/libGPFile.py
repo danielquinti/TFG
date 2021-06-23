@@ -19,6 +19,7 @@ class Reader:
         def _readChunk(self):
                 self.chunk=self.file.read(self.CHUNKSIZE)
                 if not self.chunk:
+                        raise EOFError()
                 self.pos=0
         def readBytes(self, nBytes):
                 total=b''
