@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 import re
-
+import time
 import numpy as np
 from libGPFile import *
 
@@ -99,6 +99,7 @@ if __name__ == "__main__":
     chords_list=[]
     new_song = np.full(12, -2)
     samples = get_files(path)
+    start_time = time.time()
     for sample in samples:
         try:
             g = GPFile.read(sample)
@@ -111,9 +112,9 @@ if __name__ == "__main__":
             [sequences.append(bt) for bt in sequence]
             chords_list.append(num_chords)
             sequences.append(new_song)
-            sequences=np.vstack(sequences)
-            chords_list=np.array(chords_list)
-            os.chdir("../data")
-            np.savetxt("all.csv",sequences,delimiter=",", fmt='%1.2f')
-            np.savetxt("chords.csv",chords_list,delimiter=",", fmt='%4d')
-            exit(0)
+    sequences=np.vstack(sequences)
+    chords_list=np.array(chords_list)
+    os.chdir("../data")
+    np.savetxt("all.csv",sequences,delimiter=",", fmt='%1.6f')
+    np.savetxt("chords.csv",chords_list,delimiter=",", fmt='%4d')
+    print("--- %s seconds ---" % (time.time() - start_time))
