@@ -3,8 +3,13 @@ import os
 import re
 import time
 import numpy as np
+import random
+import math
 from libGPFile import *
 
+GOOD_SONGS=6752
+END_OF_SONG = np.full(12, -2)
+source_path = "data\\tabs"
 string_note_map = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
 
 
@@ -67,33 +72,55 @@ def get_files(route):
     file_list = []
     for root, dirs, files in os.walk(route):
         for file in files:
-            # append the file name to the list
             file_list.append(os.path.join(root, file))
     return file_list
 
-
+def fill_lists(sequence,chords, sequence_list,chords_list):
+    [sequence_list.append(bt) for bt in sequence]
+    sequence_list.append(END_OF_SONG)
+    chords_list.append(chords)
+#52552
 if __name__ == "__main__":
-    path = "../data"
-    sequences = []
-    chords_list = []
-    new_song = np.full(12, -2)
-    samples = get_files(path)
+    train=[]
+    dev=[]
+    test=[]
+    train_chords=[]
+    dev_chords=[]
+    test_chords=[]
+
+    dataset =[]
+    samples =get_files(source_path)
+    random.shuffle(samples)
+    counter=0
     start_time = time.time()
     for sample in samples:
+        counter+=1
+        print(counter)
         try:
             g = GPFile.read(sample)
         except EOFError:
             continue
-        i = find(g.tracks, condition=track_name_match)
-        if i is not None:
-            g.dropAllTracksBut(i)
-            sequence, num_chords = extract_sequence(g.beatLists)
-            [sequences.append(bt) for bt in sequence]
-            chords_list.append(num_chords)
-            sequences.append(new_song)
-    sequences = np.vstack(sequences)
-    chords_list = np.array(chords_list)
-    os.chdir("../data")
-    np.savetxt("all.csv", sequences, delimiter=",", fmt='%1.6f')
-    np.savetxt("chords.csv", chords_list, delimiter=",", fmt='%4d')
+        track = find(g.tracks, condition=track_name_match)
+        if track is not None:
+            g.dropAllTracksBut(track)
+            dataset.append(extract_sequence(g.beatLists))
+
+    
+    [fill_lists(sequence,chords,train,train_chords) for sequence,chords in random.sample(dataset[:math.floor(GOOD_SONGS*0.95)],math.floor(GOOD_SONGS*0.90))]
+    [fill_lists(sequence,chords,dev,dev_chords) for sequence,chords in random.sample(dataset[:math.floor(GOOD_SONGS*0.95)],math.floor(GOOD_SONGS*0.05))]
+    [fill_lists(sequence,chords,test,test_chords) for sequence,chords in random.sample(dataset[math.floor(GOOD_SONGS*0.95):],math.floor(GOOD_SONGS*0.05))]
+
+    train = np.vstack(train)
+    dev = np.vstack(dev)
+    test = np.vstack(test)
+    train_chords = np.array(train_chords)
+    dev_chords = np.array(dev_chords)
+    test_chords = np.array(test_chords)
+    os.chdir("data")
+    np.savetxt("train.csv", train, delimiter=",", fmt='%1.6f')
+    np.savetxt("dev.csv", dev, delimiter=",", fmt='%1.6f')
+    np.savetxt("test.csv", test, delimiter=",", fmt='%1.6f')
+    np.savetxt("train_chords.csv", train_chords, delimiter=",", fmt='%1.6f')
+    np.savetxt("dev_chords.csv", dev_chords, delimiter=",", fmt='%1.6f')
+    np.savetxt("test_chords.csv", test_chords, delimiter=",", fmt='%1.6f')
     print("--- %s seconds ---" % (time.time() - start_time))
