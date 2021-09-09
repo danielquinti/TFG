@@ -7,11 +7,11 @@ import random
 import math
 from libGPFile import *
 
-GOOD_SONGS=6752
+GOOD_SONGS = 6752
 END_OF_SONG = np.full(12, -2)
+N = 6
 source_path = "data\\tabs"
 string_note_map = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
-
 
 note_number_map = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#",
                    11: "B"}
@@ -75,26 +75,27 @@ def get_files(route):
             file_list.append(os.path.join(root, file))
     return file_list
 
-def fill_lists(sequence,chords, sequence_list,chords_list):
-    [sequence_list.append(bt) for bt in sequence]
-    sequence_list.append(END_OF_SONG)
-    chords_list.append(chords)
-#52552
-if __name__ == "__main__":
-    train=[]
-    dev=[]
-    test=[]
-    train_chords=[]
-    dev_chords=[]
-    test_chords=[]
 
-    dataset =[]
-    samples =get_files(source_path)
+def fill_lists(sequence, chords, sequence_list, chords_list):
+    [sequence_list.append(bt) for bt in sequence[-N:]]
+    # sequence_list.append(END_OF_SONG)
+    chords_list.append(chords)
+
+
+def generate_and_split():
+    train = []
+    dev = []
+    test = []
+    train_chords = []
+    dev_chords = []
+    test_chords = []
+    dataset = []
+    samples = get_files(source_path)
     random.shuffle(samples)
-    counter=0
+    counter = 0
     start_time = time.time()
     for sample in samples:
-        counter+=1
+        counter += 1
         print(counter)
         try:
             g = GPFile.read(sample)
@@ -105,10 +106,12 @@ if __name__ == "__main__":
             g.dropAllTracksBut(track)
             dataset.append(extract_sequence(g.beatLists))
 
-    
-    [fill_lists(sequence,chords,train,train_chords) for sequence,chords in random.sample(dataset[:math.floor(GOOD_SONGS*0.95)],math.floor(GOOD_SONGS*0.90))]
-    [fill_lists(sequence,chords,dev,dev_chords) for sequence,chords in random.sample(dataset[:math.floor(GOOD_SONGS*0.95)],math.floor(GOOD_SONGS*0.05))]
-    [fill_lists(sequence,chords,test,test_chords) for sequence,chords in random.sample(dataset[math.floor(GOOD_SONGS*0.95):],math.floor(GOOD_SONGS*0.05))]
+    [fill_lists(sequence, chords, train, train_chords) for sequence, chords in
+     random.sample(dataset[:math.floor(GOOD_SONGS * 0.9)], math.floor(GOOD_SONGS * 0.80))]
+    [fill_lists(sequence, chords, dev, dev_chords) for sequence, chords in
+     random.sample(dataset[:math.floor(GOOD_SONGS * 0.9)], math.floor(GOOD_SONGS * 0.10))]
+    [fill_lists(sequence, chords, test, test_chords) for sequence, chords in
+     random.sample(dataset[math.floor(GOOD_SONGS * 0.9):], math.floor(GOOD_SONGS * 0.10))]
 
     train = np.vstack(train)
     dev = np.vstack(dev)
@@ -124,3 +127,7 @@ if __name__ == "__main__":
     np.savetxt("dev_chords.csv", dev_chords, delimiter=",", fmt='%1.6f')
     np.savetxt("test_chords.csv", test_chords, delimiter=",", fmt='%1.6f')
     print("--- %s seconds ---" % (time.time() - start_time))
+
+
+if __name__ == "__main__":
+    generate_and_split()
