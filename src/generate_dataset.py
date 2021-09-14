@@ -107,11 +107,11 @@ def generate_and_split():
             dataset.append(extract_sequence(g.beatLists))
 
     [fill_lists(sequence, chords, train, train_chords) for sequence, chords in
-     random.sample(dataset[:math.floor(GOOD_SONGS * 0.9)], math.floor(GOOD_SONGS * 0.80))]
+     random.sample(dataset[:math.floor(GOOD_SONGS * 0.8)], math.floor(GOOD_SONGS * 0.64))]
     [fill_lists(sequence, chords, dev, dev_chords) for sequence, chords in
-     random.sample(dataset[:math.floor(GOOD_SONGS * 0.9)], math.floor(GOOD_SONGS * 0.10))]
+     random.sample(dataset[:math.floor(GOOD_SONGS * 0.8)], math.floor(GOOD_SONGS * 0.16))]
     [fill_lists(sequence, chords, test, test_chords) for sequence, chords in
-     random.sample(dataset[math.floor(GOOD_SONGS * 0.9):], math.floor(GOOD_SONGS * 0.10))]
+     random.sample(dataset[math.floor(GOOD_SONGS * 0.9):], math.floor(GOOD_SONGS * 0.2))]
 
     train = np.vstack(train)
     dev = np.vstack(dev)
