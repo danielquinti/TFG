@@ -13,9 +13,9 @@ class WindowGenerator():
         self.inputs=[]
         self.labels=[]
         self.train_inputs=[]
-        self.train_labels=[]
         self.test_inputs=[]
-        self.test_labels=[]
+        self.train_labels={"notes":[],"duration":[]}
+        self.test_labels={"notes":[],"duration":[]}
         self.generate_window()
         self.split()
 
@@ -30,10 +30,16 @@ class WindowGenerator():
         contents=np.loadtxt(file_name)
         contents=contents[:(contents.shape[0]//self.window_width)*self.window_width]
         [self.inputs.append([contents[i+self.window_width*j] for i in range(self.input_width)]) for j in range(contents.shape[0]//self.window_width)]
-        [self.labels.append([contents[i+self.window_width*j-1] for i in range(self.label_width)]) for j in range(1,math.ceil(contents.shape[0]/self.window_width)+1)]
+        # [self.labels.append([contents[i+self.window_width*j-2] for i in range(self.label_width)]) for j in range(1,math.ceil(contents.shape[0]/self.window_width)+1)]
+        for j in range(1, math.ceil(contents.shape[0] / self.window_width) + 1):
+            for i in range(self.label_width):
+                self.labels.append(Label(np.array(contents[i+self.window_width*j-self.label_width])))
+        # for j in range(1, math.ceil(contents.shape[0] / self.window_width) + 1):
+        #     for i in range(self.label_width):
+        #         print(i+self.window_width*j-self.label_width)
 
     def generate_window(self):
-        file_names=self.get_file_list("data\\dump")
+        file_names=self.get_file_list("data\\dump1")
         for file_name in file_names:
             self.crawl_file(file_name)
         self.inputs=random.sample(self.inputs,len(self.inputs))
@@ -41,30 +47,19 @@ class WindowGenerator():
 
     def split(self):
         self.train_inputs=self.inputs[:math.floor(((1-self.test_rate)*len(self.inputs)))]
-        self.train_labels=self.labels[:math.floor(((1-self.test_rate)*len(self.labels)))]
         self.test_inputs=self.inputs[math.ceil(((1-self.test_rate)*len(self.inputs))):]
-        self.test_labels=self.labels[math.ceil(((1-self.test_rate)*len(self.inputs))):]
-        aux=[]
-        [[aux.append(beat) for beat in sample] for sample in self.train_inputs]
-        self.train_inputs=np.vstack(self.train_inputs)
-        aux=[]
-        [[aux.append(beat) for beat in sample] for sample in self.train_labels]
-        self.train_labels=np.vstack(self.train_labels)
-        aux=[]
-        [[aux.append(beat) for beat in sample] for sample in self.test_inputs]
-        self.test_inputs=np.vstack(self.test_inputs)
-        aux=[]
-        [[aux.append(beat) for beat in sample] for sample in self.test_labels]
-        self.test_labels=np.vstack(self.test_labels)
+        self.train_inputs=np.array(self.train_inputs)
+        self.test_inputs=np.array(self.test_inputs)
 
-        # aux=[]
-        # [[aux.append(beat) for beat in sample] for sample in self.train_labels]
-        # self.train_labels=np.vstack(self.train_labels)
-        #
-        # aux=[]
-        # [[aux.append(beat) for beat in sample] for sample in self.test_inputs]
-        # self.test_inputs=np.vstack(self.test_inputs)
-        #
-        # aux=[]
-        # [[aux.append(beat) for beat in sample] for sample in self.test_labels]
-        # self.test_labels=np.vstack(self.test_labels)
+        aux=self.labels[:math.floor(((1-self.test_rate)*len(self.labels)))]
+        self.train_labels["notes"]=np.array([[label.notes] for label in aux])
+        self.train_labels["duration"]=np.array([label.duration for label in aux])
+
+        aux=self.labels[math.ceil(((1-self.test_rate)*len(self.labels))):]
+        self.test_labels["notes"]=np.array([[label.notes] for label in aux])
+        self.test_labels["duration"]=np.array([label.duration for label in aux])
+
+class Label():
+    def __init__(self,beat):
+        self.notes=beat
+        self.duration=np.max(beat)

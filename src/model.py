@@ -8,6 +8,7 @@ import IPython.display
 import pandas as pd
 from WindowGenerator import *
 import tensorflow as tf
+import tensorflow.keras as keras
 from tensorflow.keras import layers
 from sklearn.metrics import confusion_matrix
 import itertools
@@ -15,8 +16,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 N = 6
-input_size = 12
-output_size = 12
+input_size = 13
+output_size = 13
 seq_length = N - 1
 batch_size = 32
 MAX_EPOCHS =30
@@ -79,47 +80,40 @@ def compile_and_fit(model, window, patience=4):
 # np.savetxt("train_labels.csv", dataset.train_labels, fmt='%1.6f')
 # np.savetxt("test_inputs.csv", dataset.test_inputs, fmt='%1.6f')
 # np.savetxt("test_labels.csv", dataset.test_labels, fmt='%1.6f')
+dataset=WindowGenerator(5,1,0.2)
 
-train=np.loadtxt("data\\test_labels.csv")
-plot_data=[[np.count_nonzero(train[:,i]==math.pow(2,-e)) for i in range(13)]for e in range(7)]
-cmap = mpl.colors.LinearSegmentedColormap.from_list('my_colormap',
-                                           ['red','blue'],
-                                           800)
-img = plt.imshow(plot_data,interpolation='nearest',
-                    cmap = cmap,origin="lower")# y=[np.count_nonzero(train[:,i]) for i in range(13)]
-plt.show()
-# x=np.arange(0,13,1)
-# fig, ax = plt.subplots()
-# ax.plot(x, y)
-# plt.show()
-# ax.set(xlabel='notes', ylabel='frequency',
-#        title='About as simple as it gets, folks')
-# ax.grid()
-#
-# plt.show()
+# create and fit the LSTM network
+# model = keras.Sequential()
+# model.add(layers.LSTM(4, input_shape=(5, 13)))
+# model.add(layers.Dense(1))
+# model.compile(loss='mean_squared_error', optimizer='adam')
+# model.fit(dataset.train_inputs, dataset.train_labels["notes"], epochs=100, batch_size=1, verbose=2)
 
+inputs = layers.Input((5,13))
+x = layers.Dense(13, activation='relu')(inputs)
+x = layers.Dense(13, activation='relu')(x)
+output1 = layers.Dense(13,activation='softmax',name='notes')(x)# cross entropy
+output2 = layers.Dense(1, activation='relu',name='duration')(x)#mse
+model = keras.Model(inputs=inputs, outputs=[output1, output2])
+model.compile(loss='mse',
+              optimizer='adam',
+              metrics={"notes":keras.metrics.MeanAbsoluteError(),
+              'duration': keras.metrics.MeanAbsoluteError()})
 
-# prueba = test.to_numpy()
-# prueba_x = prueba[np.mod(np.arange(np.shape(prueba)[0]), 6) != 0]
-# prueba_y = prueba[np.mod(np.arange(np.shape(prueba)[0]), 6) == 0]
-# prueba_x = prueba_x.reshape(np.shape(prueba_y)[0], 5, 12)
-# multi_step_dense = tf.keras.Sequential([
-#     # tf.keras.layers.LSTM(12, return_sequences=True),
-#     # tf.keras.layers.Dense(units=1)
-#     layers.Flatten(),
-#     tf.keras.layers.Dense(units=12, activation='relu'),
-#     tf.keras.layers.Dense(units=12, activation='relu'),
-#     tf.keras.layers.Dense(units=12),
-#     tf.keras.layers.Reshape([1, -1])
-# ])
-#
-# compile_and_fit(multi_step_dense, conv_window)
-# # print(multi_step_dense.predict(train,verbose=0))
-# predicciones = multi_step_dense.predict(prueba_x, verbose=0)
-#
-#
-# predicciones=np.argmax(predicciones,axis=2).flatten()
-# prueba_y=np.argmax(prueba_y,axis=1)
-# cm = confusion_matrix(y_true=prueba_y, y_pred=predicciones)
-# cm_plot_labels=["0","1","2","3","4","5","6","7","8","9","10","11"]
-# plot_confusion_matrix(cm,cm_plot_labels)
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+                                                  patience=4,
+                                                  mode='min')
+
+history = model.fit(x=dataset.train_inputs,
+                    y={'notes': dataset.train_labels["notes"]
+                        , 'duration':dataset.train_labels["duration"]
+                    },
+                    epochs=MAX_EPOCHS, batch_size=batch_size,verbose=2,shuffle=False,callbacks=[early_stopping],validation_split=0.2)
+#TODO las predicciones tienen forma 5*13
+print("done")
+predicciones=model.predict(dataset.test_inputs,verbose=0)
+obtained=np.argmax(predicciones[0],axis=1).flatten()
+expected=np.argmax(dataset.test_labels["notes"],axis=2).flatten()
+cm = confusion_matrix(y_true=expected, y_pred=obtained)
+cm_plot_labels=["0","1","2","3","4","5","6","7","8","9","10","11,12"]
+plot_confusion_matrix(cm,cm_plot_labels)
