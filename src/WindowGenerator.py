@@ -39,7 +39,7 @@ class WindowGenerator():
         #         print(i+self.window_width*j-self.label_width)
 
     def generate_window(self):
-        file_names=self.get_file_list("data\\dump1")
+        file_names=self.get_file_list("data\\dump")
         for file_name in file_names:
             self.crawl_file(file_name)
         self.inputs=random.sample(self.inputs,len(self.inputs))

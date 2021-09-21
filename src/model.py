@@ -1,26 +1,21 @@
 #!/usr/bin/python3
-import math
-import os
-import numpy as np
-import IPython
-import time
-import IPython.display
-import pandas as pd
-from WindowGenerator import *
+import itertools
+
+import matplotlib.pyplot as plt
 import tensorflow as tf
 import tensorflow.keras as keras
-from tensorflow.keras import layers
 from sklearn.metrics import confusion_matrix
-import itertools
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+from tensorflow.keras import layers
+
+from WindowGenerator import *
 
 N = 6
 input_size = 13
 output_size = 13
 seq_length = N - 1
 batch_size = 32
-MAX_EPOCHS =30
+MAX_EPOCHS = 5
+
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -56,64 +51,55 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
     plt.show()
 
-def compile_and_fit(model, window, patience=4):
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                      patience=patience,
-                                                      mode='min')
 
-    model.compile(loss=tf.losses.MeanSquaredError(),
-                  optimizer=tf.optimizers.Adam(),
-                  metrics=[tf.metrics.MeanAbsoluteError()])
+dataset = WindowGenerator(5, 1, 0.2)
 
-    history = model.fit(window.train, epochs=MAX_EPOCHS,
-                        validation_data=window.val,
-                        batch_size=batch_size,
-                        callbacks=[early_stopping],shuffle=False)
-    return history
-
-# start=time.time()
-# print(time.time()-start)
-
-# dataset = WindowGenerator(5, 1,0.2)
-# os.chdir("data")
-# np.savetxt("train_inputs.csv", dataset.train_inputs, fmt='%1.6f')
-# np.savetxt("train_labels.csv", dataset.train_labels, fmt='%1.6f')
-# np.savetxt("test_inputs.csv", dataset.test_inputs, fmt='%1.6f')
-# np.savetxt("test_labels.csv", dataset.test_labels, fmt='%1.6f')
-dataset=WindowGenerator(5,1,0.2)
-
-# create and fit the LSTM network
-# model = keras.Sequential()
-# model.add(layers.LSTM(4, input_shape=(5, 13)))
-# model.add(layers.Dense(1))
-# model.compile(loss='mean_squared_error', optimizer='adam')
-# model.fit(dataset.train_inputs, dataset.train_labels["notes"], epochs=100, batch_size=1, verbose=2)
-
-inputs = layers.Input((5,13))
-x = layers.Dense(13, activation='relu')(inputs)
-x = layers.Dense(13, activation='relu')(x)
-output1 = layers.Dense(13,activation='softmax',name='notes')(x)# cross entropy
-output2 = layers.Dense(1, activation='relu',name='duration')(x)#mse
+inputs = layers.Input((5, 13))
+x = layers.LSTM(65, activation='relu', input_shape=(5, 13))(inputs)
+output1 = layers.Dense(13, activation='softmax', name='notes')(x)  # cross entropy
+output2 = layers.Dense(1, activation='relu', name='duration')(x)  # mse
 model = keras.Model(inputs=inputs, outputs=[output1, output2])
-model.compile(loss='mse',
+model.compile(loss="mse",
               optimizer='adam',
-              metrics={"notes":keras.metrics.MeanAbsoluteError(),
-              'duration': keras.metrics.MeanAbsoluteError()})
+              metrics={"notes": keras.metrics.MeanAbsoluteError(),
+                       'duration': keras.metrics.MeanAbsoluteError()
+                       })
 
 early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                  patience=4,
+                                                  patience=2,
                                                   mode='min')
 
 history = model.fit(x=dataset.train_inputs,
-                    y={'notes': dataset.train_labels["notes"]
-                        , 'duration':dataset.train_labels["duration"]
-                    },
-                    epochs=MAX_EPOCHS, batch_size=batch_size,verbose=2,shuffle=False,callbacks=[early_stopping],validation_split=0.2)
-#TODO las predicciones tienen forma 5*13
+                    y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
+                    epochs=MAX_EPOCHS, batch_size=batch_size, verbose=2, shuffle=False, callbacks=[early_stopping],
+                    validation_split=0.2)
 print("done")
-predicciones=model.predict(dataset.test_inputs,verbose=0)
-obtained=np.argmax(predicciones[0],axis=1).flatten()
-expected=np.argmax(dataset.test_labels["notes"],axis=2).flatten()
-cm = confusion_matrix(y_true=expected, y_pred=obtained)
-cm_plot_labels=["0","1","2","3","4","5","6","7","8","9","10","11,12"]
-plot_confusion_matrix(cm,cm_plot_labels)
+predicciones = model.predict(dataset.test_inputs, verbose=0)
+obtained = np.argmax(predicciones[0], axis=1).flatten()
+expected = np.argmax(dataset.test_labels["notes"], axis=2).flatten()
+matrix = confusion_matrix(y_true=expected, y_pred=obtained)
+cm_plot_labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11,12"]
+plot_confusion_matrix(matrix, cm_plot_labels)
+
+predicciones = model.predict(dataset.test_inputs, verbose=0)
+obtained = np.round(np.log2(predicciones[1]))
+expected = np.round(np.log2(dataset.test_labels["duration"])).flatten()
+matrix = confusion_matrix(y_true=expected, y_pred=obtained)
+cm_plot_labels = ["whole", "half", "quarter", "eighth", "sixteenth", "thirty-second", "sixty-fourth",
+                  "hundred-twenty-eighth"]
+plot_confusion_matrix(matrix, cm_plot_labels)
+
+# def compile_and_fit(model, window, patience=4):
+#     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+#                                                       patience=patience,
+#                                                       mode='min')
+#
+#     model.compile(loss=tf.losses.MeanSquaredError(),
+#                   optimizer=tf.optimizers.Adam(),
+#                   metrics=[tf.metrics.MeanAbsoluteError()])
+#
+#     history = model.fit(window.train, epochs=MAX_EPOCHS,
+#                         validation_data=window.val,
+#                         batch_size=batch_size,
+#                         callbacks=[early_stopping], shuffle=False)
+#     return history
