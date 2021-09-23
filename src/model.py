@@ -61,7 +61,9 @@ def compile_and_train(dataset):
     model.compile(
         loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
         optimizer='adam',
-        metrics=dict(notes=keras.metrics.MeanAbsoluteError(), duration=keras.metrics.MeanAbsoluteError()))
+        metrics=dict(notes=keras.metrics.MeanAbsoluteError(), duration=keras.metrics.MeanAbsoluteError()),
+        loss_weights=dict(notes=1, duration=0.01)
+    )
 
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=2,
@@ -75,11 +77,10 @@ def compile_and_train(dataset):
                      shuffle=False,
                      # callbacks=[early_stopping],
                      # validation_split=0.2
-                     loss_weights=dict(notes=1, duration=0.01)
                      )
 
 
-def analyze_results(model):
+def analyse_results(model):
     predictions = model.predict(dataset.test_inputs, verbose=0)
     obtained = np.argmax(predictions[0], axis=1).flatten()
     expected = np.argmax(dataset.test_labels["notes"], axis=2).flatten()
@@ -95,10 +96,12 @@ def analyze_results(model):
                       "hundred-twenty-eighth"]
     plot_confusion_matrix(matrix, cm_plot_labels)
 
-
-if __name__ == "__main__":
-    dataset = DatasetFromCSV(5, 1)
+def analyse_dataset(dataset):
     notes=dataset.test_inputs
     notes = np.argmax(notes,axis=2).flatten()
     plt.hist(notes, bins=13)
     plt.show()
+
+if __name__ == "__main__":
+    dataset = DatasetFromCSV(5, 1)
+    compile_and_train(dataset)
