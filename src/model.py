@@ -68,22 +68,21 @@ def compile_and_train(dataset):
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                       patience=2,
                                                       mode='min')
-
-    return model.fit(x=dataset.train_inputs,
+    model.fit(x=dataset.train_inputs,
                      y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
                      epochs=MAX_EPOCHS,
                      batch_size=batch_size,
                      verbose=2,
                      shuffle=False,
-                     # callbacks=[early_stopping],
-                     # validation_split=0.2
+                     callbacks=[early_stopping],
+                     validation_split=0.2
                      )
-
+    return model
 
 def analyse_results(model):
     predictions = model.predict(dataset.test_inputs, verbose=0)
     obtained = np.argmax(predictions[0], axis=1).flatten()
-    expected = np.argmax(dataset.test_labels["notes"], axis=2).flatten()
+    expected = np.argmax(dataset.test_labels["notes"], axis=1).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
     cm_plot_labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11,12"]
     plot_confusion_matrix(matrix, cm_plot_labels)
@@ -104,4 +103,5 @@ def analyse_dataset(dataset):
 
 if __name__ == "__main__":
     dataset = DatasetFromCSV(5, 1)
-    compile_and_train(dataset)
+    model=compile_and_train(dataset)
+    analyse_results(model)

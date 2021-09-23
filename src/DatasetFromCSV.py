@@ -38,7 +38,7 @@ class DatasetFromCSV:
         labels = random.sample(labels, len(labels))
         labels = \
             {
-                "notes": np.array([[label.notes] for label in labels]),
+                "notes": np.array([label.notes for label in labels]),
                 "duration": np.array([label.duration for label in labels]),
             }
 
