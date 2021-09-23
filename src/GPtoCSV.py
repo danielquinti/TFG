@@ -1,21 +1,18 @@
 #!/usr/bin/python3
-import os
-import re
-import time
-import numpy as np
-import json
-import random
 import math
+import os
+import random
+import re
+
+import numpy as np
+
 from libGPFile import *
 
-GOOD_SONGS = 6752
-END_OF_SONG = np.full(12, -2)
-N = 6
-SILENCE_THRESHOLD = 50
-MINIMUM_TIMESTEPS = 10
+SILENCE_THRESHOLD = 8
+MINIMUM_TIMESTEPS = 6
 source_path = "C:\\Users\\danie\\Downloads\\60000Tabs"
 string_note_map = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
-
+test_rate = 0.1
 note_number_map = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#",
                    11: "B"}
 
@@ -44,7 +41,6 @@ def find(lst, condition=None):
 
 
 def process_song(beat_lists, song_name):
-    chords = 0
     silence = 0
     part = 0
     contents = []
@@ -52,19 +48,16 @@ def process_song(beat_lists, song_name):
         for beat in measure[0]:
             beat_vector = np.zeros(13)
             duration = 1 / (2 ** (int.from_bytes(beat.duration, byteorder='big', signed=True) + 2))
-            # TODO change to normal list search
-            g_string = find(beat.strings, none_check)  # acorde
-            if sum(x is not None for x in beat.strings) >= 1:
-                chords += 1
-            if g_string is None or beat.strings[g_string].noteType is None:  # silencio
+            if sum(x is not None for x in beat.strings) > 1:  # chord
+                return
+            g_string = find(beat.strings, none_check)
+            if g_string is None or beat.strings[g_string].noteType is None:  # rest
                 silence += 1
-            # TODO hay archivos con notas y silencios
             elif silence > SILENCE_THRESHOLD:
-                if len(contents)>=MINIMUM_TIMESTEPS:
-                    np.savetxt(song_name + "_" + str(part) + ".csv", np.asarray(contents), fmt='%1.6f')
-                    chords_dict[song_name + "_" + str(part)] = chords
+                silence = 0
+                if len(contents) >= MINIMUM_TIMESTEPS:
+                    np.savetxt((song_name + "-" + str(part) + ".csv"), np.asarray(contents), fmt='%1.6f')
                     part += 1
-                chords = 0
 
                 base_note = string_to_base_note(g_string)
                 offset = beat.strings[g_string].noteType[1]
@@ -73,9 +66,8 @@ def process_song(beat_lists, song_name):
                 contents = [beat_vector]
 
             elif silence > 0:
-                #TODO es duration o 1?
-                beat_vector[-1]=duration
-                [contents.append(beat_vector) for i in range(silence)]
+                beat_vector[-1] = duration
+                [contents.append(beat_vector) for _ in range(silence)]
                 base_note = string_to_base_note(g_string)
                 offset = beat.strings[g_string].noteType[1]
                 note = (base_note + offset) % 12
@@ -89,8 +81,9 @@ def process_song(beat_lists, song_name):
                 note = (base_note + offset) % 12
                 beat_vector[note] = duration
                 contents.append(beat_vector)
-    if len(contents)>=MINIMUM_TIMESTEPS:
-        np.savetxt(song_name + "_" + str(part+1) + ".csv", np.asarray(contents), fmt='%1.6f')
+    if len(contents) >= MINIMUM_TIMESTEPS:
+        np.savetxt(song_name + "-" + str(part) + ".csv", np.asarray(contents), fmt='%1.6f')
+
 
 def get_files(route):
     file_list = []
@@ -100,13 +93,22 @@ def get_files(route):
     return file_list
 
 
-def generate():
+def convert():
     file_names = get_files(source_path)
-    os.chdir("data\\dump")
-    counter=1
-    for file_name in file_names:
-        counter+=1
-        print(counter)
+    # GPFile-level shuffle
+    file_names = random.sample(file_names, len(file_names))
+    # GPFile-level split
+    train_file_names = file_names[:math.floor(len(file_names) * (1 - test_rate))]
+    test_file_names = file_names[math.floor(len(file_names) * (1 - test_rate)):]
+    os.chdir("data\\test")
+    process_songs(test_file_names)
+    os.chdir("..\\train")
+    process_songs(train_file_names)
+
+
+def process_songs(name_list):
+    for i, file_name in enumerate(name_list):
+        print(i)
         try:
             g = GPFile.read(file_name)
         except EOFError:
@@ -115,11 +117,7 @@ def generate():
         if track is not None:
             g.dropAllTracksBut(track)
             process_song(g.beatLists, file_name.split("\\")[-1].split(".")[0])
-    os("..")
-    with open('chords.json', 'w') as fp:
-        json.dump(chords_dict, fp)
 
 
-chords_dict = dict()
 if __name__ == "__main__":
-    generate()
+    convert()
