@@ -86,8 +86,8 @@ def analyse_results(model):
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
     cm_plot_labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11,12"]
     plot_confusion_matrix(matrix, cm_plot_labels)
-
-    predictions = model.predict(dataset.test_inputs, verbose=0)
+    #TODO 4-biased note predictions
+    #TODO 0-biased duration predictions
     obtained = np.round(np.log2(predictions[1]))
     expected = np.round(np.log2(dataset.test_labels["duration"])).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
