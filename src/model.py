@@ -9,12 +9,8 @@ from tensorflow.keras import layers
 
 from DatasetFromCSV import *
 
-N = 6
-input_size = 13
-output_size = 13
-seq_length = N - 1
-batch_size = 32
-MAX_EPOCHS = 5
+BATCH_SIZE = 32
+MAX_EPOCHS = 10
 
 
 def plot_confusion_matrix(cm, classes,
@@ -56,7 +52,7 @@ def compile_and_train(dataset):
     inputs = layers.Input((5, 13))
     x = layers.LSTM(65, activation='relu', input_shape=(5, 13))(inputs)
     output1 = layers.Dense(13, activation='softmax', name='notes')(x)  # cross entropy
-    output2 = layers.Dense(1, activation='relu', name='duration')(x)  # mse
+    output2 = layers.Dense(1, activation='sigmoid', name='duration')(x)  # mse
     model = keras.Model(inputs=inputs, outputs=[output1, output2])
     model.compile(
         loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
@@ -69,39 +65,37 @@ def compile_and_train(dataset):
                                                       patience=2,
                                                       mode='min')
     model.fit(x=dataset.train_inputs,
-                     y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
-                     epochs=MAX_EPOCHS,
-                     batch_size=batch_size,
-                     verbose=2,
-                     shuffle=False,
-                     callbacks=[early_stopping],
-                     validation_split=0.2
-                     )
+              y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
+              epochs=MAX_EPOCHS,
+              batch_size=BATCH_SIZE,
+              verbose=2,
+              shuffle=True,
+              callbacks=[early_stopping],
+              validation_split=0.2
+              )
     return model
 
+
 def analyse_results(model):
+
     predictions = model.predict(dataset.test_inputs, verbose=0)
+
+    # notes confusion matrix
     obtained = np.argmax(predictions[0], axis=1).flatten()
     expected = np.argmax(dataset.test_labels["notes"], axis=1).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
-    cm_plot_labels = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11,12"]
+    cm_plot_labels = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"]
     plot_confusion_matrix(matrix, cm_plot_labels)
-    #TODO 4-biased note predictions
-    #TODO 0-biased duration predictions
+
+    # duration confusion matrix
     obtained = np.round(np.log2(predictions[1]))
     expected = np.round(np.log2(dataset.test_labels["duration"])).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
-    cm_plot_labels = ["whole", "half", "quarter", "eighth", "sixteenth", "thirty-second", "sixty-fourth",
-                      "hundred-twenty-eighth"]
+    cm_plot_labels = ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
     plot_confusion_matrix(matrix, cm_plot_labels)
 
-def analyse_dataset(dataset):
-    notes=dataset.test_inputs
-    notes = np.argmax(notes,axis=2).flatten()
-    plt.hist(notes, bins=13)
-    plt.show()
 
 if __name__ == "__main__":
     dataset = DatasetFromCSV(5, 1)
-    model=compile_and_train(dataset)
+    model = compile_and_train(dataset)
     analyse_results(model)
