@@ -1,0 +1,31 @@
+Epoch 1/10
+4967/4967 - 77s - loss: 2.1714 - notes_loss: 2.1712 - duration_loss: 0.0108 - notes_mean_absolute_error: 0.1300 - duration_mean_absolute_error: 0.0549 - val_loss: 2.1323 - val_notes_loss: 2.1322 - val_duration_loss: 0.0075 - val_notes_mean_absolute_error: 0.1292 - val_duration_mean_absolute_error: 0.0401
+Epoch 2/10
+4967/4967 - 76s - loss: 2.0464 - notes_loss: 2.0463 - duration_loss: 0.0066 - notes_mean_absolute_error: 0.1251 - duration_mean_absolute_error: 0.0392 - val_loss: 2.0854 - val_notes_loss: 2.0853 - val_duration_loss: 0.0072 - val_notes_mean_absolute_error: 0.1266 - val_duration_mean_absolute_error: 0.0403
+Epoch 3/10
+4967/4967 - 76s - loss: 1.9980 - notes_loss: 1.9979 - duration_loss: 0.0064 - notes_mean_absolute_error: 0.1232 - duration_mean_absolute_error: 0.0382 - val_loss: 2.0915 - val_notes_loss: 2.0914 - val_duration_loss: 0.0072 - val_notes_mean_absolute_error: 0.1254 - val_duration_mean_absolute_error: 0.0362
+Epoch 4/10
+4967/4967 - 75s - loss: 1.9590 - notes_loss: 1.9589 - duration_loss: 0.0064 - notes_mean_absolute_error: 0.1216 - duration_mean_absolute_error: 0.0388 - val_loss: 2.0905 - val_notes_loss: 2.0904 - val_duration_loss: 0.0072 - val_notes_mean_absolute_error: 0.1250 - val_duration_mean_absolute_error: 0.0415
+Confusion matrix, without normalization
+[[ 354   19  213   90  154  198   25  256   74  303  117   93  203]
+ [  43  216   15   69  134   15  217   17   62  131   24  104  134]
+ [ 200   58  557   35  474   73   66  271   22  519  111   15  207]
+ [  76   65   23   83   74   72  110   76   79   39   72   93  114]
+ [  91   84  295   37  958   85  204  177   26  230    7  128  180]
+ [ 212   18  206   91  161  530   80  211   88  221  203   24  169]
+ [  30  143   35   42  373   53 1173  159   75  126   30   77   91]
+ [ 173   25  189   57  219  282  189  807  105  298   80   47  196]
+ [ 159   79   19  159  144  117  313  137  317  115   32   73   55]
+ [ 110   94  274   20  512   46  166  271   70 1308   41  106  425]
+ [ 175   35   65   48   73  159   77   79   43  149  225   35   54]
+ [ 157  107   99   66  484   10  335  140   42  452   26  370  271]
+ [  53  140   76   11   68   16   29   38   14  142    7    6 1125]]
+Confusion matrix, without normalization
+[[   56   199    35     7     0     0]
+ [    7  3873  2173   180     3     0]
+ [    2  1125 16746   956    36     0]
+ [    0    59  1012   420    19     0]
+ [    0    12   130   118    19     1]
+ [    0     2    52    57    12     6]]
+
+Process finished with exit code 0
