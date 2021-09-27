@@ -10,7 +10,7 @@ from tensorflow.keras import layers
 from DatasetFromCSV import *
 
 BATCH_SIZE = 32
-MAX_EPOCHS = 10
+MAX_EPOCHS = 100
 
 
 def plot_confusion_matrix(cm, classes,
@@ -61,16 +61,12 @@ def compile_and_train(dataset):
         loss_weights=dict(notes=1, duration=0.01)
     )
 
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
-                                                      patience=2,
-                                                      mode='min')
     model.fit(x=dataset.train_inputs,
               y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
               epochs=MAX_EPOCHS,
               batch_size=BATCH_SIZE,
               verbose=2,
               shuffle=True,
-              callbacks=[early_stopping],
               validation_split=0.2
               )
     return model
