@@ -10,8 +10,8 @@ from tensorflow.keras import layers
 from DatasetFromCSV import *
 
 BATCH_SIZE = 32
-MAX_EPOCHS = 100
-
+MAX_EPOCHS = 1
+dummy = True
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -48,7 +48,7 @@ def plot_confusion_matrix(cm, classes,
     plt.show()
 
 
-def compile_and_train(dataset):
+def compile_and_train_lstm(dataset):
     inputs = layers.Input((5, 13))
     x = layers.LSTM(65, activation='relu', input_shape=(5, 13))(inputs)
     output1 = layers.Dense(13, activation='softmax', name='notes')(x)  # cross entropy
@@ -57,7 +57,30 @@ def compile_and_train(dataset):
     model.compile(
         loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
         optimizer='adam',
-        metrics=dict(notes=keras.metrics.MeanAbsoluteError(), duration=keras.metrics.MeanAbsoluteError()),
+        metrics=dict(notes=tf.keras.metrics.Accuracy(), duration=keras.metrics.MeanAbsoluteError()),
+        loss_weights=dict(notes=1, duration=0.01)
+    )
+
+    model.fit(x=dataset.train_inputs,
+              y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
+              epochs=MAX_EPOCHS,
+              batch_size=BATCH_SIZE,
+              verbose=2,
+              shuffle=True,
+              validation_split=0.2
+              )
+    return model
+
+def compile_and_train_ffwd(dataset):
+    inputs = layers.Input((5, 13))
+    x = layers.Dense(65, activation='relu')(inputs)
+    output1 = layers.Dense(13, activation='softmax', name='notes')(x)  # cross entropy
+    output2 = layers.Dense(1, activation='sigmoid', name='duration')(x)  # mse
+    model = keras.Model(inputs=inputs, outputs=[output1, output2])
+    model.compile(
+        loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
+        optimizer='adam',
+        metrics=dict(notes=tf.keras.metrics.Accuracy(), duration=keras.metrics.MeanAbsoluteError()),
         loss_weights=dict(notes=1, duration=0.01)
     )
 
@@ -72,7 +95,7 @@ def compile_and_train(dataset):
     return model
 
 
-def analyse_results(model):
+def build_and_plot_cm(model):
 
     predictions = model.predict(dataset.test_inputs, verbose=0)
 
@@ -92,6 +115,7 @@ def analyse_results(model):
 
 
 if __name__ == "__main__":
-    dataset = DatasetFromCSV(5, 1)
-    model = compile_and_train(dataset)
-    analyse_results(model)
+    dataset = DatasetFromCSV(5, 1, dummy)
+    baseline = compile_and_train_ffwd(dataset)
+    lstm = compile_and_train_lstm(dataset)
+    build_and_plot_cm(baseline)
