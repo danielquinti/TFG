@@ -6,12 +6,9 @@ import tensorflow as tf
 import tensorflow.keras as keras
 from sklearn.metrics import confusion_matrix
 from tensorflow.keras import layers
-
+import time
 from DatasetFromCSV import *
 
-BATCH_SIZE = 32
-MAX_EPOCHS = 1
-dummy = True
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -73,14 +70,17 @@ def compile_and_train_lstm(dataset):
 
 def compile_and_train_ffwd(dataset):
     inputs = layers.Input((5, 13))
-    x = layers.Dense(65, activation='relu')(inputs)
+    x = layers.Flatten()(inputs)
+    x = layers.Dense(40, activation='relu')(x)
+    x = layers.Dense(30, activation='relu')(x)
+    x = layers.Dense(20, activation='relu')(x)
     output1 = layers.Dense(13, activation='softmax', name='notes')(x)  # cross entropy
     output2 = layers.Dense(1, activation='sigmoid', name='duration')(x)  # mse
     model = keras.Model(inputs=inputs, outputs=[output1, output2])
     model.compile(
         loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
         optimizer='adam',
-        metrics=dict(notes=tf.keras.metrics.Accuracy(), duration=keras.metrics.MeanAbsoluteError()),
+        metrics=dict(notes="categorical_accuracy", duration=keras.metrics.MeanAbsoluteError()),
         loss_weights=dict(notes=1, duration=0.01)
     )
 
@@ -95,7 +95,7 @@ def compile_and_train_ffwd(dataset):
     return model
 
 
-def build_and_plot_cm(model):
+def build_and_plot_cm(model,name):
 
     predictions = model.predict(dataset.test_inputs, verbose=0)
 
@@ -103,19 +103,34 @@ def build_and_plot_cm(model):
     obtained = np.argmax(predictions[0], axis=1).flatten()
     expected = np.argmax(dataset.test_labels["notes"], axis=1).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
-    cm_plot_labels = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"]
-    plot_confusion_matrix(matrix, cm_plot_labels)
+    print(matrix)
+    np.savetxt(("stats\\"+name+"_notes.csv"), matrix, fmt='%i')
+    # cm_plot_labels = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"]
+    # plot_confusion_matrix(matrix, cm_plot_labels)
 
     # duration confusion matrix
     obtained = np.round(np.log2(predictions[1]))
     expected = np.round(np.log2(dataset.test_labels["duration"])).flatten()
     matrix = confusion_matrix(y_true=expected, y_pred=obtained)
-    cm_plot_labels = ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
-    plot_confusion_matrix(matrix, cm_plot_labels)
+    print(matrix)
+    np.savetxt(("stats\\"+name+"_duration.csv"), matrix, fmt='%i')
+    # cm_plot_labels = ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
+    # plot_confusion_matrix(matrix, cm_plot_labels)
 
-
+BATCH_SIZE = 32
+MAX_EPOCHS = 300
+dummy = False
 if __name__ == "__main__":
+    start=time.time()
     dataset = DatasetFromCSV(5, 1, dummy)
-    baseline = compile_and_train_ffwd(dataset)
+
+    print("---------------------LSTM TRAINING-----------------")
     lstm = compile_and_train_lstm(dataset)
-    build_and_plot_cm(baseline)
+    print("---------------------LSTM CM-----------------")
+    build_and_plot_cm(lstm,"lstm")
+
+    print("---------------------BASELINE TRAINING-----------------")
+    baseline = compile_and_train_ffwd(dataset)
+    print("---------------------BASELINE CM-----------------")
+    build_and_plot_cm(baseline,"baseline")
+    print("--- %s seconds ---" % (time.time() - start))
