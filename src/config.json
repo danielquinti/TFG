@@ -1,0 +1,15 @@
+{
+    "INPUT_DIRS": ["data\\", "dummy\\"],
+    "OUTPUT_DIR" : "reports\\",
+    "SELECTED_MODELS" : ["lstm","ffwd"],
+
+    "DUMMY" : 1,
+    "BATCH_SIZE" : 32,
+    "MAX_EPOCHS" : 6,
+
+    "INPUT_NOTES" : 5,
+    "OUTPUT_NOTES" : 1,
+
+    "VALIDATION_SPLIT" : 0.2,
+    "LOSS_WEIGHTS" : [1,0.01]
+}

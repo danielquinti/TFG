@@ -3,7 +3,7 @@ from utils import get_file_names
 import os
 
 class DatasetFromCSV:
-    def __init__(self, input_width, label_width,dummy):
+    def __init__(self, input_width, label_width, input_dir):
         self.input_width = input_width
         self.label_width = label_width
         self.window_width = input_width + label_width
@@ -24,16 +24,15 @@ class DatasetFromCSV:
                 }
             }
         }
-        self.extract_data_from_csv(dummy, "test")
+        self.extract_data_from_csv(input_dir, "test")
         self.test_inputs = self.dataset["test"]["inputs"]
         self.test_labels = self.dataset["test"]["labels"]
 
-        self.extract_data_from_csv(dummy, "train")
+        self.extract_data_from_csv(input_dir, "train")
         self.train_inputs = self.dataset["train"]["inputs"]
         self.train_labels = self.dataset["train"]["labels"]
 
-    def extract_data_from_csv(self,dummy, target):
-        route="dummy\\"+target if dummy else "data\\"+target
+    def extract_data_from_csv(self, route, target):
         file_names = get_file_names(route)
         inputs = []
         labels = []
