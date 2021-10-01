@@ -1,7 +1,6 @@
 from src.ConfigManager import ConfigManager
 from src.ModelBenchmark import ModelBenchmark
 from src.DatasetFromCSV import DatasetFromCSV
-from src.DataVisualisation import *
 
 if __name__ == "__main__":
     config = ConfigManager()

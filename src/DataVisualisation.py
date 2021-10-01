@@ -1,8 +1,14 @@
-import itertools
+#!/usr/bin/env python
+# coding: utf-8
 
-from matplotlib import pyplot as plt
+# In[30]:
+
+
+import glob
 import numpy as np
-from utils import get_file_names
+import plotly.graph_objects as go
+from matplotlib import pyplot as plt
+import itertools
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -21,11 +27,6 @@ def plot_confusion_matrix(cm, classes,
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print("Normalized confusion matrix")
-    else:
-        print('Confusion matrix, without normalization')
-
-    print(cm)
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
@@ -35,39 +36,32 @@ def plot_confusion_matrix(cm, classes,
 
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+    plt.show()
 
 cm_tags = {
     "notes": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"],
     "duration": ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
 }
 
-def graph_trainval_metrics(config):
-    x=range(config.max_epochs)
-    for name in get_file_names(config.output_dir+"\\trainval\\"):
-        y=np.loadtxt(name).transpose()
-        plt.plot(x, y, label=name.split("\\")[-1].split(".")[0])
-    plt.legend()
-    plt.show()
+def plot_cms():
+    plt.rcParams['figure.figsize'] = [15,8]
+    for name in glob.glob("*.csv"):
+        data=np.loadtxt(name,dtype=int)
+        tags=cm_tags["notes"] if "notes" in name else cm_tags["duration"]
+        display_name=name.split(".")[0]
+        plot_confusion_matrix(data,
+            tags,
+            title=display_name,
+            cmap='Blues',
+            )
 
+def graph_metrics():
+    fig = go.Figure()
 
-def plot_confusion_matrices(config):
-    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15, 10))
-    for filename, ax in zip(get_file_names(config.output_dir+"\\cm\\"), axes.flatten()):
-        plot_confusion_matrix(np.loadtxt(filename,dtype=int),
-                              cm_tags["notes"],
-                              cmap='Blues',
-                              #display_labels=data.target_names
-                              )
-        #ax.title.set_text(type(cls).__name__)
-    plt.tight_layout()
-    plt.show()
+    for name in glob.glob("*.txt"):
+        data=np.loadtxt(name)
+        fig.add_trace(go.Scatter(x=np.array(range(data.shape[0])), y=data,
+                        mode='lines',
+                        name=name.split(".")[0]))
 
-# fig, axs = plt.subplots(2, 2)
-# axs[0, 0].plot(x, y)
-# axs[0, 0].set_title('Axis [0, 0]')
-# axs[0, 1].plot(x, y, 'tab:orange')
-# axs[0, 1].set_title('Axis [0, 1]')
-# axs[1, 0].plot(x, -y, 'tab:green')
-# axs[1, 0].set_title('Axis [1, 0]')
-# axs[1, 1].plot(x, -y, 'tab:red')
-# axs[1, 1].set_title('Axis [1, 1]')
+    fig.show()
