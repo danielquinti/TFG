@@ -32,16 +32,15 @@ class ModelBenchmark():
             loss_weights=dict(notes=self.config.loss_weights[0], duration=self.config.loss_weights[1])
         )
 
-        # history = model.fit(x=dataset.train_inputs,
-        #                     y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
-        #                     epochs=self.config.max_epochs,
-        #                     batch_size=self.config.batch_size,
-        #                     verbose=2,
-        #                     shuffle=True,
-        #                     validation_split=self.config.validation_split
-        #                     )
-        # return model, history
-        return model, None
+        history = model.fit(x=dataset.train_inputs,
+                            y={'notes': dataset.train_labels["notes"], 'duration': dataset.train_labels["duration"]},
+                            epochs=self.config.max_epochs,
+                            batch_size=self.config.batch_size,
+                            verbose=2,
+                            shuffle=True,
+                            validation_split=self.config.validation_split
+                            )
+        return model, history
 
     def save_cms(self, model, dataset, name):
         predictions = model.predict(dataset.test_inputs, verbose=0)
@@ -62,6 +61,6 @@ class ModelBenchmark():
                 model = model_builder()
                 model, history = self.compile_and_train(model, self.dataset)
                 self.save_cms(model, self.dataset, name)
-                # for key, value in history.history.items():
-                #     np.savetxt(self.config.output_dir + name + "_" + key + ".txt", value)
+                for key, value in history.history.items():
+                    np.savetxt(self.config.output_dir + name + "_" + key + ".txt", value)
 
