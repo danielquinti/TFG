@@ -26,9 +26,9 @@ class ModelBenchmark():
 
     def compile_and_train(self, model, dataset):
         model.compile(
-            loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.MeanSquaredError()),
+            loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(), duration=tf.keras.losses.CategoricalCrossentropy()),
             optimizer='adam',
-            metrics=dict(notes="accuracy", duration=keras.metrics.MeanAbsoluteError()),
+            metrics=dict(notes="accuracy", duration="accuracy"),
             loss_weights=dict(notes=self.config.loss_weights[0], duration=self.config.loss_weights[1])
         )
 
@@ -50,8 +50,8 @@ class ModelBenchmark():
         data = confusion_matrix(expected,obtained)
         np.savetxt((self.config.output_dir + name + "_notes_cm.csv"), data, fmt='%i')
 
-        obtained = np.round(np.log2(predictions[1])).flatten()
-        expected = np.round(np.log2(dataset.test_labels["duration"])).flatten()
+        obtained = np.argmax(predictions[1], axis=1).flatten()
+        expected = np.argmax(dataset.test_labels["duration"], axis=1).flatten()
         data = confusion_matrix(expected,obtained)
         np.savetxt((self.config.output_dir + name + "_duration_cm.csv"), data, fmt='%i')
 

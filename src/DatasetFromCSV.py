@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from utils import get_file_names
 import os
@@ -55,4 +57,6 @@ class DatasetFromCSV:
 class Label:
     def __init__(self, beat):
         self.notes = np.sign(beat)
-        self.duration = np.max(beat)
+        duration = np.zeros(8)
+        duration[-int(round(math.log2(np.max(beat))))]=1
+        self.duration = duration

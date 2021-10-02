@@ -5,11 +5,11 @@
 
     "DUMMY" : 0,
     "BATCH_SIZE" : 32,
-    "MAX_EPOCHS" : 300,
+    "MAX_EPOCHS" : 10,
 
     "INPUT_NOTES" : 5,
     "OUTPUT_NOTES" : 1,
 
     "VALIDATION_SPLIT" : 0.2,
-    "LOSS_WEIGHTS" : [1,0.01]
+    "LOSS_WEIGHTS" : [1,1]
 }
