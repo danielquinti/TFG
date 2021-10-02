@@ -1,16 +1,11 @@
 #!/usr/bin/python3
 import itertools
 
-import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras as keras
 from sklearn.metrics import confusion_matrix
-from tensorflow.keras import layers
-import time
 from DatasetFromCSV import *
-from src.ConfigManager import ConfigManager
 from src.models import available_models
-
+import json
 
 
 
@@ -55,12 +50,15 @@ class ModelBenchmark():
         data = confusion_matrix(expected,obtained)
         np.savetxt((self.config.output_dir + name + "_duration_cm.csv"), data, fmt='%i')
 
+    def save_history(self, history, name):
+        with open(self.config.output_dir+name+'_history.json', 'w') as fp:
+            json.dump(history, fp)
+
     def execute(self):
         for name, model_builder in available_models.items():
             if name in self.config.selected_models:
                 model = model_builder()
                 model, history = self.compile_and_train(model, self.dataset)
                 self.save_cms(model, self.dataset, name)
-                for key, value in history.history.items():
-                    np.savetxt(self.config.output_dir + name + "_" + key + ".txt", value)
+                self.save_history(history.history, name)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[30]:
+# In[18]:
 
 
 import glob
@@ -9,6 +9,45 @@ import numpy as np
 import plotly.graph_objects as go
 from matplotlib import pyplot as plt
 import itertools
+import json
+
+
+# In[19]:
+
+
+fig = go.Figure()
+
+
+# In[29]:
+
+
+for name in glob.glob("*.json"):
+    fp=open(name,"r")
+    d=json.load(fp)
+    for key, value in d.items():
+        data=np.array(value)
+        fig.add_trace(go.Scatter(x=np.array(range(data.shape[0])), y=data,
+                        mode='lines',
+                        name=name.split(".")[0]))
+
+
+# In[15]:
+
+
+fig.show()
+
+
+# In[3]:
+
+
+cm_tags = {
+    "notes": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"],
+    "duration": ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
+}
+
+
+# In[16]:
+
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -38,30 +77,25 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
     plt.show()
 
-cm_tags = {
-    "notes": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"],
-    "duration": ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
-}
 
-def plot_cms():
-    plt.rcParams['figure.figsize'] = [15,8]
-    for name in glob.glob("*.csv"):
-        data=np.loadtxt(name,dtype=int)
-        tags=cm_tags["notes"] if "notes" in name else cm_tags["duration"]
-        display_name=name.split(".")[0]
-        plot_confusion_matrix(data,
-            tags,
-            title=display_name,
-            cmap='Blues',
-            )
+# In[17]:
 
-def graph_metrics():
-    fig = go.Figure()
 
-    for name in glob.glob("*.txt"):
-        data=np.loadtxt(name)
-        fig.add_trace(go.Scatter(x=np.array(range(data.shape[0])), y=data,
-                        mode='lines',
-                        name=name.split(".")[0]))
+plt.rcParams['figure.figsize'] = [15,8]
+for name in glob.glob("*.csv"):
+    data=np.loadtxt(name,dtype=int)
+    tags=cm_tags["notes"] if "notes" in name else cm_tags["duration"]
+    display_name=name.split(".")[0]
+    plot_confusion_matrix(data,
+        tags,
+        title=display_name,
+        cmap='Blues',
+        #display_labels=data.target_names
+        )
 
-    fig.show()
+
+# In[ ]:
+
+
+
+
