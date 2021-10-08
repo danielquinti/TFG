@@ -22,6 +22,6 @@ def ffwd_model():
 
 
 available_models = {
-    "lstm": lstm_model,
-    "ffwd": ffwd_model
+    "ffwd": ffwd_model,
+    "lstm": lstm_model
 }
