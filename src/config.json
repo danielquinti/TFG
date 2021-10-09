@@ -1,0 +1,24 @@
+{
+  "gp_to_csv_input_path" : "C:\\Users\\danie\\Downloads\\60000Tabs",
+  "gp_to_csv_output_path" :  "C:\\Users\\danie\\Documents\\GitHub\\TFG\\csv_parts",
+  "max_silence_threshold" : 8,
+  "minimum_beats" : 6,
+  "gp_test_rate" : 0.1,
+  "track_name" : "guitar",
+
+  "csv_to_dataset_input_paths" : ["C:\\Users\\danie\\Documents\\GitHub\\TFG\\csv_parts", "C:\\Users\\danie\\Documents\\GitHub\\TFG\\dummy"],
+  "csv_to_dataset_output_path" : "C:\\Users\\danie\\Documents\\GitHub\\TFG\\dataset",
+  "dummy" : 0,
+  "input_beats" : 5,
+  "label_beats" : 1,
+  "create_dataset": 1,
+  "save_dataset": 1,
+
+  "model_trainer_output_path" : "C:\\Users\\danie\\Documents\\GitHub\\TFG\\results",
+  "selected_models" : ["ffwd","lstm"],
+  "create_model": 1,
+  "save_model": 1,
+  "batch_size" : 32,
+  "max_epochs" : 1,
+  "loss_weights" : [1,1]
+}
