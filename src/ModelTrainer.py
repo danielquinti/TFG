@@ -4,6 +4,8 @@ import tensorflow as tf
 from keras.models import load_model
 from CSV2Dataset import *
 from src.available_models import available_models
+from src.losses import weighted_cce_n, weighted_cce_d
+from src.metrics import mean_ap
 import json
 
 
@@ -13,11 +15,13 @@ def compile_and_train(model,
                       max_epochs,
                       loss_weights
                       ):
+
     model.compile(
-        loss=dict(notes=tf.keras.losses.CategoricalCrossentropy(),
-                  duration=tf.keras.losses.CategoricalCrossentropy()),
+        loss=dict(notes=weighted_cce_n,
+                  duration=weighted_cce_d,
+                  ),
         optimizer='adam',
-        metrics=dict(notes='accuracy', duration='accuracy'),
+        metrics=dict(notes=mean_ap, duration=mean_ap),
         loss_weights=dict(notes=loss_weights[0], duration=loss_weights[1])
     )
 
@@ -58,7 +62,7 @@ class ModelTrainer:
                                                            loss_weights)
                         if save:
                             self.trained_models[av_name] = model
-                            model.save(os.path.join(output_path, f'av_name.h5'))
+                            model.save(os.path.join(output_path, f'{av_name}.h5'))
                             with open(os.path.join(output_path, f'{av_name}_history.json'), 'w') as fp:
                                 json.dump(history.history, fp)
                     else:

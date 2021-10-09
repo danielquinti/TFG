@@ -3,33 +3,30 @@ import math
 import os
 
 import numpy as np
+from matplotlib import pyplot as plt
+
 from utils import get_file_paths
 
 
 class CSV2Dataset:
-    def __init__(self,
-                 input_path,
-                 output_path,
-                 input_beats,
-                 output_beats,
-                 create=True,
-                 save=False):
-        window_beats = input_beats + output_beats
-        if create:
-            self.create_dataset(input_path,
-                                input_beats,
-                                window_beats,
-                                "test")
-            self.create_dataset(input_path,
-                                input_beats,
-                                window_beats,
-                                "train")
-            if save:
-                self.save_dataset(output_path)
-        else:
-            self.read_dataset(output_path,
-                              input_beats)
-
+    def create_dataset(self,
+                        input_path,
+                        output_path,
+                        input_beats,
+                        label_beats,
+                        save=False):
+        window_beats = input_beats + label_beats
+        self.__create__(input_path,
+                            input_beats,
+                            window_beats,
+                            "test")
+        self.__create__(input_path,
+                            input_beats,
+                            window_beats,
+                            "train")
+        self.get_weights()
+        if save:
+            self.__save__(output_path)
     def read_dataset(self,
                      output_path,
                      input_beats):
@@ -49,17 +46,17 @@ class CSV2Dataset:
             # , "repeated_note": np.loadtxt(os.path.join(self.output_path, "test_label_repeated_note.csv"))
             # , "repeated_duration": np.loadtxt(os.path.join(self.output_path, "test_label_repeated_duration.csv"))
         }
-        print("")
+        self.get_weights()
 
-    def save_dataset(self, output_path):
+    def __save__(self, output_path):
         if not os.path.exists(output_path):
             os.mkdir(output_path)
         array_files = [
             (self.train_inputs.reshape(-1, 13), "train_inputs", '%1.6f'),
             (self.train_labels["notes"], "train_label_notes", '%i'),
             (self.train_labels["duration"], "train_label_duration", '%i'),
-            (self.train_labels["repeated_note"], "train_label_repeated_note", '%i'),
-            (self.train_labels["repeated_duration"], "train_label_repeated_duration", '%i'),
+            # (self.train_labels["repeated_note"], "train_label_repeated_note", '%i'),
+            # (self.train_labels["repeated_duration"], "train_label_repeated_duration", '%i'),
             (self.test_inputs.reshape(-1, 13), "test_inputs", '%1.6f'),
             (self.test_labels["notes"], "test_label_notes", '%i'),
             (self.test_labels["duration"], "test_label_duration", '%i'),
@@ -67,9 +64,9 @@ class CSV2Dataset:
             # (self.test_labels["repeated_duration"], "test_label_repeated_duration", '%i')
         ]
         for data, name, style in array_files:
-            np.savetxt(os.path.join(self.output_path, f'{name}.csv'), data, fmt=style)
+            np.savetxt(os.path.join(output_path, f'{name}.csv'), data, fmt=style)
 
-    def create_dataset(self,
+    def __create__(self,
                        input_path,
                        input_beats,
                        window_beats,
@@ -104,7 +101,21 @@ class CSV2Dataset:
             self.test_inputs = inputs
             self.test_labels = labels
 
-
+    def get_weights(self):
+        def get_weight(data,n_classes):
+            aux_data = np.argmax(data, axis=1).flatten()
+            freqs = np.histogram(aux_data, bins=range(n_classes+1),density=True)[0]
+            freqs+=0.00001
+            i_freqs=1./freqs
+            weights = n_classes * i_freqs / np.sum(i_freqs)
+            return weights
+        self.weights={
+            "train_notes": get_weight(self.train_labels["notes"],13),
+            "train_duration" : get_weight(self.train_labels["duration"],8),
+            "test_notes" : get_weight(self.test_labels["notes"],13),
+            "test_duration" : get_weight(self.test_labels["duration"],8)
+        }
+        return self.weights
 class Label:
     # def __init__(self, beat, repeated_note, repeated_duration):
     def __init__(self, beat):
@@ -124,6 +135,6 @@ if __name__ == "__main__":
         params['dummy'],
         params['csv_to_dataset_output_path'],
         params['input_beats'],
-        params['output_beats'],
+        params['label_beats'],
         params['create_dataset'],
         params['save_dataset'])
