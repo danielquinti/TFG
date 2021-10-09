@@ -1,10 +1,20 @@
-
-import numpy as np
-
+import json
+from configparser import ConfigParser
+from GP2CSV import gp_to_csv
 from src.CSV2Dataset import CSV2Dataset
 from src.ModelTrainer import ModelTrainer
 
 if __name__ == "__main__":
+    with open("config.json", "r") as fp:
+        params = json.load(fp)
+    gp_to_csv(
+        params['gp_to_csv_input_path'],
+        params['gp_to_csv_output_path'],
+        params['max_silence_threshold'],
+        params['minimum_beats'],
+        params['gp_test_rate'],
+        params['track_name']
+    )
     dataset = CSV2Dataset(create=False)
     # train_note = dataset.train_labels["repeated_note"]
     # train_dur = dataset.train_labels["repeated_duration"]
