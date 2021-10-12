@@ -5,7 +5,7 @@ from keras.models import load_model
 from src.data_processing.CSV2Dataset import *
 from model.available_models import available_models
 from model.losses import weighted_cce_n, weighted_cce_d
-from model.metrics import mean_ap
+from model.metrics import *
 import json
 
 
@@ -17,10 +17,10 @@ def compile_and_train(model,
                       ):
     model.compile(
         loss=dict(
-            # notes=tf.keras.losses.CategoricalCrossentropy(),
-            # duration=tf.keras.losses.CategoricalCrossentropy(),
-            notes = weighted_cce_n,
-            duration = weighted_cce_d
+            notes=tf.keras.losses.CategoricalCrossentropy(),
+            duration=tf.keras.losses.CategoricalCrossentropy(),
+            # notes = weighted_cce_n,
+            # duration = weighted_cce_d
         ),
         optimizer='adam',
         metrics=dict(notes="accuracy", duration="accuracy"),
@@ -35,7 +35,7 @@ def compile_and_train(model,
                         epochs=max_epochs,
                         batch_size=batch_size,
                         verbose=2,
-                        shuffle=False,
+                        shuffle=True,
                         validation_data=(
                             dataset.test.inputs,
                             [

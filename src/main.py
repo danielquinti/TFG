@@ -1,5 +1,7 @@
 import json
 
+from keras.models import load_model
+
 from data_processing.GP2CSV import gp_to_csv
 from data_processing.CSV2Dataset import *
 from src.ModelTrainer import ModelTrainer
@@ -15,12 +17,12 @@ if __name__ == "__main__":
     #     params['gp_test_rate'],
     #     params['track_name']
     # )
-    dataset = csv_to_dataset(
-        params["csv_to_dataset_input_paths"][params["dummy"]],
-        params["input_beats"],
-        params["label_beats"],
-    )
-    dataset.save(params["csv_to_dataset_output_path"])
+    # dataset = csv_to_dataset(
+    #     params["csv_to_dataset_input_paths"][params["dummy"]],
+    #     params["input_beats"],
+    #     params["label_beats"],
+    # )
+    # dataset.save(params["csv_to_dataset_output_path"])
     dataset = load_dataset(
         params["csv_to_dataset_output_path"],
         params["input_beats"]
@@ -36,5 +38,5 @@ if __name__ == "__main__":
 
     # os.chdir(params["model_trainer_output_path"])
     # model = load_model("ffwd")
-    # a=model.predict(dataset.test_inputs)
+    # a = model.predict(dataset.test.inputs)
     # print(a)

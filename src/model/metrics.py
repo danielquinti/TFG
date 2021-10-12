@@ -3,6 +3,8 @@ import tensorflow as tf
 
 
 def mean_ap(y_true, y_pred):
+    print(tf.shape(y_true))
+    print(tf.shape(y_true))
     obtained = tf.math.argmax(y_pred)
     expected = tf.math.argmax(y_true)
     cm = tf.math.confusion_matrix(expected, obtained)
