@@ -1,3 +1,6 @@
-data
+dataset
 .idea
 __pycache__
+gp_files
+csv_parts
+.ipynb_checkpoints
