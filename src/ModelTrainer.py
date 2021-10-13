@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 
-import tensorflow as tf
 from keras.models import load_model
 from src.data_processing.CSV2Dataset import *
 from model.available_models import available_models
-from model.losses import weighted_cce_n, weighted_cce_d
-from model.metrics import *
+from model.metrics import balanced_accuracy
+from model.losses import weighted_cce
 import json
 
 
@@ -15,18 +14,20 @@ def compile_and_train(model,
                       max_epochs,
                       loss_weights
                       ):
+    weights = dataset.get_weights()
     model.compile(
-        loss=dict(
-            notes=tf.keras.losses.CategoricalCrossentropy(),
-            duration=tf.keras.losses.CategoricalCrossentropy(),
-            # notes = weighted_cce_n,
-            # duration = weighted_cce_d
-        ),
+        loss={
+            "notes": weighted_cce(weights["train_notes"]),
+            "duration": weighted_cce(weights["train_duration"]),
+        },
         optimizer='adam',
-        metrics=dict(notes="accuracy", duration="accuracy"),
+        # metrics=dict(notes="accuracy", duration="accuracy"),
+        metrics={
+            "notes": balanced_accuracy,
+            "duration": balanced_accuracy
+        },
         loss_weights=loss_weights
     )
-
     history = model.fit(x=dataset.train.inputs,
                         y={
                             'notes': dataset.train.labels.notes,
@@ -34,7 +35,7 @@ def compile_and_train(model,
                         },
                         epochs=max_epochs,
                         batch_size=batch_size,
-                        verbose=2,
+                        verbose=1,
                         shuffle=True,
                         validation_data=(
                             dataset.test.inputs,
@@ -42,7 +43,7 @@ def compile_and_train(model,
                                 dataset.test.labels.notes,
                                 dataset.test.labels.duration
                             ]
-                        )
+                        ),
                         )
     return model, history
 

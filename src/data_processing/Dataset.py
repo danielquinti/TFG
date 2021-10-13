@@ -40,19 +40,17 @@ class Dataset:
         self.test = test
 
     def get_weights(self):
-        def get_weight(data, n_classes):
-            aux_data = np.argmax(data, axis=1).flatten()
-            freqs = np.histogram(aux_data, bins=range(n_classes + 1), density=True)[0]
-            freqs += 0.00001
+        def get_weight(data):
+            freqs = np.mean(data,axis=0)+1e-8
             i_freqs = 1. / freqs
-            weight_vector = n_classes * i_freqs / np.sum(i_freqs)
+            weight_vector = freqs.shape[0] * i_freqs / np.sum(i_freqs)
             return weight_vector
 
         weight_vectors = {
-            "train_notes": get_weight(self.train.labels.notes, 13),
-            "train_duration": get_weight(self.train.labels.duration, 8),
-            "test_notes": get_weight(self.test.labels.notes, 13),
-            "test_duration": get_weight(self.test.labels.duration, 8)
+            "train_notes": get_weight(self.train.labels.notes),
+            "train_duration": get_weight(self.train.labels.duration),
+            "test_notes": get_weight(self.test.labels.notes),
+            "test_duration": get_weight(self.test.labels.duration)
         }
         return weight_vectors
 

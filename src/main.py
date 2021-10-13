@@ -17,16 +17,16 @@ if __name__ == "__main__":
     #     params['gp_test_rate'],
     #     params['track_name']
     # )
-    dataset = csv_to_dataset(
-        params["csv_to_dataset_input_paths"],
-        params["input_beats"],
-        params["label_beats"],
-    )
-    # dataset.save(params["csv_to_dataset_output_path"])
-    # dataset = load_dataset(
-    #     params["csv_to_dataset_output_path"],
-    #     params["input_beats"]
+    # dataset = csv_to_dataset(
+    #     params["csv_to_dataset_input_paths"],
+    #     params["input_beats"],
+    #     params["label_beats"],
     # )
+    # dataset.save(params["csv_to_dataset_output_path"])
+    dataset = load_dataset(
+        params["csv_to_dataset_output_path"],
+        params["input_beats"]
+    )
     mt = ModelTrainer()
     mt.train_models(dataset,
                     params["selected_models"],
