@@ -8,15 +8,14 @@
 
   "csv_to_dataset_input_paths" : "data\\csv_parts",
   "csv_to_dataset_output_path" : "data\\dataset",
-  "dummy" : 0,
   "input_beats" : 5,
   "label_beats" : 1,
 
   "model_trainer_output_path" : "models",
-  "selected_models" : ["ffwd","lstm"],
+  "selected_models" : ["lstm", "ffwd"],
   "save_model": 1,
   "batch_size" : 32,
-  "max_epochs" : 300,
+  "max_epochs" : 100,
   "loss_weights" : {
     "notes": 1,
     "duration": 1
