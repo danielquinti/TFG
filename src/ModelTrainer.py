@@ -6,9 +6,12 @@ from model.available_models import available_models
 from model.metrics import balanced_accuracy
 from model.losses import weighted_cce
 import json
+from time import time
+from tensorflow.python.keras.callbacks import TensorBoard
 
 
 def compile_and_train(model,
+                      name,
                       dataset,
                       batch_size,
                       max_epochs,
@@ -28,6 +31,8 @@ def compile_and_train(model,
         },
         loss_weights=loss_weights
     )
+    route = os.path.join("logs", f'{name}_{time()}')
+    tensorboard = TensorBoard(log_dir=route)
     history = model.fit(x=dataset.train.inputs,
                         y={
                             'notes': dataset.train.labels.notes,
@@ -44,6 +49,7 @@ def compile_and_train(model,
                                 dataset.test.labels.duration
                             ]
                         ),
+                        callbacks=[tensorboard]
                         )
     return model, history
 
@@ -60,13 +66,14 @@ class ModelTrainer:
                      loss_weights,
                      output_path,
                      save=True):
-        num_n_classes= len(dataset.note_classes)
-        num_d_classes= len(dataset.duration_classes)
+        num_n_classes = len(dataset.note_classes)
+        num_d_classes = len(dataset.duration_classes)
         for selected_name in selected_models:
             for av_name, model_builder in available_models.items():
                 if selected_name == av_name:
-                    model = model_builder(num_n_classes,num_d_classes)
+                    model = model_builder(num_n_classes, num_d_classes)
                     model, history = compile_and_train(model,
+                                                       av_name,
                                                        dataset,
                                                        batch_size,
                                                        max_epochs,
@@ -74,8 +81,6 @@ class ModelTrainer:
                     if save:
                         self.trained_models[av_name] = model
                         model.save(os.path.join(output_path, av_name))
-                        with open(os.path.join(output_path, f'{av_name}_history.json'), 'w') as fp:
-                            json.dump(history.history, fp)
 
     def load_models(self,
                     input_path,
