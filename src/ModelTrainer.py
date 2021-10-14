@@ -60,10 +60,12 @@ class ModelTrainer:
                      loss_weights,
                      output_path,
                      save=True):
+        num_n_classes= len(dataset.note_classes)
+        num_d_classes= len(dataset.duration_classes)
         for selected_name in selected_models:
             for av_name, model_builder in available_models.items():
                 if selected_name == av_name:
-                    model = model_builder()
+                    model = model_builder(num_n_classes,num_d_classes)
                     model, history = compile_and_train(model,
                                                        dataset,
                                                        batch_size,

@@ -14,6 +14,7 @@ class Distribution:
         self.labels = labels
 
 
+
 def load_dataset(output_path,
                  input_beats):
     return Dataset(
@@ -38,6 +39,23 @@ class Dataset:
     def __init__(self, train: Distribution, test: Distribution):
         self.train = train
         self.test = test
+        self.note_classes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B", "REST"]
+        self.duration_classes = ["1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64", "1/128"]
+        self.remove_empty_classes()
+
+    def remove_empty_classes(self):
+        examples_per_class=np.sum(self.train.labels.notes, axis=0)
+        empty_classes=np.argwhere(examples_per_class==0).flatten()
+        for cls in empty_classes:
+            self.train.labels.notes=np.delete(self.train.labels.notes, cls, 1)
+            self.test.labels.notes=np.delete(self.test.labels.notes, cls, 1)
+            del self.note_classes[cls]
+        examples_per_class=np.sum(self.train.labels.duration, axis=0)
+        empty_classes=np.argwhere(examples_per_class == 0).flatten()
+        for cls in empty_classes:
+            self.train.labels.duration=np.delete(self.train.labels.duration, cls, 1)
+            self.test.labels.duration=np.delete(self.test.labels.duration, cls, 1)
+            del self.duration_classes[cls]
 
     def get_weights(self):
         def get_weight(data):
