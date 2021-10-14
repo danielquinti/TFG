@@ -1,6 +1,6 @@
 import math
-from src.data_processing.utils import *
-from src.data_processing.Dataset import *
+from .utils import *
+from .Dataset import *
 
 
 def get_distribution(input_path,

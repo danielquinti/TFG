@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from keras.models import load_model
-from src.data_processing.CSV2Dataset import *
+from data_processing.CSV2Dataset import *
 from model.available_models import available_models
 from model.metrics import balanced_accuracy
 from model.losses import weighted_cce

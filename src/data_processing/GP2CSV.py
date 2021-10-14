@@ -5,8 +5,8 @@ import random
 import re
 import numpy as np
 
-from src.data_processing import libGPFile
-from src.data_processing.utils import *
+from .libGPFile import *
+from .utils import *
 
 string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
 
@@ -84,7 +84,7 @@ def __process_songs__(output_path,
         print(i)
         # ignore unparsable files
         try:
-            g = libGPFile.GPFile.read(file_path)
+            g = GPFile.read(file_path)
         except EOFError:
             continue
         # isolate, process and save guitar track
@@ -124,16 +124,3 @@ def gp_to_csv(input_path,
                       track_name,
                       train_file_names,
                       'train')
-
-
-if __name__ == "__main__":
-    with open("src\\config.json", "r") as fp:
-        params = json.load(fp)
-    gp_to_csv(
-        params['gp_to_csv_input_path'],
-        params['gp_to_csv_output_path'],
-        params['max_silence_threshold'],
-        params['minimum_beats'],
-        params['gp_test_rate'],
-        params['track_name']
-    )

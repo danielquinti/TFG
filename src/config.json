@@ -1,13 +1,13 @@
 {
-  "gp_to_csv_input_path" : "data\\gp_files",
-  "gp_to_csv_output_path" :  "data\\csv_parts",
+  "gp_to_csv_input_path" : ["data","gp_files"],
+  "gp_to_csv_output_path" :  ["data","csv_parts"],
   "max_silence_threshold" : 8,
   "minimum_beats" : 6,
   "gp_test_rate" : 0.1,
   "track_name" : "guitar",
 
-  "csv_to_dataset_input_paths" : "data\\csv_parts",
-  "csv_to_dataset_output_path" : "data\\dataset",
+  "csv_to_dataset_input_path" : ["data","csv_parts"],
+  "csv_to_dataset_output_path" : ["data","dataset"],
   "input_beats" : 5,
   "label_beats" : 1,
 
@@ -15,7 +15,7 @@
   "selected_models" : ["lstm", "ffwd"],
   "save_model": 1,
   "batch_size" : 32,
-  "max_epochs" : 50,
+  "max_epochs" : 1,
   "loss_weights" : {
     "notes": 1,
     "duration": 1
