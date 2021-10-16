@@ -20,7 +20,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     },
     {
       "model_name": "ffwd",
@@ -39,7 +39,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     },
     {
       "model_name": "ffwd",
@@ -58,7 +58,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     },
     {
       "model_name": "lstm",
@@ -77,7 +77,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     },
     {
       "model_name": "lstm",
@@ -96,7 +96,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     },
     {
       "model_name": "lstm",
@@ -115,7 +115,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 300
     }
   ]
 }
