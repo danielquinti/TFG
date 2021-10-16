@@ -7,3 +7,8 @@ def weighted_cce(weights):
         return K.sum(-weights * y_true * K.log(y_pred_clip), axis=-1)
 
     return loss
+
+
+losses = {
+    "wcce": weighted_cce
+}

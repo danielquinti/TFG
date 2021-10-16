@@ -1,0 +1,6 @@
+{
+  "input_path" : "data/csv_parts",
+  "output_path" : "data/dataset",
+  "input_beats" : 5,
+  "label_beats" : 1
+}

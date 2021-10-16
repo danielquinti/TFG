@@ -1,0 +1,8 @@
+{
+  "input_path": "data/gp_files",
+  "output_path": "data/csv_parts",
+  "silence_thr": 8,
+  "min_beats": 6,
+  "test_rate": 0.1,
+  "track_name": "guitar"
+}

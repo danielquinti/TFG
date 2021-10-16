@@ -99,12 +99,23 @@ def __process_songs__(output_path,
                              min_beats)
 
 
-def gp_to_csv(input_path,
-              output_path,
-              silence_thr,
-              min_beats,
-              test_rate,
-              track_name):
+def gp_to_csv():
+    fp = open(
+        os.path.join(
+            "src",
+            "data_processing",
+            "gp_to_csv_config.json"
+        )
+    )
+    params = json.load(fp)
+
+    input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
+    output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
+    silence_thr = params["silence_threshold"]
+    test_rate = params["test_rate"]
+    track_name = params["track_name"]
+    min_beats = params["min_beats"]
+
     file_paths = get_file_paths(input_path)
     # GPFile-level shuffle
     file_paths = random.sample(file_paths, len(file_paths))
