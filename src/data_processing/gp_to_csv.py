@@ -11,10 +11,10 @@ from .utils import *
 string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
 
 
-def __process_song__(beat_lists,
-                     general_path,
-                     silence_thr,
-                     min_beats):
+def __process_song__(beat_lists: list[GPFile.GPMeasure],
+                     general_path: str,
+                     silence_thr: int,
+                     min_beats: int):
     rest_ctr = 0
     part = 0
     contents = []
@@ -71,32 +71,39 @@ def __process_song__(beat_lists,
         np.savetxt(final_path, np.asarray(contents), fmt='%1.6f')
 
 
-def __process_songs__(output_path,
-                      silence_thr,
-                      min_beats,
-                      track_name,
-                      file_paths,
-                      distribution):
-    distribution_folder_path = os.path.join(output_path, distribution)
-    if not os.path.exists(os.path.join(distribution_folder_path)):
-        os.mkdir(distribution_folder_path)
-    for i, file_path in enumerate(file_paths):
-        print(i)
-        # ignore unparsable files
-        try:
-            g = GPFile.read(file_path)
-        except EOFError:
-            continue
-        # isolate, process and save guitar track
-        track = find(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
-        if track is not None:
-            g.dropAllTracksBut(track)
-            short_name = file_path.split("\\")[-1].split(".")[0]
-            output_file_path = os.path.join(output_path, distribution, short_name)
-            __process_song__(g.beatLists,
-                             output_file_path,
-                             silence_thr,
-                             min_beats)
+def __process_songs__(output_path: str,
+                      silence_thr: int,
+                      min_beats: int,
+                      track_name: str,
+                      file_paths: list[str],
+                      test_rate: float
+                      ):
+    border = math.floor(len(file_paths) * (1 - test_rate))
+    dist_paths = {
+        "train" : file_paths[:border],
+        "test" : file_paths[border:]
+    }
+    for dist_name, file_paths in dist_paths:
+        distribution_folder_path = os.path.join(output_path, dist_name)
+        if not os.path.exists(os.path.join(distribution_folder_path)):
+            os.mkdir(distribution_folder_path)
+        for i, file_path in enumerate(file_paths):
+            print(i)
+            # ignore unparsable files
+            try:
+                g = GPFile.read(file_path)
+            except EOFError:
+                continue
+            # isolate, process and save guitar track
+            track = find(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
+            if track is not None:
+                g.dropAllTracksBut(track)
+                short_name = file_path.split("\\")[-1].split(".")[0]
+                output_file_path = os.path.join(output_path, dist_name, short_name)
+                __process_song__(g.beatLists,
+                                 output_file_path,
+                                 silence_thr,
+                                 min_beats)
 
 
 def gp_to_csv():
@@ -109,29 +116,21 @@ def gp_to_csv():
     )
     params = json.load(fp)
 
-    input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
-    output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
-    silence_thr = params["silence_threshold"]
-    test_rate = params["test_rate"]
-    track_name = params["track_name"]
-    min_beats = params["min_beats"]
+    input_path: str = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
+    output_path: str = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
+    track_name: str = params["track_name"]
+    silence_thr: int = params["silence_threshold"]
+    min_beats: int = params["min_beats"]
+    test_rate: float = params["test_rate"]
 
     file_paths = get_file_paths(input_path)
     # GPFile-level shuffle
     file_paths = random.sample(file_paths, len(file_paths))
     # GPFile-level split
-    border = math.floor(len(file_paths) * (1 - test_rate))
-    train_file_names = file_paths[:border]
-    test_file_names = file_paths[border:]
+
     __process_songs__(output_path,
                       silence_thr,
                       min_beats,
                       track_name,
-                      test_file_names,
-                      'test')
-    __process_songs__(output_path,
-                      silence_thr,
-                      min_beats,
-                      track_name,
-                      train_file_names,
-                      'train')
+                      file_paths,
+                      test_rate)

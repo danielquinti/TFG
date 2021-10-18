@@ -38,12 +38,12 @@ class ModelTrainer:
                         verbose
                         ):
         folder_name = f'{name}_{loss_names["notes"]}_{metric_names["notes"]}_lw{loss_weights["notes"]},{loss_weights["duration"]}_bs{batch_size}_e{max_epochs}'
-
+        losses = {
+            "notes": get_loss_function(loss_names["notes"], self.dataset.weights["train_notes"]),
+            "duration": get_loss_function(loss_names["duration"], self.dataset.weights["train_duration"])
+        }
         model.compile(
-            loss={
-                "notes": losses[loss_names["notes"]](self.dataset.weights["train_notes"]),
-                "duration": losses[loss_names["duration"]](self.dataset.weights["train_duration"]),
-            },
+            loss=losses,
             optimizer=optimizer_name,
             metrics={
                 "notes": metrics[metric_names["notes"]],

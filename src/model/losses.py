@@ -1,4 +1,5 @@
 import tensorflow.keras.backend as K
+import tensorflow as tf
 
 
 def weighted_cce(weights):
@@ -8,7 +9,9 @@ def weighted_cce(weights):
 
     return loss
 
-
-losses = {
-    "wcce": weighted_cce
-}
+def get_loss_function(name, weights):
+    losses = {
+        "wcce": weighted_cce(weights),
+        "cce": tf.keras.losses.CategoricalCrossentropy()
+    }
+    return losses[name]
