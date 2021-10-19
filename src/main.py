@@ -5,7 +5,7 @@ from keras.models import load_model
 from data_processing.gp_to_csv import gp_to_csv
 from data_processing.dataset_manager import *
 from model_trainer import ModelTrainer
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 if __name__ == "__main__":
     with open(os.path.join("src", "train_config.json"), "r") as fp:
