@@ -116,6 +116,120 @@
 
       "batch_size": 32,
       "max_epochs": 300
+    },
+    {
+      "model_name": "ffwd",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 1
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
+    },
+    {
+      "model_name": "ffwd",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
+    },
+    {
+      "model_name": "ffwd",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 0,
+        "duration": 1
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
+    },
+    {
+      "model_name": "lstm",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 1
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
+    },
+    {
+      "model_name": "lstm",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
+    },
+    {
+      "model_name": "lstm",
+      "loss_function_names":{
+        "notes": "w_cce",
+        "duration": "w_cce"
+      },
+      "metric_names":{
+        "notes": "ba",
+        "duration": "ba"
+      },
+      "loss_weights": {
+        "notes": 0,
+        "duration": 1
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 300
     }
   ]
 }

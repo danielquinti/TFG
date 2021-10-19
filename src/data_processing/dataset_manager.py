@@ -35,7 +35,7 @@ class DatasetManager:
             for file_name in file_names:
                 contents = np.loadtxt(file_name)
                 # add inputs and labels by sliding window
-                for i in range(contents.shape[0] - self.window_beats):
+                for i in range(contents.shape[0] - self.window_beats+1):
                     inputs.append(contents[i:i + self.input_beats])
                     label_beat = contents[i + self.input_beats]
 

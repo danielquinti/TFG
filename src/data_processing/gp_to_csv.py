@@ -16,6 +16,7 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                      silence_thr: int,
                      min_beats: int):
     rest_ctr = 0
+    rest_acc=[]
     part = 0
     contents = []
     for measure in beat_lists:
@@ -23,12 +24,16 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
             beat_vector = np.zeros(13)
             # encode duration as the (2**n)th part of a beat
             duration = 1 / (2 ** (int.from_bytes(beat.duration, byteorder='big', signed=True) + 2))
+
             if sum(x is not None for x in beat.strings) > 1:  # chord
                 # discard tracks with cords
                 return
+
             g_string = find(beat.strings, lambda x: x is not None)
             if g_string is None or beat.strings[g_string].noteType is None:  # rest
                 rest_ctr += 1
+                beat_vector[-1] = duration
+                rest_acc.append(beat_vector)
             # the beat has a single note
             elif rest_ctr > silence_thr:  # the new note is from a different sample group
                 if len(contents) >= min_beats:  # avoid dumping sequences that are too short
@@ -38,6 +43,7 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
 
                 # reset accumulators and parse the current note
                 rest_ctr = 0
+                rest_acc=[]
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
                 note = (base_note + offset) % 12
@@ -45,9 +51,7 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 contents = [beat_vector]
 
             elif rest_ctr > 0:  # new note within the same sample group after a sequence of rests
-                beat_vector[-1] = duration
-                [contents.append(beat_vector) for _ in range(rest_ctr)]  # update accumulator with rest sequence
-
+                [contents.append(x) for x in rest_acc]  # update accumulator with rest sequence
                 # parse and compute current note
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
@@ -58,6 +62,7 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 beat_vector[note] = duration
                 contents.append(beat_vector)
                 rest_ctr = 0
+                rest_acc=[]
             else:  # new note with no leading rests
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
@@ -83,7 +88,7 @@ def __process_songs__(output_path: str,
         "train" : file_paths[:border],
         "test" : file_paths[border:]
     }
-    for dist_name, file_paths in dist_paths:
+    for dist_name, file_paths in dist_paths.items():
         distribution_folder_path = os.path.join(output_path, dist_name)
         if not os.path.exists(os.path.join(distribution_folder_path)):
             os.mkdir(distribution_folder_path)
@@ -119,7 +124,7 @@ def gp_to_csv():
     input_path: str = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
     output_path: str = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
     track_name: str = params["track_name"]
-    silence_thr: int = params["silence_threshold"]
+    silence_thr: int = params["silence_thr"]
     min_beats: int = params["min_beats"]
     test_rate: float = params["test_rate"]
 
