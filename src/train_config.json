@@ -25,8 +25,8 @@
     {
       "model_name": "ffwd",
       "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
+        "notes": "cce",
+        "duration": "cce"
       },
       "metric_names":{
         "notes": "ba",
