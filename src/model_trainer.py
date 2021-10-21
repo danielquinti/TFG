@@ -43,14 +43,16 @@ class ModelTrainer:
             "notes": get_loss_function(loss_names["notes"], self.dataset.weights["train_notes"]),
             "duration": get_loss_function(loss_names["duration"], self.dataset.weights["train_duration"])
         }
+
+        metrics = {
+                      "notes": get_metric(metric_names["notes"],self.dataset.train.labels.notes.shape[1]),
+                      "duration": get_metric(metric_names["duration"],self.dataset.train.labels.duration.shape[1]),
+                  }
         model.compile(
             loss=losses,
             optimizer=optimizer_name,
-            metrics={
-                "notes": metrics[metric_names["notes"]],
-                "duration": metrics[metric_names["duration"]],
-            },
-            loss_weights=loss_weights
+            loss_weights=loss_weights,
+            metrics=metrics
         )
 
         route = os.path.join(
