@@ -6,8 +6,8 @@
     {
       "model_name": "ffwd",
       "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
+        "notes": "1cce",
+        "duration": "1cce"
       },
       "metric_names":{
         "notes": "ba",
@@ -20,13 +20,13 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 300
+      "max_epochs": 50
     },
     {
-      "model_name": "lstm",
+      "model_name": "ffwd",
       "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
+        "notes": "wcce",
+        "duration": "wcce"
       },
       "metric_names":{
         "notes": "ba",
@@ -39,7 +39,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 300
+      "max_epochs": 50
     }
-    ]
+  ]
   }

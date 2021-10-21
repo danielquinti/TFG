@@ -48,7 +48,7 @@ class ModelTrainer:
             optimizer=optimizer_name,
             metrics={
                 "notes": metrics[metric_names["notes"]],
-                "duration": metrics[metric_names["duration"]]
+                "duration": metrics[metric_names["duration"]],
             },
             loss_weights=loss_weights
         )
