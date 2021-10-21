@@ -15,5 +15,5 @@ if __name__ == "__main__":
     # dataset = dm.extract_dataset()
     # dm.save_dataset()
     dataset=dm.load_dataset()
-    mt= ModelTrainer(dataset)
+    mt = ModelTrainer(dataset)
     mt.train_models()

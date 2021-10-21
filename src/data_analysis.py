@@ -1,7 +1,5 @@
 import glob
 import numpy as np
-import plotly.graph_objects as go
-from matplotlib import pyplot as plt
 import itertools
 import json
 import os
@@ -75,7 +73,7 @@ def get_metrics():
             ".. "
         )
     )
-def save_cms():
+def get_metrics():
     dm = DatasetManager()
     dataset = dm.load_dataset()
     mt = ModelTrainer(dataset)
@@ -87,37 +85,28 @@ def save_cms():
             )
         notes_pred = np.argmax(notes_pred, axis=1)
         notes_true=np.argmax(dataset.test.labels.notes, axis=1)
-        notes_cm = confusion_matrix(
+        data = confusion_matrix(
             notes_true,
             notes_pred
         )
-
+        mean_ap = np.average([data[i, i] / np.sum(data[i, :]) for i in range(data.shape[0])])
+        accuracy = np.sum([data[i, i] for i in range(data.shape[0])]) / np.sum(data)
+        print(name+" notes")
+        print("    Accuracy %.2f" % accuracy)
+        print("    MAP %.3f" % mean_ap)
         duration_pred, duration_pred = model.predict(
                 dataset.test.inputs
             )
         duration_pred = np.argmax(duration_pred, axis=1)
         duration_true=np.argmax(dataset.test.labels.duration, axis=1)
-        duration_cm = confusion_matrix(
+        data = confusion_matrix(
             duration_true,
             duration_pred
         )
+        mean_ap = np.average([data[i, i] / np.sum(data[i, :]) for i in range(data.shape[0])])
+        accuracy = np.sum([data[i, i] for i in range(data.shape[0])]) / np.sum(data)
+        print(name+" duration")
+        print("    Accuracy %.2f" % accuracy)
+        print("    MAP %.3f" % mean_ap)
 
-        np.savetxt(
-            os.path.join(
-                "data",
-                "cm",
-                f'{name}_notes.csv'
-            ),
-            notes_cm
-        )
-        np.savetxt(
-            os.path.join(
-                "data",
-                "cm",
-                f'{name}_notes.csv'
-            ),
-            duration_cm
-        )
-
-save_cms()
 get_metrics()
