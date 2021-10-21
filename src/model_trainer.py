@@ -24,11 +24,13 @@ class ModelTrainer:
         self.verbose = params["verbose"]
         self.model_configs: list = params["model_configs"]
         self.dataset = dataset
+        self.num_n_classes = self.dataset.train.labels.notes.shape[1]
+        self.num_d_classes = self.dataset.train.labels.duration.shape[1]
         self.trained_models = {}
 
     def compile_and_fit(self,
                         model,
-                        name,
+                        folder_name,
                         loss_names: dict,
                         metric_names: dict,
                         loss_weights,
@@ -37,7 +39,6 @@ class ModelTrainer:
                         max_epochs,
                         verbose
                         ):
-        folder_name = f'{name}_{loss_names["notes"]}_{metric_names["notes"]}_lw{loss_weights["notes"]},{loss_weights["duration"]}_bs{batch_size}_e{max_epochs}'
         losses = {
             "notes": get_loss_function(loss_names["notes"], self.dataset.weights["train_notes"]),
             "duration": get_loss_function(loss_names["duration"], self.dataset.weights["train_duration"])
@@ -82,24 +83,20 @@ class ModelTrainer:
         model.save(
             os.path.join(
                 self.output_path,
-                folder_name
+                f'{folder_name}.h5'
             )
         )
 
         return model, history
 
-    def run(self):
-
-        num_n_classes = len(self.dataset.note_classes)
-        num_d_classes = len(self.dataset.duration_classes)
+    def train_models(self):
         for config in self.model_configs:
 
             mc = ModelConfiguration(config)
-            model = available_models[mc.model_name](num_n_classes, num_d_classes)
-
+            model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
             self.compile_and_fit(
                 model,
-                mc.model_name,
+                mc.folder_name,
                 mc.loss_function_names,
                 mc.metric_names,
                 mc.loss_weights,
@@ -108,18 +105,19 @@ class ModelTrainer:
                 mc.max_epochs,
                 self.verbose,
             )
+            self.trained_models[mc.folder_name]=model
 
-    def load_models(self,
-                    input_path,
-                    selected_models):
-        for selected_name in selected_models:
-            for av_name, model_builder in available_models.items():
-                if selected_name == av_name:
-                    os.chdir(input_path)
-                    self.trained_models[av_name] = load_model(av_name)
-                    os.chdir("..")
+    def load_models(self):
 
-
+        for config in self.model_configs:
+            mc = ModelConfiguration(config)
+            model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
+            model.load_weights(
+                os.path.join(self.output_path,
+                             f'{mc.folder_name}.h5'
+                             )
+            )
+            self.trained_models[mc.folder_name]=model
 class ModelConfiguration:
     def __init__(self, data: dict):
         self.model_name = data["model_name"]
@@ -129,3 +127,4 @@ class ModelConfiguration:
         self.optimizer_name = data["optimizer_name"]
         self.batch_size = data["batch_size"]
         self.max_epochs = data["max_epochs"]
+        self.folder_name = f'{self.model_name}_{self.loss_function_names["notes"]}_{self.metric_names["notes"]}_lw{self.loss_weights["notes"]},{self.loss_weights["duration"]}_bs{self.batch_size}_e{self.max_epochs}'

@@ -54,20 +54,20 @@ class DatasetManager:
     def save_dataset(self):
         self.dataset.save(self.output_path)
 
-    def load_dataset(self, output_path, input_beats):
+    def load_dataset(self):
         self.dataset = Dataset(
             Distribution(
-                np.loadtxt(os.path.join(output_path, "train_inputs.csv")).reshape((-1, input_beats, 13)),
+                np.loadtxt(os.path.join(self.output_path, "train_inputs.csv")).reshape((-1, self.input_beats, 13)),
                 Labels(
-                    np.loadtxt(os.path.join(output_path, "train_label_notes.csv")),
-                    np.loadtxt(os.path.join(output_path, "train_label_duration.csv"))
+                    np.loadtxt(os.path.join(self.output_path, "train_label_notes.csv")),
+                    np.loadtxt(os.path.join(self.output_path, "train_label_duration.csv"))
                 )
             ),
             Distribution(
-                np.loadtxt(os.path.join(output_path, "test_inputs.csv")).reshape((-1, input_beats, 13)),
+                np.loadtxt(os.path.join(self.output_path, "test_inputs.csv")).reshape((-1, self.input_beats, 13)),
                 Labels(
-                    np.loadtxt(os.path.join(output_path, "test_label_notes.csv")),
-                    np.loadtxt(os.path.join(output_path, "test_label_duration.csv"))
+                    np.loadtxt(os.path.join(self.output_path, "test_label_notes.csv")),
+                    np.loadtxt(os.path.join(self.output_path, "test_label_duration.csv"))
                 )
             ),
         )
