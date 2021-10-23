@@ -1,4 +1,4 @@
-savimport glob
+import glob
 import numpy as np
 import itertools
 import json
@@ -123,7 +123,7 @@ def save_cms():
             fmt='%i'
         )
 
-        mean_ap = (np.diag(data) / np.sum(data, axis=1)).mean()
+        mean_ap = (np.diag(data) / (np.sum(data, axis=1)+1e-8)).mean()
         accuracy = np.sum(np.diag(data)) / np.sum(data)
         print(name+" duration")
         print("    Accuracy %.2f" % accuracy)
