@@ -1,14 +1,12 @@
-# import glob
-# import numpy as np
-# import plotly.graph_objects as go
-# from matplotlib import pyplot as plt
-# import itertools
-# import json
-# import os
-#
-# from data_processing.dataset_manager import *
-# from model_trainer import ModelTrainer
-# from sklearn.metrics import confusion_matrix, plot_confusion_matrix
+savimport glob
+import numpy as np
+import itertools
+import json
+import os
+
+from data_processing.dataset_manager import *
+from model_trainer import ModelTrainer
+from sklearn.metrics import confusion_matrix
 #
 #
 # cm_tags = {
@@ -75,49 +73,60 @@
 #             ".. "
 #         )
 #     )
-# def save_cms():
-#     dm = DatasetManager()
-#     dataset = dm.load_dataset()
-#     mt = ModelTrainer(dataset)
-#     mt.load_models()
-#     for name, model in mt.trained_models.items():
-#
-#         notes_pred, duration_pred = model.predict(
-#                 dataset.test.inputs
-#             )
-#         notes_pred = np.argmax(notes_pred, axis=1)
-#         notes_true=np.argmax(dataset.test.labels.notes, axis=1)
-#         notes_cm = confusion_matrix(
-#             notes_true,
-#             notes_pred
-#         )
-#
-#         duration_pred, duration_pred = model.predict(
-#                 dataset.test.inputs
-#             )
-#         duration_pred = np.argmax(duration_pred, axis=1)
-#         duration_true=np.argmax(dataset.test.labels.duration, axis=1)
-#         duration_cm = confusion_matrix(
-#             duration_true,
-#             duration_pred
-#         )
-#
-#         np.savetxt(
-#             os.path.join(
-#                 "data",
-#                 "cm",
-#                 f'{name}_notes.csv'
-#             ),
-#             notes_cm
-#         )
-#         np.savetxt(
-#             os.path.join(
-#                 "data",
-#                 "cm",
-#                 f'{name}_notes.csv'
-#             ),
-#             duration_cm
-#         )
-#
-# save_cms()
-# get_metrics()
+def save_cms():
+    dm = DatasetManager()
+    dataset = dm.load_dataset()
+    mt = ModelTrainer(dataset)
+    mt.load_models()
+    for name, model in mt.trained_models.items():
+
+        notes_pred, duration_pred = model.predict(
+                dataset.test.inputs
+            )
+        notes_pred = np.argmax(notes_pred, axis=1)
+        notes_true=np.argmax(dataset.test.labels.notes, axis=1)
+        data = confusion_matrix(
+            notes_true,
+            notes_pred
+        )
+        mean_ap = (np.diag(data) / np.sum(data, axis=1)).mean()
+        accuracy = np.sum(np.diag(data)) / np.sum(data)
+        print(name+" notes")
+        print("    Accuracy %.2f" % accuracy)
+        print("    MAP %.3f" % mean_ap)
+        np.savetxt(
+            os.path.join(
+                "data",
+                "cm",
+                f'{name}_notes.csv'
+            ),
+            data,
+            fmt='%i'
+        )
+
+        duration_pred, duration_pred = model.predict(
+                dataset.test.inputs
+            )
+        duration_pred = np.argmax(duration_pred, axis=1)
+        duration_true=np.argmax(dataset.test.labels.duration, axis=1)
+        data = confusion_matrix(
+            duration_true,
+            duration_pred
+        )
+        np.savetxt(
+            os.path.join(
+                "data",
+                "cm",
+                f'{name}_duration.csv'
+            ),
+            data,
+            fmt='%i'
+        )
+
+        mean_ap = (np.diag(data) / np.sum(data, axis=1)).mean()
+        accuracy = np.sum(np.diag(data)) / np.sum(data)
+        print(name+" duration")
+        print("    Accuracy %.2f" % accuracy)
+        print("    MAP %.3f" % mean_ap)
+
+save_cms()

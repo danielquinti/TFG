@@ -45,14 +45,23 @@ class ModelTrainer:
         }
 
         metrics = {
-                      "notes": get_metric(metric_names["notes"],self.dataset.train.labels.notes.shape[1]),
-                      "duration": get_metric(metric_names["duration"],self.dataset.train.labels.duration.shape[1]),
-                  }
+            "notes":
+                [
+                    get_metric(metric_names["notes"], self.dataset.train.labels.notes.shape[1]),
+                    "accuracy"
+                ],
+            "duration":
+                [
+                    get_metric(metric_names["duration"], self.dataset.train.labels.duration.shape[1]),
+                    "accuracy"
+                ]
+        }
         model.compile(
             loss=losses,
             optimizer=optimizer_name,
             loss_weights=loss_weights,
-            metrics=metrics
+            metrics=metrics,
+            #run_eagerly=True
         )
 
         route = os.path.join(
@@ -93,7 +102,6 @@ class ModelTrainer:
 
     def train_models(self):
         for config in self.model_configs:
-
             mc = ModelConfiguration(config)
             model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
             self.compile_and_fit(
@@ -107,7 +115,7 @@ class ModelTrainer:
                 mc.max_epochs,
                 self.verbose,
             )
-            self.trained_models[mc.folder_name]=model
+            self.trained_models[mc.folder_name] = model
 
     def load_models(self):
 
@@ -119,7 +127,9 @@ class ModelTrainer:
                              f'{mc.folder_name}.h5'
                              )
             )
-            self.trained_models[mc.folder_name]=model
+            self.trained_models[mc.folder_name] = model
+
+
 class ModelConfiguration:
     def __init__(self, data: dict):
         self.model_name = data["model_name"]
