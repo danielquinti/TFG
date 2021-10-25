@@ -20,7 +20,7 @@ class Dataset:
         self.test = test
         self.remove_empty_classes()
         self.weights = self.get_weights()
-
+        self.length=train.inputs.shape[1]
     def remove_empty_classes(self):
         examples_per_class = np.sum(self.train.labels.notes, axis=0)
         empty_classes = np.argwhere(examples_per_class == 0).flatten()

@@ -10,9 +10,9 @@ if __name__ == "__main__":
         params = json.load(fp)
 
     # gp_to_csv()
-    dm = DatasetManager()
-    # dataset = dm.extract_dataset()
-    # dm.save_dataset()
-    dataset=dm.load_dataset()
-    mt= ModelTrainer(dataset)
-    mt.train_models()
+    for i in (5,10,15,20):
+        dm = DatasetManager(i)
+        dataset = dm.extract_dataset()
+        # dm.save_dataset()
+        mt= ModelTrainer(dataset)
+        mt.train_models()

@@ -52,7 +52,8 @@ class BalancedAccuracy(tf.keras.metrics.Metric):
 def get_metric(name, shape: int):
     metrics = {
         # "ba": BalancedAccuracy(shape)
-        'ba': balanced_accuracy
+        'ba': balanced_accuracy,
+        'ac': "accuracy"
     }
     return metrics[name]
 

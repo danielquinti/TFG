@@ -22,6 +22,23 @@ class DatasetManager:
         self.label_beats = params["label_beats"]
         self.window_beats = self.input_beats + self.label_beats
 
+    def __init__(self, input_beats):
+        self.dataset: Dataset = None
+        fp = open(
+            os.path.join(
+                "src",
+                "data_processing",
+                "csv_to_dataset_config.json"
+            )
+        )
+        params = json.load(fp)
+
+        self.input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
+        self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
+        self.input_beats = input_beats
+        self.label_beats = params["label_beats"]
+        self.window_beats = self.input_beats + self.label_beats
+
     def extract_dataset(self):
         distributions = {
             "train": None,

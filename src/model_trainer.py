@@ -26,6 +26,7 @@ class ModelTrainer:
         self.dataset = dataset
         self.num_n_classes = self.dataset.train.labels.notes.shape[1]
         self.num_d_classes = self.dataset.train.labels.duration.shape[1]
+        self.seq_length= self.dataset.train.inputs.shape[1]
         self.trained_models = {}
 
     def compile_and_fit(self,
@@ -47,21 +48,18 @@ class ModelTrainer:
         metrics = {
             "notes":
                 [
-                    get_metric(metric_names["notes"], self.dataset.train.labels.notes.shape[1]),
-                    "accuracy"
+                    get_metric(name, self.dataset.train.labels.notes.shape[1]) for name in metric_names["notes"]
                 ],
             "duration":
                 [
-                    get_metric(metric_names["duration"], self.dataset.train.labels.duration.shape[1]),
-                    "accuracy"
-                ]
+                    get_metric(name, self.dataset.train.labels.notes.shape[1]) for name in metric_names["duration"]
+                ],
         }
         model.compile(
             loss=losses,
             optimizer=optimizer_name,
             loss_weights=loss_weights,
             metrics=metrics,
-            #run_eagerly=True
         )
 
         route = os.path.join(
@@ -103,10 +101,10 @@ class ModelTrainer:
     def train_models(self):
         for config in self.model_configs:
             mc = ModelConfiguration(config)
-            model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
+            model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes, self.dataset.length)
             self.compile_and_fit(
                 model,
-                mc.folder_name,
+                f'{mc.folder_name}_sl{self.seq_length}',
                 mc.loss_function_names,
                 mc.metric_names,
                 mc.loss_weights,
@@ -115,19 +113,19 @@ class ModelTrainer:
                 mc.max_epochs,
                 self.verbose,
             )
-            self.trained_models[mc.folder_name] = model
+            self.trained_models[f'{mc.folder_name}_sl{self.seq_length}'] = model
 
     def load_models(self):
-
-        for config in self.model_configs:
-            mc = ModelConfiguration(config)
-            model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
-            model.load_weights(
-                os.path.join(self.output_path,
-                             f'{mc.folder_name}.h5'
-                             )
-            )
-            self.trained_models[mc.folder_name] = model
+        for seq_length in (5,10,15,20):
+            for config in self.model_configs:
+                mc = ModelConfiguration(config)
+                model = available_models[mc.model_name](self.num_n_classes, self.num_d_classes)
+                model.load_weights(
+                    os.path.join(self.output_path,
+                                 f'{mc.folder_name}_sl{seq_length}.h5'
+                                 )
+                )
+                self.trained_models[f'{mc.folder_name}_sl{seq_length}'] = model
 
 
 class ModelConfiguration:

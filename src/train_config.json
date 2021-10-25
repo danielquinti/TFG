@@ -6,12 +6,12 @@
     {
       "model_name": "ffwd",
       "loss_function_names":{
-        "notes": "1cce",
-        "duration": "1cce"
+        "notes": "wcce",
+        "duration": "wcce"
       },
       "metric_names":{
-        "notes": "ba",
-        "duration": "ba"
+        "notes": ["ba","ac"],
+        "duration": ["ba","ac"]
       },
       "loss_weights": {
         "notes": 1,
@@ -20,17 +20,17 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 50
+      "max_epochs": 100
     },
     {
       "model_name": "ffwd",
       "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
+        "notes": "wcce",
+        "duration": "wcce"
       },
       "metric_names":{
-        "notes": "ba",
-        "duration": "ba"
+        "notes": ["ba","ac"],
+        "duration": ["ba","ac"]
       },
       "loss_weights": {
         "notes": 1,
@@ -39,7 +39,7 @@
       "optimizer_name": "adam",
 
       "batch_size": 32,
-      "max_epochs": 50
+      "max_epochs": 100
     }
   ]
   }
