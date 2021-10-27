@@ -19,8 +19,10 @@ class Dataset:
         self.train = train
         self.test = test
         self.remove_empty_classes()
-        self.weights = self.get_weights()
-        self.length=train.inputs.shape[1]
+        self.duration_weights, self.notes_weights = self.get_weights()
+        self.n_classes = self.train.labels.notes.shape[-1]
+        self.d_classes = self.train.labels.duration.shape[-1]
+
     def remove_empty_classes(self):
         examples_per_class = np.sum(self.train.labels.notes, axis=0)
         empty_classes = np.argwhere(examples_per_class == 0).flatten()
@@ -40,13 +42,11 @@ class Dataset:
             weight_vector = freqs.shape[0] * i_freqs / np.sum(i_freqs)
             return weight_vector
 
-        weight_vectors = {
-            "train_notes": get_weight(self.train.labels.notes),
-            "train_duration": get_weight(self.train.labels.duration),
-            "test_notes": get_weight(self.test.labels.notes),
-            "test_duration": get_weight(self.test.labels.duration)
-        }
-        return weight_vectors
+
+        return (
+            get_weight(self.train.labels.duration),
+            get_weight(self.train.labels.notes)
+        )
 
     def save(self, output_path):
         if not os.path.exists(output_path):

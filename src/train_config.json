@@ -4,6 +4,8 @@
   "model_configs":
   [
     {
+      "input_beats":5,
+      "label_beats":1,
       "model_name": "ffwd",
       "loss_function_names":{
         "notes": "wcce",
@@ -23,7 +25,9 @@
       "max_epochs": 100
     },
     {
-      "model_name": "ffwd",
+      "input_beats":5,
+      "label_beats":1,
+      "model_name": "lstm",
       "loss_function_names":{
         "notes": "wcce",
         "duration": "wcce"
