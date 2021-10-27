@@ -72,11 +72,9 @@ cm_tags = {
 #         )
 #     )
 def save_cms():
-    dm = DatasetManager()
-    dataset = dm.load_dataset()
-    mt = ModelTrainer(dataset)
+    mt = ModelTrainer()
     mt.load_models()
-    for name, model in mt.trained_models.items():
+    for name, (model,dataset) in mt.trained_models.items():
 
         notes_pred, duration_pred = model.predict(
                 dataset.test.inputs
