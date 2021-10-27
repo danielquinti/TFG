@@ -1,9 +1,6 @@
 import tensorflow.keras as keras
 from tensorflow.keras import layers
 
-from src.model.losses import get_loss_function
-from src.model.metrics import get_metric
-
 
 def lstm_model(n_classes, d_classes, input_beats, label_beats):
     inputs = layers.Input((input_beats, n_classes))
