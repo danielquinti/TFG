@@ -27,6 +27,8 @@ class BalancedAccuracy(tf.keras.metrics.Metric):
         y_pred_oh = tf.one_hot(y_pred_index, tf.shape(y_true)[-1])
         self.hits += tf.reduce_sum(y_true * y_pred_oh, axis=0)
         self.counts += tf.reduce_sum(y_true, axis=0)
+        tf.print(self.hits)
+        tf.print(self.counts)
 
 
     def result(self):
@@ -34,7 +36,7 @@ class BalancedAccuracy(tf.keras.metrics.Metric):
             self.hits,
             self.counts
         )
-        # compute mean discarding labels with no counts for this epoch
+        # compute mean discarding labels with no counts
         return tf.reduce_sum(recalls)/tf.reduce_sum(tf.sign(self.counts))
 
     def reset_states(self):
