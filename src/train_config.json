@@ -12,29 +12,8 @@
         "duration": "wcce"
       },
       "metric_names":{
-        "notes": ["ba","ac"],
-        "duration": ["ba","ac"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 1
-      },
-      "optimizer_name": "adam",
-
-      "batch_size": 32,
-      "max_epochs": 100
-    },
-    {
-      "input_beats":5,
-      "label_beats":1,
-      "model_name": "lstm",
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba","ac"],
-        "duration": ["ba","ac"]
+        "notes": ["ba"],
+        "duration": ["ba"]
       },
       "loss_weights": {
         "notes": 1,

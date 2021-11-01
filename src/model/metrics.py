@@ -28,8 +28,14 @@ class BalancedAccuracy(tf.keras.metrics.Metric):
         self.hits += tf.reduce_sum(y_true * y_pred_oh, axis=0)
         self.counts += tf.reduce_sum(y_true, axis=0)
 
+
     def result(self):
-        return tf.reduce_mean(self.hits / self.counts)
+        recalls=tf.math.divide_no_nan(
+            self.hits,
+            self.counts
+        )
+        # compute mean discarding labels with no counts for this epoch
+        return tf.reduce_sum(recalls)/tf.reduce_sum(tf.sign(self.counts))
 
     def reset_states(self):
         self.counts = tf.zeros(self.shape)
@@ -43,9 +49,3 @@ def get_metric(name, shape: int):
         'ac': "accuracy"
     }
     return metrics[name]
-
-# m = BalancedAccuracy(13)
-# m.update_state([1,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0])
-# print('Intermediate result:', float(m.result()))
-# m.update_state([1,0,0,0,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0,0,0,0])
-# print('Final result:', float(m.result()))
