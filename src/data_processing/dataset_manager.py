@@ -55,6 +55,9 @@ class DatasetManager:
             self.extract_distribution("train", input_beats, window_beats),
             self.extract_distribution("test", input_beats, window_beats),
         )
+    def get_average_lengths(self):
+        file_names = get_file_paths(os.path.join(self.input_path, "train"))
+        print(np.mean([np.loadtxt(file_name).shape[0] for file_name in file_names]))
 
     # def load_dataset(self, input_beats, output_beats):
     #     dataset_name = f'i_{input_beats}_l{output_beats}'
