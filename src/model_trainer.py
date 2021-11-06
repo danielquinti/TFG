@@ -44,7 +44,7 @@ def compute_metrics(model, dataset, mc):
     )
     notes = alt_measurement(dataset.test.labels.notes, notes_pred)
     duration = alt_measurement(dataset.test.labels.duration, duration_pred)
-    row = [mc.model_name] + \
+    row = [mc.folder_name] + \
         evaluation[:-1] + \
         notes + \
         [evaluation[-1]] + \
