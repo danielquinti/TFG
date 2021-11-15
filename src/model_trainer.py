@@ -2,6 +2,8 @@
 import csv
 
 import keras
+import numpy
+import numpy as np
 from keras.models import load_model
 from data_processing.dataset_manager import *
 from model.available_models import available_models
@@ -12,7 +14,7 @@ from time import time
 from tensorflow.python.keras.callbacks import TensorBoard
 
 
-def alt_measurement(raw_true, raw_pred):
+def ba_cm(raw_true, raw_pred):
     true = np.argmax(raw_true, axis=1)
     pred = np.argmax(raw_pred, axis=1)
     data = confusion_matrix(
@@ -28,6 +30,17 @@ def alt_measurement(raw_true, raw_pred):
     metric_cm = recalls.sum() / np.sign(true_counts).sum()
     return [metric_cm]
 
+def ba_np(raw_true, raw_pred):
+    pred = np.argmax(raw_pred, axis=1)
+    pred_one_hot=np.zeros_like(raw_true)
+    pred_one_hot[np.arange(pred.size),pred]=1
+
+    hits=np.sum(raw_true*pred_one_hot,axis=0)
+    counts=np.sum(raw_true,axis=0)
+    recalls = np.divide(hits, counts, out=np.zeros_like(hits, dtype='float'), where=counts != 0)
+    metric_no_cm = recalls.sum() / np.sign(counts).sum()
+    return [metric_no_cm]
+
 
 def compute_metrics(model, dataset, mc):
     evaluation = model.evaluate(
@@ -38,22 +51,8 @@ def compute_metrics(model, dataset, mc):
         ],
         mc.batch_size
     )
-
-    notes_pred, duration_pred = model.predict(
-        dataset.test.inputs
-    )
-    notes = alt_measurement(dataset.test.labels.notes, notes_pred)
-    duration = alt_measurement(dataset.test.labels.duration, duration_pred)
-    row = [mc.folder_name] + \
-        evaluation[:-1] + \
-        notes + \
-        [evaluation[-1]] + \
-        duration
-    headers = ["model"] + \
-        model.metrics_names[:-1] + \
-        ["notes-cm"] + \
-        [model.metrics_names[-1]] + \
-        ["duration-cm"]
+    row = [mc.folder_name] + evaluation
+    headers = ["model"] + model.metrics_names
     return row, headers
 
 

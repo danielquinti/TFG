@@ -37,8 +37,8 @@ class Dataset:
 
     def get_weights(self):
         def get_weight(data):
-            freqs = np.mean(data, axis=0) + 1e-8
-            i_freqs = 1. / freqs
+            freqs = np.mean(data, axis=0)
+            i_freqs = np.divide(1., freqs, out=np.zeros_like(freqs, dtype='float'), where=freqs != 0)
             weight_vector = freqs.shape[0] * i_freqs / np.sum(i_freqs)
             return weight_vector
 
