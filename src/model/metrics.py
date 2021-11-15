@@ -26,9 +26,9 @@ class BalancedAccuracy(tf.keras.metrics.Metric):
         # compute mean discarding labels with no counts
         return tf.reduce_sum(recalls) / tf.reduce_sum(tf.sign(self.counts))
 
-    def reset_state(self):
-        self.counts.assign(tf.zeros(self.shape))
-        self.hits.assign(tf.zeros(self.shape))
+    def reset_states(self):
+        self.counts.assign(tf.zeros([self.shape]))
+        self.hits.assign(tf.zeros([self.shape]))
 
 
 class GeometricAccuracy(tf.keras.metrics.Metric):
@@ -67,9 +67,9 @@ class GeometricAccuracy(tf.keras.metrics.Metric):
             exponent
         )
 
-    def reset_state(self):
-        self.counts.assign(tf.zeros(self.shape))
-        self.hits.assign(tf.zeros(self.shape))
+    def reset_states(self):
+        self.counts.assign(tf.zeros([self.shape]))
+        self.hits.assign(tf.zeros([self.shape]))
 
 
 def get_metric(name, shape: int):
