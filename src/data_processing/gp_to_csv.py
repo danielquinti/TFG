@@ -17,13 +17,16 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                      min_beats: int):
     rest_ctr = 0
     rest_acc=[]
+    note_range=13
+    note_mod=note_range-1
+    duration_range=7
+    beat_range=note_range+duration_range
     part = 0
     contents = []
     for measure in beat_lists:
         for beat in measure[0]:
-            beat_vector = np.zeros(13)
-            # encode duration as the (2**n)th part of a beat
-            duration = 1 / (2 ** (int.from_bytes(beat.duration, byteorder='big', signed=True) + 2))
+            beat_vector = np.zeros(beat_range)
+            duration = int.from_bytes(beat.duration, byteorder='big', signed=True) +2
 
             if sum(x is not None for x in beat.strings) > 1:  # chord
                 # discard tracks with cords
@@ -32,7 +35,10 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
             g_string = find(beat.strings, lambda x: x is not None)
             if g_string is None or beat.strings[g_string].noteType is None:  # rest
                 rest_ctr += 1
-                beat_vector[-1] = duration
+                #toggle the indexes of the last note (rest) and the corresponding duration
+                beat_vector[note_mod] = 1
+                beat_vector[note_range+duration]=1
+
                 rest_acc.append(beat_vector)
             # the beat has a single note
             elif rest_ctr > silence_thr:  # the new note is from a different sample group
@@ -46,8 +52,11 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 rest_acc=[]
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
-                note = (base_note + offset) % 12
-                beat_vector[note] = duration
+                note = (base_note + offset) % note_mod
+                #toggle the indexes of the last corresponding note and duration
+                beat_vector[note] = 1
+                beat_vector[note_range+duration]=1
+
                 contents = [beat_vector]
 
             elif rest_ctr > 0:  # new note within the same sample group after a sequence of rests
@@ -58,8 +67,9 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 note = (base_note + offset) % 12
 
                 # update accumulator with current note
-                beat_vector = np.zeros(13)
-                beat_vector[note] = duration
+                beat_vector = np.zeros(beat_range)
+                beat_vector[note] = 1
+                beat_vector[note_range+duration]=1
                 contents.append(beat_vector)
                 rest_ctr = 0
                 rest_acc=[]
@@ -67,7 +77,10 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
                 note = (base_note + offset) % 12
-                beat_vector[note] = duration
+                #toggle the indexes of the last corresponding note and duration
+                beat_vector[note] = 1
+                beat_vector[note_range+duration]=1
+
                 contents.append(beat_vector)
 
     # dump the last notes of the file
@@ -90,7 +103,9 @@ def __process_songs__(output_path: str,
     }
     for dist_name, file_paths in dist_paths.items():
         distribution_folder_path = os.path.join(output_path, dist_name)
-        if not os.path.exists(os.path.join(distribution_folder_path)):
+        if not os.path.exists(output_path):
+            os.mkdir(output_path)
+        if not os.path.exists(distribution_folder_path):
             os.mkdir(distribution_folder_path)
         for i, file_path in enumerate(file_paths):
             print(i)

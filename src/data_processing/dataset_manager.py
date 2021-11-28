@@ -39,11 +39,8 @@ class DatasetManager:
                 inputs.append(contents[i:i + input_beats])
                 label_beat = contents[i + input_beats]
 
-                duration = np.zeros(8)
-                duration[-int(round(math.log2(np.max(label_beat))))] = 1
-
-                label_notes.append(np.sign(label_beat))
-                label_duration.append(duration)
+                label_notes.append(label_beat[:13])
+                label_duration.append(label_beat[13:])
 
         inputs = np.array(inputs)
         labels = Labels(np.array(label_notes), np.array(label_duration))
