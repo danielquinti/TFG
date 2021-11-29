@@ -67,9 +67,9 @@ class ModelConfig:
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.label_beats = config["label_beats"]
-        self.folder_name = f'{self.model_name}_{self.loss_function_names["notes"]}_lw' + \
-                           f'({self.loss_weights["notes"]},{self.loss_weights["duration"]})_bs{self.batch_size}_e' + \
-                           f'{self.max_epochs}_ds({self.input_beats},{self.label_beats})'
+        self.folder_name = f'{self.model_name}_{self.loss_function_names["notes"]}_opt_{self.optimizer_name}_'+\
+            f'lw({self.loss_weights["notes"]},{self.loss_weights["duration"]})_bs{self.batch_size}_e' + \
+            f'{self.max_epochs}_ds({self.input_beats},{self.label_beats})'
 
 
 class ModelTrainer:
