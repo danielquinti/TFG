@@ -130,7 +130,7 @@ def gp_to_csv():
     fp = open(
         os.path.join(
             "src",
-            "data_processing",
+            "config",
             "gp_to_csv_config.json"
         )
     )

@@ -9,7 +9,7 @@ class DatasetManager:
         fp = open(
             os.path.join(
                 "src",
-                "data_processing",
+                "config",
                 "csv_to_dataset_config.json"
             )
         )

@@ -77,6 +77,7 @@ class ModelTrainer:
         fp = open(
             os.path.join(
                 "src",
+                "config",
                 "train_config.json"
             )
         )
