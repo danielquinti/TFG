@@ -1,45 +1,12 @@
 #!/usr/bin/python3
 import csv
-
-import keras
-import numpy
-import numpy as np
-from keras.models import load_model
-from data_processing.dataset_manager import *
-from model.available_models import available_models
-from model.metrics import *
-from model.losses import *
 import json
-from time import time
-from tensorflow.python.keras.callbacks import TensorBoard
+import os
 
+from tensorflow.python import keras
 
-def ba_cm(raw_true, raw_pred):
-    true = np.argmax(raw_true, axis=1)
-    pred = np.argmax(raw_pred, axis=1)
-    data = confusion_matrix(
-        true,
-        pred
-    )
-    diag = np.diag(data)
-    true_counts = np.sum(data, axis=1)
-
-    # avoid division by 0
-    recalls = np.divide(diag, true_counts, out=np.zeros_like(diag, dtype='float'), where=true_counts != 0)
-    # compute mean discarding labels with no counts
-    metric_cm = recalls.sum() / np.sign(true_counts).sum()
-    return [metric_cm]
-
-def ba_np(raw_true, raw_pred):
-    pred = np.argmax(raw_pred, axis=1)
-    pred_one_hot=np.zeros_like(raw_true)
-    pred_one_hot[np.arange(pred.size),pred]=1
-
-    hits=np.sum(raw_true*pred_one_hot,axis=0)
-    counts=np.sum(raw_true,axis=0)
-    recalls = np.divide(hits, counts, out=np.zeros_like(hits, dtype='float'), where=counts != 0)
-    metric_no_cm = recalls.sum() / np.sign(counts).sum()
-    return [metric_no_cm]
+from data_processing import dataset_manager, dataset
+from model import losses, metrics, available_models
 
 
 def compute_metrics(model, dataset, mc):
@@ -67,9 +34,9 @@ class ModelConfig:
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.label_beats = config["label_beats"]
-        self.folder_name = f'{self.model_name}_{self.loss_function_names["notes"]}_opt_{self.optimizer_name}_'+\
-            f'lw({self.loss_weights["notes"]},{self.loss_weights["duration"]})_bs{self.batch_size}_e' + \
-            f'{self.max_epochs}_ds({self.input_beats},{self.label_beats})'
+        self.folder_name = f'{self.model_name}_{self.loss_function_names["notes"]}_opt_{self.optimizer_name}_' + \
+                           f'lw({self.loss_weights["notes"]},{self.loss_weights["duration"]})_bs{self.batch_size}_e' + \
+                           f'{self.max_epochs}_ds({self.input_beats},{self.label_beats})'
 
 
 class ModelTrainer:
@@ -86,7 +53,7 @@ class ModelTrainer:
         self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
         self.verbose = params["verbose"]
         self.model_configs: list = params["model_configs"]
-        self.dataset_manager = DatasetManager()
+        self.dataset_manager = dataset_manager.DatasetManager()
         self.trained_models = {}
 
     def compile_model(
@@ -98,22 +65,22 @@ class ModelTrainer:
             loss_weights,
             metric_names
     ):
-        metrics = {
+        metr_dict = {
             "notes":
                 [
-                    get_metric(name, dataset.n_classes) for name in metric_names["notes"]
+                    metrics.get_metric(name, dataset.n_classes) for name in metric_names["notes"]
                 ],
             "duration":
                 [
-                    get_metric(name, dataset.d_classes) for name in metric_names["duration"]
+                    metrics.get_metric(name, dataset.d_classes) for name in metric_names["duration"]
                 ],
         }
-        losses = {
-            "notes": get_loss_function(
+        loss_dict = {
+            "notes": losses.get_loss_function(
                 loss_names["notes"],
                 dataset.notes_weights
             ),
-            "duration": get_loss_function(
+            "duration": losses.get_loss_function(
                 loss_names["duration"],
                 dataset.duration_weights
             ),
@@ -121,8 +88,8 @@ class ModelTrainer:
         model.compile(
             optimizer=optimizer_name,
             loss_weights=loss_weights,
-            loss=losses,
-            metrics=metrics
+            loss=metr_dict,
+            metrics=loss_dict
         )
 
     def fit_model(
@@ -138,7 +105,7 @@ class ModelTrainer:
             folder_name
         )
 
-        tensorboard = TensorBoard(log_dir=route)
+        tensorboard = keras.callbacks.TensorBoard(log_dir=route)
 
         model.fit(
             x=dataset.train.inputs,
@@ -163,9 +130,9 @@ class ModelTrainer:
     def build_model(
             self,
             mc: ModelConfig,
-            dataset: Dataset
+            dataset: dataset.Dataset
     ):
-        model = available_models[mc.model_name](
+        model = available_models.available_models[mc.model_name](
             dataset.n_classes,
             dataset.d_classes,
             mc.input_beats,
@@ -229,7 +196,7 @@ class ModelTrainer:
 
     def load_model(self,
                    mc: ModelConfig,
-                   dataset: Dataset):
+                   dataset: dataset.Dataset):
         model = available_models[mc.model_name](
             dataset.n_classes,
             dataset.d_classes,

@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 
 
@@ -41,7 +42,6 @@ class Dataset:
             i_freqs = np.divide(1., freqs, out=np.zeros_like(freqs, dtype='float'), where=freqs != 0)
             weight_vector = freqs.shape[0] * i_freqs / np.sum(i_freqs)
             return weight_vector
-
 
         return (
             get_weight(self.train.labels.duration),

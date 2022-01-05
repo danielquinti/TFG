@@ -1,18 +1,18 @@
 import tensorflow.keras as keras
-from keras import regularizers
-from tensorflow.keras import layers
+from tensorflow.keras import layers, regularizers
 
 
 def lstm_model(n_classes, d_classes, input_beats, label_beats):
-    input_range=n_classes+d_classes
+    input_range = n_classes + d_classes
     inputs = layers.Input((input_beats, input_range))
     x = layers.LSTM(65, activation='relu', input_shape=(input_beats, input_range))(inputs)
     output1 = layers.Dense(n_classes, activation='softmax', name='notes')(x)
     output2 = layers.Dense(d_classes, activation='softmax', name='duration')(x)
     return keras.Model(inputs=inputs, outputs=[output1, output2])
 
+
 def lstm_reg(n_classes, d_classes, input_beats, label_beats):
-    input_range=n_classes+d_classes
+    input_range = n_classes + d_classes
     inputs = layers.Input((input_beats, input_range))
     x = layers.LSTM(
         65,
@@ -31,7 +31,7 @@ def lstm_reg(n_classes, d_classes, input_beats, label_beats):
 
 
 def ffwd_model(n_classes, d_classes, input_beats, label_beats):
-    input_range=n_classes+d_classes
+    input_range = n_classes + d_classes
     inputs = layers.Input((input_beats, input_range))
     x = layers.Flatten()(inputs)
     x = layers.Dense(40, activation='relu')(x)

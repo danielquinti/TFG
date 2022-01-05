@@ -1,7 +1,4 @@
-import numpy as np
 import tensorflow as tf
-
-from sklearn.metrics import confusion_matrix
 
 
 class BalancedAccuracy(tf.keras.metrics.Metric):
@@ -52,11 +49,11 @@ class GeometricAccuracy(tf.keras.metrics.Metric):
         )
         # compute geometric mean discarding labels with no counts
 
-        tf.print(tf.where(recalls>0))
+        tf.print(tf.where(recalls > 0))
         nonzeroprod = tf.reduce_prod(
-            recalls+1e-8
+            recalls + 1e-8
         )
-        exponent= tf.math.divide(
+        exponent = tf.math.divide(
             1.0,
             tf.reduce_sum(
                 tf.sign(self.counts)

@@ -1,7 +1,8 @@
 import json
-import math
-from .utils import *
-from .dataset import *
+import os
+import numpy as np
+
+from src.data_processing import dataset, utils
 
 
 class DatasetManager:
@@ -21,14 +22,14 @@ class DatasetManager:
 
     def get_dataset(self, input_beats, output_beats):
         dataset_name = f'i_{input_beats}_l{output_beats}'
-        dataset = self.datasets.get(dataset_name)
-        if dataset is None:
+        data = self.datasets.get(dataset_name)
+        if data is None:
             return self.extract_dataset(input_beats, output_beats)
         else:
-            return dataset
+            return data
 
     def extract_distribution(self, distribution_name, input_beats, window_beats):
-        file_names = get_file_paths(os.path.join(self.input_path, distribution_name))
+        file_names = utils.get_file_paths(os.path.join(self.input_path, distribution_name))
         inputs = []
         label_notes = []
         label_duration = []
@@ -43,35 +44,16 @@ class DatasetManager:
                 label_duration.append(label_beat[13:])
 
         inputs = np.array(inputs)
-        labels = Labels(np.array(label_notes), np.array(label_duration))
-        return Distribution(inputs, labels)
+        labels = dataset.Labels(np.array(label_notes), np.array(label_duration))
+        return dataset.Distribution(inputs, labels)
 
     def extract_dataset(self, input_beats, output_beats):
         window_beats = input_beats + output_beats
-        return Dataset(
+        return dataset.Dataset(
             self.extract_distribution("train", input_beats, window_beats),
             self.extract_distribution("test", input_beats, window_beats),
         )
-    def get_average_lengths(self):
-        file_names = get_file_paths(os.path.join(self.input_path, "train"))
-        print(np.mean([np.loadtxt(file_name).shape[0] for file_name in file_names]))
 
-    # def load_dataset(self, input_beats, output_beats):
-    #     dataset_name = f'i_{input_beats}_l{output_beats}'
-    #     self.datasets[dataset_name] = Dataset(
-    #         Distribution(
-    #             np.loadtxt(os.path.join(self.output_path, "train_inputs.csv")).reshape((-1, input_beats, 13)),
-    #             Labels(
-    #                 np.loadtxt(os.path.join(self.output_path, "train_label_notes.csv")),
-    #                 np.loadtxt(os.path.join(self.output_path, "train_label_duration.csv"))
-    #             )
-    #         ),
-    #         Distribution(
-    #             np.loadtxt(os.path.join(self.output_path, "test_inputs.csv")).reshape((-1, input_beats, 13)),
-    #             Labels(
-    #                 np.loadtxt(os.path.join(self.output_path, "test_label_notes.csv")),
-    #                 np.loadtxt(os.path.join(self.output_path, "test_label_duration.csv"))
-    #             )
-    #         ),
-    #     )
-    #     return self.dataset
+    def get_average_lengths(self):
+        file_names = utils.get_file_paths(os.path.join(self.input_path, "train"))
+        print(np.mean([np.loadtxt(file_name).shape[0] for file_name in file_names]))

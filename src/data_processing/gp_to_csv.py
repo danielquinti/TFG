@@ -1,43 +1,45 @@
 #!/usr/bin/python3
 import json
 import math
+import os
 import random
 import re
+
 import numpy as np
 
-from .libGPFile import *
-from .utils import *
+import libGPFile
+import utils
 
 string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
 
 
-def __process_song__(beat_lists: list[GPFile.GPMeasure],
+def __process_song__(beat_lists: list[libGPFile.GPFile.GPMeasure],
                      general_path: str,
                      silence_thr: int,
                      min_beats: int):
     rest_ctr = 0
-    rest_acc=[]
-    note_range=13
-    note_mod=note_range-1
-    duration_range=7
-    beat_range=note_range+duration_range
+    rest_acc = []
+    note_range = 13
+    note_mod = note_range - 1
+    duration_range = 7
+    beat_range = note_range + duration_range
     part = 0
     contents = []
     for measure in beat_lists:
         for beat in measure[0]:
             beat_vector = np.zeros(beat_range)
-            duration = int.from_bytes(beat.duration, byteorder='big', signed=True) +2
+            duration = int.from_bytes(beat.duration, byteorder='big', signed=True) + 2
 
             if sum(x is not None for x in beat.strings) > 1:  # chord
                 # discard tracks with cords
                 return
 
-            g_string = find(beat.strings, lambda x: x is not None)
+            g_string = utils.find(beat.strings, lambda x: x is not None)
             if g_string is None or beat.strings[g_string].noteType is None:  # rest
                 rest_ctr += 1
-                #toggle the indexes of the last note (rest) and the corresponding duration
+                # toggle the indexes of the last note (rest) and the corresponding duration
                 beat_vector[note_mod] = 1
-                beat_vector[note_range+duration]=1
+                beat_vector[note_range + duration] = 1
 
                 rest_acc.append(beat_vector)
             # the beat has a single note
@@ -49,13 +51,13 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
 
                 # reset accumulators and parse the current note
                 rest_ctr = 0
-                rest_acc=[]
+                rest_acc = []
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
                 note = (base_note + offset) % note_mod
-                #toggle the indexes of the last corresponding note and duration
+                # toggle the indexes of the last corresponding note and duration
                 beat_vector[note] = 1
-                beat_vector[note_range+duration]=1
+                beat_vector[note_range + duration] = 1
 
                 contents = [beat_vector]
 
@@ -69,17 +71,17 @@ def __process_song__(beat_lists: list[GPFile.GPMeasure],
                 # update accumulator with current note
                 beat_vector = np.zeros(beat_range)
                 beat_vector[note] = 1
-                beat_vector[note_range+duration]=1
+                beat_vector[note_range + duration] = 1
                 contents.append(beat_vector)
                 rest_ctr = 0
-                rest_acc=[]
+                rest_acc = []
             else:  # new note with no leading rests
                 base_note = string_to_base_note[g_string]
                 offset = beat.strings[g_string].noteType[1]
                 note = (base_note + offset) % 12
-                #toggle the indexes of the last corresponding note and duration
+                # toggle the indexes of the last corresponding note and duration
                 beat_vector[note] = 1
-                beat_vector[note_range+duration]=1
+                beat_vector[note_range + duration] = 1
 
                 contents.append(beat_vector)
 
@@ -98,8 +100,8 @@ def __process_songs__(output_path: str,
                       ):
     border = math.floor(len(file_paths) * (1 - test_rate))
     dist_paths = {
-        "train" : file_paths[:border],
-        "test" : file_paths[border:]
+        "train": file_paths[:border],
+        "test": file_paths[border:]
     }
     for dist_name, file_paths in dist_paths.items():
         distribution_folder_path = os.path.join(output_path, dist_name)
@@ -111,11 +113,11 @@ def __process_songs__(output_path: str,
             print(i)
             # ignore unparsable files
             try:
-                g = GPFile.read(file_path)
+                g = libGPFile.GPFile.read(file_path)
             except EOFError:
                 continue
             # isolate, process and save guitar track
-            track = find(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
+            track = utils.find(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
             if track is not None:
                 g.dropAllTracksBut(track)
                 short_name = file_path.split("\\")[-1].split(".")[0]
@@ -143,7 +145,7 @@ def gp_to_csv():
     min_beats: int = params["min_beats"]
     test_rate: float = params["test_rate"]
 
-    file_paths = get_file_paths(input_path)
+    file_paths = utils.get_file_paths(input_path)
     # GPFile-level shuffle
     file_paths = random.sample(file_paths, len(file_paths))
     # GPFile-level split
