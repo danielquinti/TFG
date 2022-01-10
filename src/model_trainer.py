@@ -9,12 +9,12 @@ from data_processing import dataset_manager, dataset
 from model import losses, metrics, available_models
 
 
-def compute_metrics(model, dataset, mc):
+def compute_metrics(model, data, mc):
     evaluation = model.evaluate(
-        dataset.test.inputs,
+        data.test.inputs,
         [
-            dataset.test.labels.notes,
-            dataset.test.labels.duration
+            data.test.labels.notes,
+            data.test.labels.duration
         ],
         mc.batch_size
     )
@@ -59,7 +59,7 @@ class ModelTrainer:
     def compile_model(
             self,
             model,
-            dataset,
+            data,
             loss_names,
             optimizer_name,
             loss_weights,
@@ -68,21 +68,21 @@ class ModelTrainer:
         metr_dict = {
             "notes":
                 [
-                    metrics.get_metric(name, dataset.n_classes) for name in metric_names["notes"]
+                    metrics.get_metric(name, data.n_classes) for name in metric_names["notes"]
                 ],
             "duration":
                 [
-                    metrics.get_metric(name, dataset.d_classes) for name in metric_names["duration"]
+                    metrics.get_metric(name, data.d_classes) for name in metric_names["duration"]
                 ],
         }
         loss_dict = {
             "notes": losses.get_loss_function(
                 loss_names["notes"],
-                dataset.notes_weights
+                data.notes_weights
             ),
             "duration": losses.get_loss_function(
                 loss_names["duration"],
-                dataset.duration_weights
+                data.duration_weights
             ),
         }
         model.compile(
@@ -95,7 +95,7 @@ class ModelTrainer:
     def fit_model(
             self,
             model,
-            dataset,
+            data,
             max_epochs,
             batch_size,
             folder_name
@@ -108,20 +108,20 @@ class ModelTrainer:
         tensorboard = keras.callbacks.TensorBoard(log_dir=route)
 
         model.fit(
-            x=dataset.train.inputs,
+            x=data.train.inputs,
             y={
-                'notes': dataset.train.labels.notes,
-                'duration': dataset.train.labels.duration
+                'notes': data.train.labels.notes,
+                'duration': data.train.labels.duration
             },
             epochs=max_epochs,
             batch_size=batch_size,
             verbose=self.verbose,
             shuffle=True,
             validation_data=(
-                dataset.test.inputs,
+                data.test.inputs,
                 [
-                    dataset.test.labels.notes,
-                    dataset.test.labels.duration
+                    data.test.labels.notes,
+                    data.test.labels.duration
                 ]
             ),
             callbacks=[tensorboard]
@@ -130,18 +130,18 @@ class ModelTrainer:
     def build_model(
             self,
             mc: ModelConfig,
-            dataset: dataset.Dataset
+            data: dataset.Dataset
     ):
         model = available_models.available_models[mc.model_name](
-            dataset.n_classes,
-            dataset.d_classes,
+            data.n_classes,
+            data.d_classes,
             mc.input_beats,
             mc.label_beats
         )
 
         self.compile_model(
             model,
-            dataset,
+            data,
             mc.loss_function_names,
             mc.optimizer_name,
             mc.loss_weights,
@@ -150,7 +150,7 @@ class ModelTrainer:
 
         self.fit_model(
             model,
-            dataset,
+            data,
             mc.max_epochs,
             mc.batch_size,
             mc.folder_name
@@ -179,27 +179,27 @@ class ModelTrainer:
                 rows.append(header)
             rows.append(row)
         with open(
-                os.path.join(
-                    self.output_path,
-                    "metrics.csv"
-                ),
-                'w',
-        ) as csvfile:
-            writer = csv.writer(csvfile)
+            os.path.join(
+                self.output_path,
+                "metrics.csv"
+            ),
+            'w',
+        ) as csv_file:
+            writer = csv.writer(csv_file)
             writer.writerows(rows)
 
     def load_models(self):
         for config in self.model_configs:
             mc = ModelConfig(config)
-            dataset = self.dataset_manager.get_dataset(mc.input_beats, mc.label_beats)
-            self.load_model(mc, dataset)
+            data = self.dataset_manager.get_dataset(mc.input_beats, mc.label_beats)
+            self.load_model(mc, data)
 
     def load_model(self,
                    mc: ModelConfig,
-                   dataset: dataset.Dataset):
+                   data: dataset.Dataset):
         model = available_models[mc.model_name](
-            dataset.n_classes,
-            dataset.d_classes,
+            data.n_classes,
+            data.d_classes,
             mc.input_beats,
             mc.label_beats
         )
@@ -209,4 +209,4 @@ class ModelTrainer:
                 f'{mc.folder_name}.h5'
             )
         )
-        self.trained_models[mc.folder_name] = (model, dataset)
+        self.trained_models[mc.folder_name] = (model, data)

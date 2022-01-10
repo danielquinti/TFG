@@ -18,7 +18,7 @@ class DatasetManager:
 
         self.input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
         self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
-        self.raw_data={
+        self.raw_data = {
             "test": self.read_files("test"),
             "train": self.read_files("train")
         }
@@ -33,7 +33,7 @@ class DatasetManager:
             return data
 
     def read_files(self, distribution_name):
-        contents=[]
+        contents = []
         file_names = utils.get_file_paths(os.path.join(self.input_path, distribution_name))
         for file_name in file_names:
             contents.append(np.loadtxt(file_name))
