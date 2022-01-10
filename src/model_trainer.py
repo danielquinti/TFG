@@ -6,7 +6,7 @@ import os
 from tensorflow.python import keras
 
 from data_processing import dataset_manager, dataset
-from model import losses, metrics, available_models
+from model import losses, metrics, models
 
 
 def compute_metrics(model, data, mc):
@@ -132,7 +132,8 @@ class ModelTrainer:
             mc: ModelConfig,
             data: dataset.Dataset
     ):
-        model = available_models.available_models[mc.model_name](
+        model = models.get_model(
+            mc.model_name,
             data.n_classes,
             data.d_classes,
             mc.input_beats,
@@ -197,7 +198,7 @@ class ModelTrainer:
     def load_model(self,
                    mc: ModelConfig,
                    data: dataset.Dataset):
-        model = available_models[mc.model_name](
+        model = models[mc.model_name](
             data.n_classes,
             data.d_classes,
             mc.input_beats,

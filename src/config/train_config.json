@@ -23,6 +23,49 @@
 
       "batch_size": 32,
       "max_epochs": 1
+    },
+        {
+      "input_beats": 5,
+      "label_beats":1,
+      "model_name": "ffwd",
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 1
+    },
+        {
+      "input_beats": 5,
+      "label_beats":1,
+      "model_name": "lr",
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer_name": "adam",
+
+      "batch_size": 32,
+      "max_epochs": 1
     }
   ]
   }
+
