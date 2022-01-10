@@ -170,11 +170,11 @@ class ModelTrainer:
         rows = []
         for config in self.model_configs:
             mc = ModelConfig(config)
-            dataset = self.dataset_manager.get_dataset(mc.input_beats, mc.label_beats)
-            model = self.build_model(mc, dataset)
+            data = self.dataset_manager.get_dataset(mc.input_beats, mc.label_beats)
+            model = self.build_model(mc, data)
             self.trained_models[mc.folder_name] = model
             self.save_weights(model, mc.folder_name)
-            row, header = compute_metrics(model, dataset, mc)
+            row, header = compute_metrics(model, data, mc)
             if not rows:
                 rows.append(header)
             rows.append(row)

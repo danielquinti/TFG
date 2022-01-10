@@ -18,6 +18,10 @@ class DatasetManager:
 
         self.input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
         self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
+        self.raw_data={
+            "test": self.read_files("test"),
+            "train": self.read_files("train")
+        }
         self.datasets = {}
 
     def get_dataset(self, input_beats, output_beats):
@@ -28,17 +32,22 @@ class DatasetManager:
         else:
             return data
 
-    def extract_distribution(self, distribution_name, input_beats, window_beats):
+    def read_files(self, distribution_name):
+        contents=[]
         file_names = utils.get_file_paths(os.path.join(self.input_path, distribution_name))
+        for file_name in file_names:
+            contents.append(np.loadtxt(file_name))
+        return contents
+
+    def extract_distribution(self, distribution_name, input_beats, window_beats):
         inputs = []
         label_notes = []
         label_duration = []
-        for file_name in file_names:
-            contents = np.loadtxt(file_name)
+        for song in self.raw_data[distribution_name]:
             # add inputs and labels by sliding window
-            for i in range(contents.shape[0] - window_beats + 1):
-                inputs.append(contents[i:i + input_beats])
-                label_beat = contents[i + input_beats]
+            for i in range(song.shape[0] - window_beats + 1):
+                inputs.append(song[i:i + input_beats])
+                label_beat = song[i + input_beats]
 
                 label_notes.append(label_beat[:13])
                 label_duration.append(label_beat[13:])
@@ -55,5 +64,4 @@ class DatasetManager:
         )
 
     def get_average_lengths(self):
-        file_names = utils.get_file_paths(os.path.join(self.input_path, "train"))
-        print(np.mean([np.loadtxt(file_name).shape[0] for file_name in file_names]))
+        return np.mean(chunk.shape[0] for chunk in self.raw_data["train"])
