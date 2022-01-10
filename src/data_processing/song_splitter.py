@@ -14,12 +14,11 @@ from src.data_processing import libGPFile, utils
 
 def __save_chunks__(general_path: str, chunks: list):
     for idx, chunk in enumerate(chunks):
-        final_path = general_path + f"-{idx}"
-        np.save(final_path, np.asarray(chunks))
+        final_path = general_path + f"-{idx}.csv"
+        np.savetxt(final_path, np.asarray(chunk), fmt="%1.6f")
 
 
 def __split_song__(beat_lists: list[libGPFile.GPFile.GPMeasure],
-                   general_path: str,
                    silence_thr: int,
                    min_beats: int):
     string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
@@ -117,17 +116,19 @@ def __check_and_split_song__(
     track = find_match(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
     if track is not None:
         g.dropAllTracksBut(track)
-        song_name = input_path.split("\\")[-1].split(".")[0]
-        song_out_path = os.path.join(output_path, song_name)
+
         chunks = __split_song__(
             g.beatLists,
-            song_out_path,
             silence_thr,
             min_beats
         )
-        __save_chunks__(song_out_path, chunks)
-        return chunks if chunks else None
-
+        song_name = input_path.split("\\")[-1].split(".")[0]
+        song_out_path = os.path.join(output_path, song_name)
+        if chunks:
+            __save_chunks__(song_out_path, chunks)
+            return chunks
+        else:
+            return None
 
 def __split_songs__(
         input_path: str,
@@ -155,7 +156,7 @@ def __split_songs__(
         if not os.path.exists(distribution_folder_path):
             os.mkdir(distribution_folder_path)
         for i, file_path in enumerate(file_paths):
-            print(i)
+            print(f'Split attempt: {i+1}/{len(file_paths)}')
             __check_and_split_song__(
                 file_path,
                 distribution_folder_path,

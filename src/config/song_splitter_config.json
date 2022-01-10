@@ -1,6 +1,6 @@
 {
   "input_path": "data/gp_files",
-  "output_path": "data/csv_parts",
+  "output_path": "data/song_chunks",
   "silence_thr": 8,
   "min_beats": 6,
   "test_rate": 0.1,
