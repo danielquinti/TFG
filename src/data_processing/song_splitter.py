@@ -8,8 +8,7 @@ from collections.abc import Callable
 from typing import Any
 
 import numpy as np
-
-from src.data_processing import libGPFile, utils
+import libGPFile, utils
 
 
 def __save_chunks__(general_path: str, chunks: list):

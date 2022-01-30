@@ -111,7 +111,6 @@ class RunConfig:
         self.label_beats = config["label_beats"]
 
 
-
 class ModelTrainer:
     def __init__(self):
         with open(

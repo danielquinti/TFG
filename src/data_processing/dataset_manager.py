@@ -1,8 +1,10 @@
 import json
 import os
+
 import numpy as np
 
-from src.data_processing import dataset, utils
+import dataset
+import utils
 
 
 class DatasetManager:
