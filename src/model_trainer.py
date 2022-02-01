@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 import csv
+import inspect
 import json
 import os
 from datetime import datetime
 from tensorflow.python import keras
-
-from architecture import losses, metrics, layers
+import tensorflow as tf
+from architecture import losses, metrics, layers, regularizers
 from data_processing import dataset_manager, dataset
 
 
@@ -54,8 +55,8 @@ def compile_model(
     model.compile(
         optimizer=optimizer_name,
         loss_weights=loss_weights,
-        loss=metr_dict,
-        metrics=loss_dict
+        loss=loss_dict,
+        metrics=metr_dict
     )
 
 
@@ -104,6 +105,10 @@ class RunConfig:
         self.loss_function_names: dict = config["loss_function_names"]
         self.metric_names: dict = config["metric_names"]
         self.loss_weights: dict = config["loss_weights"]
+        try:
+            self.regularizer = regularizers.get_regularizer(config["regularizer"])
+        except KeyError:
+            self.regularizer=None
         self.optimizer_name = config["optimizer_name"]
         self.batch_size = config["batch_size"]
         self.max_epochs = config["max_epochs"]
@@ -148,7 +153,9 @@ class ModelTrainer:
             data.n_classes,
             data.d_classes,
             mc.input_beats,
-            mc.label_beats
+            mc.label_beats,
+            mc.loss_weights,
+            mc.regularizer
         )
 
         compile_model(
