@@ -2,8 +2,14 @@ import tensorflow.keras as keras
 from tensorflow.keras import layers
 
 
-def lstm_model(inputs, input_beats, input_range):
-    x = layers.LSTM(65, activation='relu', input_shape=(input_beats, input_range))(inputs)
+def lstm_model(inputs, input_beats, input_range, regularizer):
+    x = layers.LSTM(
+        # TODO parameterize
+        65,
+        activation='relu',
+        input_shape=(input_beats, input_range),
+        kernel_regularizer=regularizer
+    )(inputs)
     return x
 
 
@@ -28,19 +34,19 @@ def get_model(
     inputs = layers.Input((input_beats, input_range))
     x = {
         "ffwd": ffwd_model(inputs),
-        "lstm": lstm_model(inputs, n_classes + d_classes, input_beats)
+        "lstm": lstm_model(inputs, n_classes + d_classes, input_beats, regularizer)
     }[model_name]
     output1 = layers.Dense(
-            n_classes,
-            activation='softmax',
-            name='notes',
-            kernel_regularizer=regularizer
-        )(x)
+        n_classes,
+        activation='softmax',
+        name='notes',
+        kernel_regularizer=regularizer
+    )(x)
     output2 = layers.Dense(
         d_classes,
         activation='softmax',
         name='duration',
         kernel_regularizer=regularizer
     )(x)
-    outputs=[output1, output2]
+    outputs = [output1, output2]
     return keras.Model(inputs=inputs, outputs=outputs)
