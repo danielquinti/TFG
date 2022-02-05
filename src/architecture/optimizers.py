@@ -17,4 +17,4 @@ def get_optimizer(data: dict):
             params[k] = v
         else:
             raise ValueError("Malformed optimizer configuration")
-    return options[name](*params.values()), f'{name}(params.values())'
+    return options[name](*(params.values()))
