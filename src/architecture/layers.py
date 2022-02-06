@@ -27,7 +27,8 @@ def get_model(
         d_classes,
         input_beats,
         label_beats,
-        loss_weights,
+        notes_active,
+        duration_active,
         regularizer
 ):
     input_range = n_classes + d_classes
@@ -36,17 +37,23 @@ def get_model(
         "ffwd": ffwd_model(inputs),
         "lstm": lstm_model(inputs, n_classes + d_classes, input_beats, regularizer)
     }[model_name]
-    output1 = layers.Dense(
-        n_classes,
-        activation='softmax',
-        name='notes',
-        kernel_regularizer=regularizer
-    )(x)
-    output2 = layers.Dense(
-        d_classes,
-        activation='softmax',
-        name='duration',
-        kernel_regularizer=regularizer
-    )(x)
-    outputs = [output1, output2]
+    outputs=[]
+    if notes_active:
+        outputs.append(
+            layers.Dense(
+                n_classes,
+                activation='softmax',
+                name='notes',
+                kernel_regularizer=regularizer
+            )(x)
+        )
+    if duration_active:
+        outputs.append(
+            layers.Dense(
+                d_classes,
+                activation='softmax',
+                name='duration',
+                kernel_regularizer=regularizer
+            )(x)
+        )
     return keras.Model(inputs=inputs, outputs=outputs)

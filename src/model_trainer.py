@@ -10,101 +10,24 @@ from architecture import losses, metrics, layers, regularizers, optimizers
 from data_processing import dataset_manager, dataset
 
 
-def compute_metrics(model, data, mc):
+def compute_metrics(model, data, batch_size, run_name):
     evaluation = model.evaluate(
         data.test.inputs,
         [
             data.test.labels.notes,
             data.test.labels.duration
         ],
-        mc.batch_size
+        batch_size
     )
-    row = [mc.run_name] + evaluation
+    row = [run_name] + evaluation
     headers = ["run_name"] + model.metrics_names
     return row, headers
 
 
-def compile_model(
-        model,
-        data,
-        loss_names,
-        optimizer,
-        loss_weights,
-        metric_names
-):
-    metr_dict = {
-        "notes":
-            [
-                metrics.get_metric(name, data.n_classes) for name in metric_names["notes"]
-            ],
-        "duration":
-            [
-                metrics.get_metric(name, data.d_classes) for name in metric_names["duration"]
-            ],
-    }
-    loss_dict = {
-        "notes": losses.get_loss_function(
-            loss_names["notes"],
-            data.notes_weights
-        ),
-        "duration": losses.get_loss_function(
-            loss_names["duration"],
-            data.duration_weights
-        ),
-    }
-    model.compile(
-        optimizer=optimizer,
-        loss_weights=loss_weights,
-        loss=loss_dict,
-        metrics=metr_dict
-    )
-
-
-def fit_model(
-        model,
-        data,
-        max_epochs,
-        batch_size,
-        output_path,
-        run_name,
-        verbose
-):
-    route = os.path.join(
-        output_path,
-        "logs",
-        run_name
-    )
-
-    tensorboard = keras.callbacks.TensorBoard(log_dir=route)
-
-    model.fit(
-        x=data.train.inputs,
-        y={
-            'notes': data.train.labels.notes,
-            'duration': data.train.labels.duration
-        },
-        epochs=max_epochs,
-        batch_size=batch_size,
-        verbose=verbose,
-        shuffle=True,
-        validation_data=(
-            data.test.inputs,
-            [
-                data.test.labels.notes,
-                data.test.labels.duration
-            ]
-        ),
-        callbacks=[tensorboard]
-    )
-
-
 class RunConfig:
-    def __init__(self, config):
+    def __init__(self, config, data_manager):
         self.run_name = config["run_name"]
         self.model_name = config["model_name"]
-        self.loss_function_names: dict = config["loss_function_names"]
-        self.metric_names: dict = config["metric_names"]
-        self.loss_weights: dict = config["loss_weights"]
         try:
             self.regularizer = regularizers.get_regularizer(config["regularizer"])
         except KeyError:
@@ -114,6 +37,60 @@ class RunConfig:
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.label_beats = config["label_beats"]
+        self.data = data_manager.get_dataset(
+                config["input_beats"],
+                config["label_beats"]
+            )
+        raw_loss_weights = config["loss_weights"]
+        notes_active = raw_loss_weights["notes"] > 0
+        duration_active = raw_loss_weights["duration"] > 0
+        self.model = layers.get_model(
+            self.model_name,
+            self.data.n_classes,
+            self.data.d_classes,
+            self.input_beats,
+            self.label_beats,
+            notes_active,
+            duration_active,
+            self.regularizer
+        )
+        self.train_input = self.data.train.inputs
+        metric_names: dict = config["metric_names"]
+        loss_names: dict = config["loss_function_names"]
+
+        self.metrics = {}
+        self.losses = {}
+        self.train_output={}
+        val_output=[]
+        self.loss_weights={}
+        if notes_active:
+            self.metrics["notes"]=\
+                [
+                    metrics.get_metric(name, self.data.n_classes) for name in metric_names["notes"]
+                ]
+            self.losses["notes"] = losses.get_loss_function(
+                loss_names["notes"],
+                self.data.notes_weights
+            )
+            val_output.append(self.data.test.labels.notes)
+            self.train_output['notes'] = self.data.train.labels.notes
+            self.loss_weights["notes"] = raw_loss_weights["notes"]
+        if duration_active:
+            self.metrics["duration"] = \
+                [
+                    metrics.get_metric(name, self.data.d_classes) for name in metric_names["duration"]
+                ]
+            self.losses["duration"] = losses.get_loss_function(
+                    loss_names["duration"],
+                    self.data.duration_weights
+                )
+            val_output.append(self.data.test.labels.duration)
+            self.train_output['duration'] = self.data.train.labels.duration
+            self.loss_weights["duration"] = raw_loss_weights["duration"]
+        self.validation_data = (
+            self.data.test.inputs,
+            val_output
+        )
 
 
 class ModelTrainer:
@@ -143,42 +120,6 @@ class ModelTrainer:
         self.dataset_manager = dataset_manager.DatasetManager()
         self.trained_models = {}
 
-    def build_model(
-            self,
-            mc: RunConfig,
-            data: dataset.Dataset,
-    ):
-        model = layers.get_model(
-            mc.model_name,
-            data.n_classes,
-            data.d_classes,
-            mc.input_beats,
-            mc.label_beats,
-            mc.loss_weights,
-            mc.regularizer
-        )
-
-        compile_model(
-            model,
-            data,
-            mc.loss_function_names,
-            mc.optimizer,
-            mc.loss_weights,
-            mc.metric_names
-        )
-
-        fit_model(
-            model,
-            data,
-
-            mc.max_epochs,
-            mc.batch_size,
-            self.output_path,
-            mc.run_name,
-            self.verbose
-        )
-        return model
-
     def save_weights(self, model, name):
         folder_path = os.path.join(
             self.output_path,
@@ -192,17 +133,39 @@ class ModelTrainer:
         )
         model.save_weights(weight_filename)
 
+    def run_one(self, config):
+        rc = RunConfig(
+            config,
+            self.dataset_manager
+        )
+        rc.model.compile(
+            optimizer=rc.optimizer,
+            loss_weights=rc.loss_weights,
+            loss=rc.losses,
+            metrics=rc.metrics
+        )
+        tensorboard = keras.callbacks.TensorBoard(
+            log_dir=os.path.join(self.output_path, rc.run_name))
+
+        rc.model.fit(
+            x=rc.train_input,
+            y=rc.train_output,
+            epochs=rc.max_epochs,
+            batch_size=rc.batch_size,
+            verbose=self.verbose,
+            shuffle=True,
+            validation_data=rc.validation_data,
+            callbacks=[tensorboard]
+        )
+        self.trained_models[rc.run_name] = rc.model
+        self.save_weights(rc.model, rc.run_name)
+        return compute_metrics(rc.model, rc.data, rc.batch_size, rc.run_name)
+
     def run_all(self):
         rows = []
         for config in self.model_configs:
-            mc = RunConfig(config)
-            data = self.dataset_manager.get_dataset(mc.input_beats, mc.label_beats)
-            model = self.build_model(mc, data)
-            self.trained_models[mc.run_name] = model
-            self.save_weights(model, mc.run_name)
-            row, header = compute_metrics(model, data, mc)
-            if not rows:
-                rows.append(header)
+            row, header = self.run_one(config)
+            rows.append(header)
             rows.append(row)
         with open(
                 os.path.join(
