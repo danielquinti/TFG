@@ -10,13 +10,11 @@ from architecture import losses, metrics, layers, regularizers, optimizers
 from data_processing import dataset_manager, dataset
 
 
-def compute_metrics(model, data, batch_size, run_name):
+def compute_metrics(model, inp, output, batch_size, run_name):
+
     evaluation = model.evaluate(
-        data.test.inputs,
-        [
-            data.test.labels.notes,
-            data.test.labels.duration
-        ],
+        inp,
+        output,
         batch_size
     )
     row = [run_name] + evaluation
@@ -37,21 +35,23 @@ class RunConfig:
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.label_beats = config["label_beats"]
-        self.data = data_manager.get_dataset(
-                config["input_beats"],
-                config["label_beats"]
-            )
+
         raw_loss_weights = config["loss_weights"]
-        notes_active = raw_loss_weights["notes"] > 0
-        duration_active = raw_loss_weights["duration"] > 0
-        self.model = layers.get_model(
+        active_features = {
+            feature: raw_loss_weights[feature] > 0 for feature in raw_loss_weights.keys()
+        }
+        self.data: dataset = data_manager.get_dataset(
+            config["input_beats"],
+            config["label_beats"],
+            active_features
+        )
+        self.model: keras.Model = layers.get_model(
             self.model_name,
-            self.data.n_classes,
-            self.data.d_classes,
+            self.data.train.inputs.shape[-1],
+            self.data.number_of_classes,
             self.input_beats,
             self.label_beats,
-            notes_active,
-            duration_active,
+            active_features,
             self.regularizer
         )
         self.train_input = self.data.train.inputs
@@ -60,36 +60,26 @@ class RunConfig:
 
         self.metrics = {}
         self.losses = {}
-        self.train_output={}
-        val_output=[]
-        self.loss_weights={}
-        if notes_active:
-            self.metrics["notes"]=\
-                [
-                    metrics.get_metric(name, self.data.n_classes) for name in metric_names["notes"]
-                ]
-            self.losses["notes"] = losses.get_loss_function(
-                loss_names["notes"],
-                self.data.notes_weights
-            )
-            val_output.append(self.data.test.labels.notes)
-            self.train_output['notes'] = self.data.train.labels.notes
-            self.loss_weights["notes"] = raw_loss_weights["notes"]
-        if duration_active:
-            self.metrics["duration"] = \
-                [
-                    metrics.get_metric(name, self.data.d_classes) for name in metric_names["duration"]
-                ]
-            self.losses["duration"] = losses.get_loss_function(
-                    loss_names["duration"],
-                    self.data.duration_weights
+        self.train_output = {}
+        self.test_output = []
+        self.loss_weights = {}
+        for feature, is_active in active_features.items():
+            if is_active:
+                self.metrics[feature] = \
+                    [
+                        metrics.get_metric(name, self.data.number_of_classes[feature]) for name in metric_names[feature]
+                    ]
+                self.losses[feature] = losses.get_loss_function(
+                    loss_names[feature],
+                    self.data.weights[feature]
                 )
-            val_output.append(self.data.test.labels.duration)
-            self.train_output['duration'] = self.data.train.labels.duration
-            self.loss_weights["duration"] = raw_loss_weights["duration"]
-        self.validation_data = (
+                self.test_output.append(self.data.test.labels[feature])
+                self.train_output[feature] = self.data.train.labels[feature]
+                self.loss_weights[feature] = raw_loss_weights[feature]
+        self.test_input = self.data.test.inputs
+        self.test_data = (
             self.data.test.inputs,
-            val_output
+            self.test_output
         )
 
 
@@ -154,12 +144,12 @@ class ModelTrainer:
             batch_size=rc.batch_size,
             verbose=self.verbose,
             shuffle=True,
-            validation_data=rc.validation_data,
+            validation_data=rc.test_data,
             callbacks=[tensorboard]
         )
         self.trained_models[rc.run_name] = rc.model
         self.save_weights(rc.model, rc.run_name)
-        return compute_metrics(rc.model, rc.data, rc.batch_size, rc.run_name)
+        return compute_metrics(rc.model, rc.test_input, rc.test_output, rc.batch_size, rc.run_name)
 
     def run_all(self):
         rows = []

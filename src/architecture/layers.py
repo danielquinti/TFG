@@ -23,37 +23,27 @@ def ffwd_model(inputs):
 
 def get_model(
         model_name,
-        n_classes,
-        d_classes,
+        input_range,
+        number_of_classes: dict,
         input_beats,
         label_beats,
-        notes_active,
-        duration_active,
+        active_features: dict,
         regularizer
 ):
-    input_range = n_classes + d_classes
     inputs = layers.Input((input_beats, input_range))
     x = {
         "ffwd": ffwd_model(inputs),
-        "lstm": lstm_model(inputs, n_classes + d_classes, input_beats, regularizer)
+        "lstm": lstm_model(inputs, input_range, input_beats, regularizer)
     }[model_name]
-    outputs=[]
-    if notes_active:
-        outputs.append(
-            layers.Dense(
-                n_classes,
-                activation='softmax',
-                name='notes',
-                kernel_regularizer=regularizer
-            )(x)
-        )
-    if duration_active:
-        outputs.append(
-            layers.Dense(
-                d_classes,
-                activation='softmax',
-                name='duration',
-                kernel_regularizer=regularizer
-            )(x)
-        )
+    outputs = []
+    for feature, is_active in active_features.items():
+        if is_active:
+            outputs.append(
+                layers.Dense(
+                    number_of_classes[feature],
+                    activation='softmax',
+                    name=feature,
+                    kernel_regularizer=regularizer
+                )(x)
+            )
     return keras.Model(inputs=inputs, outputs=outputs)
