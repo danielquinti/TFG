@@ -6,8 +6,8 @@ def get_optimizer(data: dict):
     name = data["name"]
     options = {
         "adam": tf.keras.optimizers.Adam,
-        "RMSprop": tf.keras.optimizers.RMSprop,
-        "SGD": tf.keras.optimizers.SGD
+        "rmsprop": tf.keras.optimizers.RMSprop,
+        "sgd": tf.keras.optimizers.SGD
     }
     signature = inspect.getfullargspec(options[name])
 

@@ -84,12 +84,7 @@ class RunConfig:
 
 
 class ModelTrainer:
-    def __init__(self):
-        config_file_path = os.path.join(
-            "src",
-            "config",
-            "train_config.json"
-        )
+    def __init__(self, config_file_path: str):
         with open(config_file_path) as fp:
             params = json.load(fp)
 
