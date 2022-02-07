@@ -23,8 +23,7 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "rmsprop",
-        "learning_rate": 0.0001
+        "name": "rmsprop"
       },
       "regularizer": 0.005,
       "batch_size": 32,
@@ -48,8 +47,7 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "rmsprop",
-        "learning_rate": 0.0001
+        "name": "rmsprop"
       },
       "regularizer": 0.005,
       "batch_size": 32,
@@ -73,8 +71,7 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "rmsprop",
-        "learning_rate": 0.0001
+        "name": "rmsprop"
       },
       "batch_size": 32,
       "max_epochs": 50
@@ -97,8 +94,7 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "rmsprop",
-        "learning_rate": 0.0001
+        "name": "rmsprop"
       },
       "batch_size": 32,
       "max_epochs": 50
