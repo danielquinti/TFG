@@ -3,7 +3,7 @@ import csv
 import json
 import os
 from datetime import datetime
-
+import shutil
 from tensorflow.python import keras
 
 from architecture import losses, metrics, layers, regularizers, optimizers
@@ -85,13 +85,12 @@ class RunConfig:
 
 class ModelTrainer:
     def __init__(self):
-        with open(
-                os.path.join(
-                    "src",
-                    "config",
-                    "train_config.json"
-                )
-        ) as fp:
+        config_file_path = os.path.join(
+            "src",
+            "config",
+            "train_config.json"
+        )
+        with open(config_file_path) as fp:
             params = json.load(fp)
 
         current_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
@@ -105,6 +104,8 @@ class ModelTrainer:
             output_path_parent,
             folder_name
         )
+        os.mkdir(self.output_path)
+        shutil.copy(config_file_path, self.output_path)
         self.verbose = params["verbose"]
         self.model_configs: list = params["run_configs"]
         self.dataset_manager = dataset_manager.DatasetManager()
@@ -134,8 +135,13 @@ class ModelTrainer:
             loss=rc.losses,
             metrics=rc.metrics
         )
+        log_folder = os.path.join(
+            self.output_path,
+            "logs"
+        )
         tensorboard = keras.callbacks.TensorBoard(
-            log_dir=os.path.join(self.output_path, rc.run_name))
+            log_dir=os.path.join(log_folder, rc.run_name)
+        )
 
         rc.model.fit(
             x=rc.train_input,
