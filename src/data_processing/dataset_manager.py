@@ -21,7 +21,7 @@ class DatasetManager:
         self.input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
         self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
         self.raw_data = {
-            "test": self.read_files("test"),
+            "testing": self.read_files("testing"),
             "train": self.read_files("train")
         }
         self.datasets = {}
@@ -69,5 +69,5 @@ class DatasetManager:
         window_beats = input_beats + output_beats
         return dataset.Dataset(
             self.extract_distribution("train", input_beats, window_beats, active_features),
-            self.extract_distribution("test", input_beats, window_beats, active_features),
+            self.extract_distribution("testing", input_beats, window_beats, active_features),
         )

@@ -1,8 +1,14 @@
 import os
 import unittest
-
 import numpy as np
+import sys
 
+sys.path.append(
+    os.path.join(
+        "src",
+        "data_processing"
+    )
+)
 from src.data_processing import song_splitter
 
 
@@ -12,14 +18,14 @@ class SongSplitterTest(unittest.TestCase):
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_input",
                 "notes.gp3"
             ),
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_output",
             ),
             8,
@@ -30,11 +36,11 @@ class SongSplitterTest(unittest.TestCase):
             (
                 np.diag(np.ones(12)),
                 np.zeros((12, 1)),
-                np.zeros((12,7))
+                np.zeros((12, 7))
 
             )
         )
-        expected[:,15]=1
+        expected[:, 15] = 1
         obtained = chunks[0]
         np.testing.assert_array_equal(expected, obtained)
 
@@ -43,14 +49,14 @@ class SongSplitterTest(unittest.TestCase):
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_input",
                 "rests.gp3"
             ),
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_output",
             ),
             8,
@@ -64,14 +70,14 @@ class SongSplitterTest(unittest.TestCase):
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_input",
                 "notes_duration.gp3"
             ),
             os.path.join(
                 os.getcwd(),
                 "src",
-                "parser_test",
+                "testing",
                 "test_output",
             ),
             8,
@@ -88,7 +94,6 @@ class SongSplitterTest(unittest.TestCase):
             )
         )
         obtained = chunks[0]
-        print(obtained)
         np.testing.assert_array_equal(expected, obtained)
 
-    #TODO test splitting, discontinuity and validation
+    # TODO testing splitting, discontinuity and validation

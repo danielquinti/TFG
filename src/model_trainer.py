@@ -85,11 +85,13 @@ class RunConfig:
 
 class ModelTrainer:
     def __init__(self, config_file_path: str):
+
+        config_file_name = os.path.basename(config_file_path).split(".")[0]
         with open(config_file_path) as fp:
             params = json.load(fp)
 
         current_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        folder_name = f'{current_date}({params["config_name"]})'
+        folder_name = f'{config_file_name}({current_date})'
         output_path_parent = os.path.join(
             *(params["output_path"].split("\\")[0].split("/"))
         )
@@ -104,7 +106,6 @@ class ModelTrainer:
         self.verbose = params["verbose"]
         self.model_configs: list = params["run_configs"]
         self.dataset_manager = dataset_manager.DatasetManager()
-        self.trained_models = {}
 
     def save_weights(self, model, name):
         folder_path = os.path.join(
@@ -148,7 +149,6 @@ class ModelTrainer:
             validation_data=rc.test_data,
             callbacks=[tensorboard]
         )
-        self.trained_models[rc.run_name] = rc.model
         self.save_weights(rc.model, rc.run_name)
         return compute_metrics(rc.model, rc.test_input, rc.test_output, rc.batch_size, rc.run_name)
 

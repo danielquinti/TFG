@@ -29,7 +29,7 @@ def dir_path(string: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path', type=dir_path)
+    parser.add_argument("path", type=dir_path)
     args = parser.parse_args()
     config_path = args.path
     mt = model_trainer.ModelTrainer(config_path)
