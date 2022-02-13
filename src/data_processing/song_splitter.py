@@ -8,13 +8,32 @@ from collections.abc import Callable
 from typing import Any
 
 import numpy as np
-import libGPFile, utils
+import libGPFile
+import utils
 
 
-def __save_chunks__(general_path: str, chunks: list):
+def __save_chunks__(
+        output_path: str,
+        dist_name: str,
+        song_name: str,
+        chunks: list
+):
     for idx, chunk in enumerate(chunks):
-        final_path = general_path + f"-{idx}.csv"
-        np.savetxt(final_path, np.asarray(chunk), fmt="%1.6f")
+        chunk_name = f"{song_name}-{idx}"
+        csv_name = os.path.join(
+            output_path,
+            "csv",
+            dist_name,
+            f"{chunk_name}.csv"
+        )
+        npy_name = os.path.join(
+            output_path,
+            "npy",
+            dist_name,
+            f"{chunk_name}.npy"
+        )
+        np.savetxt(csv_name, np.asarray(chunk), fmt="%d")
+        np.save(npy_name, np.asarray(chunk))
 
 
 def __split_song__(beat_lists: list[libGPFile.GPFile.GPMeasure],
@@ -38,7 +57,7 @@ def __split_song__(beat_lists: list[libGPFile.GPFile.GPMeasure],
                 # discard tracks with cords
                 return
 
-            g_string = find_match(beat.strings, lambda x: x is not None)
+            g_string = __find_match__(beat.strings, lambda x: x is not None)
             if g_string is None or beat.strings[g_string].noteType is None:  # rest
                 rest_ctr += 1
                 # toggle the indexes of the last note (rest) and the corresponding duration
@@ -92,7 +111,7 @@ def __split_song__(beat_lists: list[libGPFile.GPFile.GPMeasure],
     return chunks
 
 
-def find_match(lst: list, condition: Callable[Any, bool]):
+def __find_match__(lst: list, condition: Callable[Any, bool]):
     for idx, elem in enumerate(lst):
         if condition(elem):
             return idx
@@ -102,6 +121,7 @@ def find_match(lst: list, condition: Callable[Any, bool]):
 def __check_and_split_song__(
         input_path: str,
         output_path: str,
+        dist_name: str,
         silence_thr: int,
         min_beats: int,
         track_name: str):
@@ -110,9 +130,8 @@ def __check_and_split_song__(
         g = libGPFile.GPFile.read(input_path)
     except EOFError:
         return
-
     # isolate, process and save guitar track
-    track = find_match(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
+    track = __find_match__(g.tracks, lambda x: re.search(track_name, x.name, re.IGNORECASE))
     if track is not None:
         g.dropAllTracksBut(track)
 
@@ -122,12 +141,17 @@ def __check_and_split_song__(
             min_beats
         )
         song_name = input_path.split("\\")[-1].split(".")[0]
-        song_out_path = os.path.join(output_path, song_name)
         if chunks:
-            __save_chunks__(song_out_path, chunks)
+            __save_chunks__(
+                output_path,
+                dist_name,
+                song_name,
+                chunks
+            )
             return chunks
         else:
             return None
+
 
 def __split_songs__(
         input_path: str,
@@ -147,18 +171,46 @@ def __split_songs__(
         "train": file_paths[:border],
         "test": file_paths[border:]
     }
+    os.makedirs(
+        os.path.join(
+            output_path,
+            "csv",
+            "train",
+        ),
+        exist_ok=True
+    )
+    os.makedirs(
+        os.path.join(
+            output_path,
+            "csv",
+            "test",
+        ),
+        exist_ok=True
+    )
+    os.makedirs(
+        os.path.join(
+            output_path,
+            "npy",
+            "train",
+        ),
+        exist_ok=True
+    )
+    os.makedirs(
+        os.path.join(
+            output_path,
+            "npy",
+            "test",
+        ),
+        exist_ok=True
+    )
 
     for dist_name, file_paths in dist_paths.items():
-        distribution_folder_path = os.path.join(output_path, dist_name)
-        if not os.path.exists(output_path):
-            os.mkdir(output_path)
-        if not os.path.exists(distribution_folder_path):
-            os.mkdir(distribution_folder_path)
         for i, file_path in enumerate(file_paths):
             print(f'Split attempt: {i+1}/{len(file_paths)}')
             __check_and_split_song__(
                 file_path,
-                distribution_folder_path,
+                output_path,
+                dist_name,
                 silence_thr,
                 min_beats,
                 track_name
@@ -190,3 +242,6 @@ def split_songs():
         track_name,
         test_rate
     )
+
+if __name__ == "__main__":
+    split_songs()

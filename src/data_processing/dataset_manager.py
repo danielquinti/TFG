@@ -18,10 +18,13 @@ class DatasetManager:
         )
         params = json.load(fp)
 
-        self.input_path = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
-        self.output_path = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
+        self.input_path = os.path.join(
+            *(params["input_path"].split("/")),
+            "npy"
+        )
+        self.output_path = os.path.join(*(params["output_path"].split("/")))
         self.raw_data = {
-            "testing": self.read_files("testing"),
+            "test": self.read_files("test"),
             "train": self.read_files("train")
         }
         self.datasets = {}
@@ -38,8 +41,10 @@ class DatasetManager:
     def read_files(self, distribution_name):
         contents = []
         file_names = utils.get_file_paths(os.path.join(self.input_path, distribution_name))
+        if not file_names:
+            raise FileNotFoundError(f'Could not find files for {distribution_name} distribution in {self.input_path}.')
         for file_name in file_names:
-            contents.append(np.loadtxt(file_name))
+            contents.append(np.load(file_name))
         return contents
 
     def extract_distribution(
@@ -69,5 +74,5 @@ class DatasetManager:
         window_beats = input_beats + output_beats
         return dataset.Dataset(
             self.extract_distribution("train", input_beats, window_beats, active_features),
-            self.extract_distribution("testing", input_beats, window_beats, active_features),
+            self.extract_distribution("test", input_beats, window_beats, active_features),
         )

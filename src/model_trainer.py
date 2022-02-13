@@ -95,13 +95,11 @@ class ModelTrainer:
         output_path_parent = os.path.join(
             *(params["output_path"].split("\\")[0].split("/"))
         )
-        if not os.path.exists(output_path_parent):
-            os.mkdir(output_path_parent)
         self.output_path = os.path.join(
             output_path_parent,
             folder_name
         )
-        os.mkdir(self.output_path)
+        os.makedirs(self.output_path, exist_ok=True)
         shutil.copy(config_file_path, self.output_path)
         self.verbose = params["verbose"]
         self.model_configs: list = params["run_configs"]
@@ -112,8 +110,7 @@ class ModelTrainer:
             self.output_path,
             "weights"
         )
-        if not os.path.exists(folder_path):
-            os.mkdir(folder_path)
+        os.makedirs(folder_path, exist_ok=True)
         weight_filename = os.path.join(
             folder_path,
             f'{name}.h5'
