@@ -7,7 +7,10 @@
       "run_name": "equal_weights",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "lstm",
+            "model": {
+        "name": "lstm",
+        "units": 4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"
@@ -30,7 +33,10 @@
       "run_name": "ten_to_one_weights",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "lstm",
+            "model": {
+        "name": "lstm",
+        "units": 4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"
@@ -53,7 +59,10 @@
       "run_name": "separate_notes",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "lstm",
+            "model": {
+        "name": "lstm",
+        "units": 4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"
@@ -76,7 +85,10 @@
       "run_name": "separate_duration",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "lstm",
+            "model": {
+        "name": "lstm",
+        "units": 4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"

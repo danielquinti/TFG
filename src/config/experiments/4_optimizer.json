@@ -4,59 +4,7 @@
   "run_configs":
   [
     {
-      "run_name": "5_notes",
-      "input_beats": 5,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
-    },
-    {
-      "run_name": "5_duration",
-      "input_beats": 5,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
-    },
-    {
-      "run_name": "10_notes",
+      "run_name": "adam_1e-3_notes",
       "input_beats": 10,
       "label_beats":1,
       "model": {
@@ -82,7 +30,7 @@
       "max_epochs": 150
     },
     {
-      "run_name": "10_duration",
+      "run_name": "adam_1e-3_durations",
       "input_beats": 10,
       "label_beats":1,
       "model": {
@@ -108,8 +56,8 @@
       "max_epochs": 150
     },
     {
-      "run_name": "20_notes",
-      "input_beats": 20,
+      "run_name": "adam_1e-4_notes",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -128,14 +76,15 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "20_duration",
-      "input_beats": 20,
+      "run_name": "adam_1e-4_durations",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -154,14 +103,15 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "30_notes",
-      "input_beats": 30,
+      "run_name": "adam_1e-5_notes",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -180,14 +130,15 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-5
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "30_duration",
-      "input_beats": 30,
+      "run_name": "adam_1e-5_durations",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -206,14 +157,16 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-5
       },
       "batch_size": 32,
       "max_epochs": 150
     },
+
     {
-      "run_name": "40_notes",
-      "input_beats": 40,
+      "run_name": "rmsprop_1e-4_notes",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -232,14 +185,15 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "adam"
+        "name": "rmsprop",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "40_duration",
-      "input_beats": 40,
+      "run_name": "rmsprop_1e-4_durations",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -258,14 +212,15 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "adam"
+        "name": "rmsprop",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "50_notes",
-      "input_beats": 50,
+      "run_name": "rmsprop_1e-5_notes",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -284,14 +239,15 @@
         "duration": 0
       },
       "optimizer":{
-        "name": "adam"
+        "name": "rmsprop",
+        "learning_rate": 1e-5
       },
       "batch_size": 32,
       "max_epochs": 150
     },
     {
-      "run_name": "50_duration",
-      "input_beats": 50,
+      "run_name": "rmsprop_1e-5_durations",
+      "input_beats": 10,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -310,7 +266,115 @@
         "duration": 1
       },
       "optimizer":{
-        "name": "adam"
+        "name": "rmsprop",
+        "learning_rate": 1e-5
+      },
+      "batch_size": 32,
+      "max_epochs": 150
+    },
+
+    {
+      "run_name": "sgd_1e-2_notes",
+      "input_beats": 10,
+      "label_beats":1,
+      "model": {
+        "name": "lstm",
+        "units": 4
+      },
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer":{
+        "name": "sgd"
+      },
+      "batch_size": 32,
+      "max_epochs": 150
+    },
+    {
+      "run_name": "sgd_1e-2_durations",
+      "input_beats": 10,
+      "label_beats":1,
+      "model": {
+        "name": "lstm",
+        "units": 4
+      },
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 0,
+        "duration": 1
+      },
+      "optimizer":{
+        "name": "sgd"
+      },
+      "batch_size": 32,
+      "max_epochs": 150
+    },
+    {
+      "run_name": "sgd_1e-3_notes",
+      "input_beats": 10,
+      "label_beats":1,
+      "model": {
+        "name": "lstm",
+        "units": 4
+      },
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 1,
+        "duration": 0
+      },
+      "optimizer":{
+        "name": "sgd",
+        "learning_rate": 1e-3
+      },
+      "batch_size": 32,
+      "max_epochs": 150
+    },
+    {
+      "run_name": "sgd_1e-3_durations",
+      "input_beats": 10,
+      "label_beats":1,
+      "model": {
+        "name": "lstm",
+        "units": 4
+      },
+      "loss_function_names":{
+        "notes": "wcce",
+        "duration": "wcce"
+      },
+      "metric_names":{
+        "notes": ["ba"],
+        "duration": ["ba"]
+      },
+      "loss_weights": {
+        "notes": 0,
+        "duration": 1
+      },
+      "optimizer":{
+        "name": "sgd",
+        "learning_rate": 1e-3
       },
       "batch_size": 32,
       "max_epochs": 150

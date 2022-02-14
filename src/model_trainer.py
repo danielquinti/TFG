@@ -6,7 +6,7 @@ from datetime import datetime
 import shutil
 from tensorflow.python import keras
 
-from architecture import losses, metrics, layers, regularizers, optimizers
+from architecture import losses, metrics, layers, optimizers
 from data_processing import dataset_manager, dataset
 
 
@@ -25,11 +25,6 @@ def compute_metrics(model, inp, output, batch_size, run_name):
 class RunConfig:
     def __init__(self, config, data_manager):
         self.run_name = config["run_name"]
-        self.model_name = config["model_name"]
-        try:
-            self.regularizer = regularizers.get_regularizer(config["regularizer"])
-        except KeyError:
-            self.regularizer = None
         self.optimizer = optimizers.get_optimizer(config["optimizer"])
         self.batch_size = config["batch_size"]
         self.max_epochs = config["max_epochs"]
@@ -46,13 +41,12 @@ class RunConfig:
             active_features
         )
         self.model: keras.Model = layers.get_model(
-            self.model_name,
+            config["model"],
             self.data.train.inputs.shape[-1],
             self.data.number_of_classes,
             self.input_beats,
             self.label_beats,
             active_features,
-            self.regularizer
         )
         self.train_input = self.data.train.inputs
         metric_names: dict = config["metric_names"]

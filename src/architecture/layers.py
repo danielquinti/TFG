@@ -1,11 +1,16 @@
 import tensorflow.keras as keras
 from tensorflow.keras import layers
+seimport regularizers
 
-
-def lstm_model(inputs, input_beats, input_range, regularizer):
+def lstm_model(
+        inputs,
+        units,
+        input_beats,
+        input_range,
+        regularizer
+):
     x = layers.LSTM(
-        # TODO parameterize
-        65,
+        units,
         activation='relu',
         input_shape=(input_beats, input_range),
         kernel_regularizer=regularizer
@@ -22,19 +27,32 @@ def ffwd_model(inputs):
 
 
 def get_model(
-        model_name,
+        config: dict,
         input_range,
         number_of_classes: dict,
         input_beats,
         label_beats,
         active_features: dict,
-        regularizer
 ):
+    try:
+        out_regularizer = regularizers.get_regularizer(config["out_regularizer"])
+    except KeyError:
+        out_regularizer = None
+    try:
+        in_regularizer = regularizers.get_regularizer(config["in_regularizer"])
+    except KeyError:
+        in_regularizer = None
     inputs = layers.Input((input_beats, input_range))
     x = {
         "ffwd": ffwd_model(inputs),
-        "lstm": lstm_model(inputs, input_range, input_beats, regularizer)
-    }[model_name]
+        "lstm": lstm_model(
+            inputs,
+            config["units"],
+            input_range,
+            input_beats,
+            in_regularizer
+        )
+    }[config["name"]]
     outputs = []
     for feature, is_active in active_features.items():
         if is_active:
@@ -43,7 +61,7 @@ def get_model(
                     number_of_classes[feature],
                     activation='softmax',
                     name=feature,
-                    kernel_regularizer=regularizer
+                    kernel_regularizer=out_regularizer
                 )(x)
             )
     return keras.Model(inputs=inputs, outputs=outputs)

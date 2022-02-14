@@ -7,7 +7,10 @@
       "run_name": "lstm",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "lstm",
+      "model": {
+        "name": "lstm",
+        "units": 4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"
@@ -26,11 +29,15 @@
       "batch_size": 32,
       "max_epochs": 150
     },
-        {
+    {
       "run_name": "ffwd",
       "input_beats": 5,
       "label_beats":1,
-      "model_name": "ffwd",
+      "model": {
+        "name": "lstm",
+        "units": 4,
+        "regularizer": 1e-4
+      },
       "loss_function_names":{
         "notes": "cce",
         "duration": "cce"
