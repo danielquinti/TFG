@@ -5,7 +5,7 @@
   [
     {
       "run_name": "adam_1e-3_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -27,11 +27,11 @@
         "name": "adam"
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "adam_1e-3_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -53,11 +53,11 @@
         "name": "adam"
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "adam_1e-4_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -80,11 +80,11 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "adam_1e-4_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -107,11 +107,11 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "adam_1e-5_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -134,11 +134,11 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "adam_1e-5_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -161,12 +161,12 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
 
     {
       "run_name": "rmsprop_1e-4_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -189,11 +189,11 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "rmsprop_1e-4_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -216,11 +216,11 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "rmsprop_1e-5_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -243,11 +243,11 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "rmsprop_1e-5_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -270,12 +270,12 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
 
     {
       "run_name": "sgd_1e-2_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -297,11 +297,11 @@
         "name": "sgd"
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "sgd_1e-2_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -323,11 +323,11 @@
         "name": "sgd"
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "sgd_1e-3_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -350,11 +350,11 @@
         "learning_rate": 1e-3
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     },
     {
       "run_name": "sgd_1e-3_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -377,7 +377,7 @@
         "learning_rate": 1e-3
       },
       "batch_size": 32,
-      "max_epochs": 150
+      "max_epochs": 1
     }
   ]
   }

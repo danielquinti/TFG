@@ -5,7 +5,7 @@
   [
     {
       "run_name": "no_reg_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -31,7 +31,7 @@
     },
     {
       "run_name": "no_reg_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -57,7 +57,7 @@
     },
     {
       "run_name": "out_reg_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -84,7 +84,7 @@
     },
     {
       "run_name": "out_reg_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -111,7 +111,7 @@
     },
     {
       "run_name": "both_reg_notes",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
@@ -139,7 +139,7 @@
     },
     {
       "run_name": "both_reg_durations",
-      "input_beats": 10,
+      "input_beats": 50,
       "label_beats":1,
       "model": {
         "name": "lstm",
