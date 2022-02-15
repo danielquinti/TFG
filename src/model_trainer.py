@@ -78,25 +78,26 @@ class RunConfig:
 
 
 class ModelTrainer:
-    def __init__(self, config_file_path: str):
+    def __init__(
+            self,
+            config_file_path: str,
+            output_path_parent: str,
+            verbose: int
+    ):
 
         config_file_name = os.path.basename(config_file_path).split(".")[0]
         with open(config_file_path) as fp:
-            params = json.load(fp)
+            self.run_configs: list = json.load(fp)
 
         current_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         folder_name = f'{config_file_name}({current_date})'
-        output_path_parent = os.path.join(
-            *(params["output_path"].split("\\")[0].split("/"))
-        )
         self.output_path = os.path.join(
             output_path_parent,
             folder_name
         )
         os.makedirs(self.output_path, exist_ok=True)
         shutil.copy(config_file_path, self.output_path)
-        self.verbose = params["verbose"]
-        self.model_configs: list = params["run_configs"]
+        self.verbose = verbose
         self.dataset_manager = dataset_manager.DatasetManager()
 
     def save_weights(self, model, name):
@@ -145,7 +146,7 @@ class ModelTrainer:
 
     def run_all(self):
         rows = []
-        for config in self.model_configs:
+        for config in self.run_configs:
             row, header = self.run_one(config)
             rows.append(header)
             rows.append(row)

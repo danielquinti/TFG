@@ -30,7 +30,21 @@ def dir_path(string: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("path", type=dir_path)
+    parser.add_argument(
+        '--output_path',
+        default="results"
+    )
+    parser.add_argument(
+        '--verbose',
+        default=1,
+    )
     args = parser.parse_args()
     config_path = args.path
-    mt = model_trainer.ModelTrainer(config_path)
+    output_path = args.output_path
+    verbose = args.verbose
+    mt = model_trainer.ModelTrainer(
+        config_path,
+        output_path,
+        verbose
+    )
     mt.run_all()

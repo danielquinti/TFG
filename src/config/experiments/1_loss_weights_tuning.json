@@ -1,111 +1,106 @@
-{
-  "output_path" : "results",
-  "verbose": 1,
-  "run_configs":
-  [
-    {
-      "run_name": "equal_weights",
-      "input_beats": 5,
-      "label_beats":1,
-            "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+[
+  {
+    "run_name": "equal_weights",
+    "input_beats": 5,
+    "label_beats":1,
+          "model": {
+      "name": "lstm",
+      "units": 4
     },
-    {
-      "run_name": "ten_to_one_weights",
-      "input_beats": 5,
-      "label_beats":1,
-            "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0.1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "loss_function_names":{
+      "notes": "cce",
+      "duration": "cce"
     },
-    {
-      "run_name": "separate_notes",
-      "input_beats": 5,
-      "label_beats":1,
-            "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
     },
-    {
-      "run_name": "separate_duration",
-      "input_beats": 5,
-      "label_beats":1,
-            "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "cce",
-        "duration": "cce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
-    }
-  ]
+    "loss_weights": {
+      "notes": 1,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 150
+  },
+  {
+    "run_name": "ten_to_one_weights",
+    "input_beats": 5,
+    "label_beats":1,
+          "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "cce",
+      "duration": "cce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 1,
+      "duration": 0.1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 150
+  },
+  {
+    "run_name": "separate_notes",
+    "input_beats": 5,
+    "label_beats":1,
+          "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "cce",
+      "duration": "cce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 1,
+      "duration": 0
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 150
+  },
+  {
+    "run_name": "separate_duration",
+    "input_beats": 5,
+    "label_beats":1,
+          "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "cce",
+      "duration": "cce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 150
   }
+]

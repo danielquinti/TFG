@@ -1,319 +1,158 @@
-{
-  "output_path" : "results",
-  "verbose": 1,
-  "run_configs":
-  [
-    {
-      "run_name": "5_notes",
-      "input_beats": 5,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+[
+  {
+    "run_name": "5_duration",
+    "input_beats": 5,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
     },
-    {
-      "run_name": "5_duration",
-      "input_beats": 5,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
     },
-    {
-      "run_name": "10_notes",
-      "input_beats": 10,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
     },
-    {
-      "run_name": "10_duration",
-      "input_beats": 10,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "loss_weights": {
+      "notes": 1,
+      "duration": 0
     },
-    {
-      "run_name": "20_notes",
-      "input_beats": 20,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "optimizer":{
+      "name": "adam"
     },
-    {
-      "run_name": "20_duration",
-      "input_beats": 20,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "batch_size": 32,
+    "max_epochs": 1
+  },
+  {
+    "run_name": "10_duration",
+    "input_beats": 10,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
     },
-    {
-      "run_name": "30_notes",
-      "input_beats": 30,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
     },
-    {
-      "run_name": "30_duration",
-      "input_beats": 30,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
     },
-    {
-      "run_name": "40_notes",
-      "input_beats": 40,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
     },
-    {
-      "run_name": "40_duration",
-      "input_beats": 40,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "optimizer":{
+      "name": "adam"
     },
-    {
-      "run_name": "50_notes",
-      "input_beats": 50,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 1,
-        "duration": 0
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
+    "batch_size": 32,
+    "max_epochs": 1
+  },
+  {
+    "run_name": "20_duration",
+    "input_beats": 20,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
     },
-    {
-      "run_name": "50_duration",
-      "input_beats": 50,
-      "label_beats":1,
-      "model": {
-        "name": "lstm",
-        "units": 4
-      },
-      "loss_function_names":{
-        "notes": "wcce",
-        "duration": "wcce"
-      },
-      "metric_names":{
-        "notes": ["ba"],
-        "duration": ["ba"]
-      },
-      "loss_weights": {
-        "notes": 0,
-        "duration": 1
-      },
-      "optimizer":{
-        "name": "adam"
-      },
-      "batch_size": 32,
-      "max_epochs": 150
-    }
-  ]
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 1
+  },
+  {
+    "run_name": "30_duration",
+    "input_beats": 30,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 1
+  },
+  {
+    "run_name": "40_duration",
+    "input_beats": 40,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 1
+  },
+  {
+    "run_name": "50_duration",
+    "input_beats": 50,
+    "label_beats":1,
+    "model": {
+      "name": "lstm",
+      "units": 4
+    },
+    "loss_function_names":{
+      "notes": "wcce",
+      "duration": "wcce"
+    },
+    "metric_names":{
+      "notes": ["ba"],
+      "duration": ["ba"]
+    },
+    "loss_weights": {
+      "notes": 0,
+      "duration": 1
+    },
+    "optimizer":{
+      "name": "adam"
+    },
+    "batch_size": 32,
+    "max_epochs": 1
   }
+]
