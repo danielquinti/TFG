@@ -27,7 +27,7 @@
         "name": "adam"
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "adam_1e-3_durations",
@@ -53,7 +53,7 @@
         "name": "adam"
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "adam_1e-4_notes",
@@ -80,7 +80,7 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "adam_1e-4_durations",
@@ -107,7 +107,7 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "adam_1e-5_notes",
@@ -134,7 +134,7 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "adam_1e-5_durations",
@@ -161,7 +161,7 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
 
     {
@@ -189,7 +189,7 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "rmsprop_1e-4_durations",
@@ -216,7 +216,7 @@
         "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "rmsprop_1e-5_notes",
@@ -243,7 +243,7 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "rmsprop_1e-5_durations",
@@ -270,7 +270,7 @@
         "learning_rate": 1e-5
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
 
     {
@@ -297,7 +297,7 @@
         "name": "sgd"
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "sgd_1e-2_durations",
@@ -323,7 +323,7 @@
         "name": "sgd"
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "sgd_1e-3_notes",
@@ -350,7 +350,7 @@
         "learning_rate": 1e-3
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     },
     {
       "run_name": "sgd_1e-3_durations",
@@ -377,7 +377,7 @@
         "learning_rate": 1e-3
       },
       "batch_size": 32,
-      "max_epochs": 1
+      "max_epochs": 150
     }
   ]
   }
