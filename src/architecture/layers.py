@@ -4,17 +4,26 @@ import regularizers
 
 def lstm_model(
         inputs,
-        units,
+        layer_config: list,
         input_beats,
         input_range,
         regularizer
 ):
+    x=inputs
+    for layer in layer_config[:-1]:
+        x = layers.LSTM(
+            layer["units"],
+            activation='relu',
+            return_sequences=True,
+            input_shape=(input_beats, input_range),
+            kernel_regularizer=regularizer
+        )(x)
     x = layers.LSTM(
-        units,
+        layer_config[-1]["units"],
         activation='relu',
         input_shape=(input_beats, input_range),
         kernel_regularizer=regularizer
-    )(inputs)
+    )(x)
     return x
 
 
@@ -47,7 +56,7 @@ def get_model(
         "ffwd": ffwd_model(inputs),
         "lstm": lstm_model(
             inputs,
-            config["units"],
+            config["layers"],
             input_range,
             input_beats,
             in_regularizer

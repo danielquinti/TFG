@@ -76,7 +76,7 @@ class RunConfig:
             self.test_output
         )
 
-
+# TODO parallelize training, one instance per runconfig
 class ModelTrainer:
     def __init__(
             self,
