@@ -1,6 +1,7 @@
 {
-  "input_path": "data/gp_files",
+  "input_path": "data/clean_tabs",
   "output_path": "data/song_chunks",
+  "parser_class": "custom",
   "silence_thr": 8,
   "min_beats": 6,
   "test_rate": 0.1,

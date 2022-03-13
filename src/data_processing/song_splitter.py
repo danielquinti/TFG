@@ -222,7 +222,7 @@ def split_songs():
             os.path.join(
                 "src",
                 "config",
-                "song_splitter_config.json"
+                "song_processor_config.json"
             )
     ) as fp:
         params = json.load(fp)
