@@ -4,6 +4,6 @@
   "parser_class": "standard",
   "silence_thr": 8,
   "min_beats": 6,
-  "test_rate": 0.1,
+  "test_rate": 0.2,
   "track_name": "guitar"
 }

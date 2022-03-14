@@ -69,8 +69,8 @@ class SongProcessorTest(unittest.TestCase):
             self.input_path,
             "chord.gp3"
         )
-        song = self.processor.safe_read_song(song_path)
-        track = self.processor.isolate_matching_track(song)
+        song = self.processor.read_song(song_path)
+        track = self.processor.get_valid_track(song)
         measure = self.processor.get_measure_list(track)[0]
         beat = self.processor.get_beat_list(measure)[0]
         self.assertTrue(self.processor.is_chord(beat))
@@ -99,11 +99,11 @@ class SongProcessorTest(unittest.TestCase):
             "multiple_chunks.gp3"
         )
         chunks = self.processor.process_song(song_path)
-        expected_0 = np.zeros((16,20))
+        expected_0 = np.zeros((16, 20))
         expected_0[:, 0] = 1
         expected_0[:, 16] = 1
 
-        expected_1 = np.zeros((8,20))
+        expected_1 = np.zeros((8, 20))
         expected_1[:, 0] = 1
         expected_1[:, 16] = 1
 
@@ -118,7 +118,7 @@ class SongProcessorTest(unittest.TestCase):
             "single_chunk.gp3"
         )
         chunks = self.processor.process_song(song_path)
-        rests = np.zeros((8,20))
+        rests = np.zeros((8, 20))
         notes = rests.copy()
         rests[:, 12] = 1
         rests[:, 15] = 1
@@ -151,13 +151,13 @@ class SongProcessorTest(unittest.TestCase):
             "hanging_rests.gp3"
         )
         chunks = self.processor.process_song(song_path)
-        rests = np.zeros((8,20))
+        rests = np.zeros((8, 20))
         notes_0 = rests.copy()
         rests[:, 12] = 1
         rests[:, 15] = 1
         notes_0[:, 0] = 1
         notes_0[:, 16] = 1
-        notes_1 = np.zeros((7,20))
+        notes_1 = np.zeros((7, 20))
         notes_1[:, 0] = 1
         notes_1[:, 16] = 1
         expected = np.vstack(
@@ -178,13 +178,12 @@ class SongProcessorTest(unittest.TestCase):
             "multiple_tracks.gp3"
         )
         chunks = self.processor.process_song(song_path)
-        expected = np.zeros((6,20))
+        expected = np.zeros((6, 20))
         expected[:, 0] = 1
         expected[:, 13] = 1
 
         obtained = chunks[0]
         np.testing.assert_array_equal(expected, obtained)
-
 
 
 class CustomSongProcessorTest(SongProcessorTest):

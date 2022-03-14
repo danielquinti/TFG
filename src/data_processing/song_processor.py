@@ -24,7 +24,6 @@ def clean_tabs():
         os.makedirs(os.path.join("data", "clean_tabs", "gtp"))
 
         for idx, full_path in enumerate(files_dict.values()):
-            # print(idx)
             shutil.copy(
                 full_path,
                 os.path.join(
@@ -108,7 +107,7 @@ def shuffle_and_split_files(file_paths, split_rate):
     }
 
 
-def __find_match__(lst: list, condition: Callable[Any, bool]):
+def __find_match_idx__(lst: list, condition: Callable[Any, bool]):
     for idx, elem in enumerate(lst):
         if condition(elem):
             return idx
@@ -189,7 +188,7 @@ class SongProcessor:
         self.output_path = out_path
         self.rest_thr = rest_thr
         self.beat_thr = beat_thr
-        self.track_name = wanted_track_name
+        self.track_name = wanted_track_name.lower()
         self.split_rate = split_rate
         self.note_range = 13
         self.duration_range = 7
@@ -203,7 +202,7 @@ class SongProcessor:
         for idx, song_path in enumerate(self.file_paths):
             if idx >= 1000:
                 break
-            song = self.safe_read_song(song_path)
+            song = self.read_song(song_path)
             if song is None:
                 losses += 1
                 continue
@@ -220,20 +219,23 @@ class SongProcessor:
             for key in tracks.keys():
                 f.write("%s, %s\n" % (key, tracks[key]))
 
-    def isolate_matching_track(self, song):
-        track_number = __find_match__(song.tracks, lambda x: re.search(self.track_name, x.name, re.IGNORECASE))
-        if track_number is not None:
-            return song.tracks[track_number]
-
+    def get_valid_track(self, song):
+        for track in song.tracks:
+            if re.search(self.track_name, track.name, flags=re.IGNORECASE) and len(track.strings) == 6:
+                return track
+        return None
     def process_songs(self):
         dist_paths = shuffle_and_split_files(self.file_paths, self.split_rate)
         prepare_dirs(self.output_path)
+        chunk_counter = 0
         for dist_name, self.file_paths in dist_paths.items():
             for i, filepath in enumerate(self.file_paths):
-                print(f'Split attempt: {i + 1}/{len(self.file_paths)}')
+                print(
+                    f'Split attempt: {i + 1}/{len(self.file_paths)}, Distribution: {dist_name}, Chunk: {chunk_counter}')
                 chunks = self.process_song(filepath)
-                song_name = self.input_path.split("\\")[-1].split(".")[0]
+                song_name = filepath.split("\\")[-1].split(".")[0]
                 if chunks:
+                    chunk_counter += len(chunks)
                     __save_chunks__(
                         self.output_path,
                         dist_name,
@@ -255,7 +257,10 @@ class SongProcessor:
         string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
         note_mod = 12
         g_string = note.string
-        base_note = string_to_base_note[g_string]
+        try:
+            base_note = string_to_base_note[g_string]
+        except KeyError:
+            return None
         offset = note.value
         return (base_note + offset) % note_mod
 
@@ -308,6 +313,8 @@ class SongProcessor:
                     rest_ctr = 0
                     rest_acc = []
                     note = self.compute_note(beat)
+                    if note is None:
+                        return None
                     self.set_note(beat_vector, note, duration)
                     contents = [beat_vector]
 
@@ -315,7 +322,8 @@ class SongProcessor:
                     [contents.append(x) for x in rest_acc]  # update accumulator with rest sequence
                     # parse and compute current note
                     note = self.compute_note(beat)
-
+                    if note is None:
+                        return None
                     # update accumulator with current note
                     beat_vector = np.zeros(self.beat_range)
                     self.set_note(beat_vector, note, duration)
@@ -324,8 +332,9 @@ class SongProcessor:
                     rest_acc = []
                 else:  # new note with no leading rests
                     note = self.compute_note(beat)
+                    if note is None:
+                        return None
                     self.set_note(beat_vector, note, duration)
-
                     contents.append(beat_vector)
 
         # dump the last notes of the file
@@ -338,21 +347,19 @@ class SongProcessor:
 
     def process_song(self, song_path):
         try:
-            song = self.safe_read_song(song_path)
-            track = self.isolate_matching_track(song)
-        except:
+            song = self.read_song(song_path)
+        except FileParsingException:
             return None
+        track = self.get_valid_track(song)
         if track is not None:
             return self.process_track(track, self.rest_thr, self.beat_thr)
-        else:
-            return None
+        return None
 
-
-    def safe_read_song(self, filepath):
+    def read_song(self, filepath):
         try:
             return gp.parse(filepath)
         except gp.GPException:
-            return None
+            raise FileParsingException("Could not parse file: " + filepath)
 
 
 class TupleSongProcessor(SongProcessor):
@@ -369,18 +376,16 @@ class TupleSongProcessor(SongProcessor):
         return np.zeros(2)
 
 
+class FileParsingException(Exception):
+    pass
+
+
 class CustomSongProcessor(SongProcessor):
-    def safe_read_song(self, filepath):
+    def read_song(self, filepath):
         try:
             return libGPFile.GPFile.read(filepath)
         except EOFError:
-            return None
-
-    def isolate_matching_track(self, song):
-        track = __find_match__(song.tracks, lambda x: re.search(self.track_name, x.name, re.IGNORECASE))
-        if track is not None:
-            song.dropAllTracksBut(track)
-        return song.beatLists
+            raise FileParsingException("Could not read song")
 
     def get_duration(self, beat):
         return int.from_bytes(beat.duration, byteorder='big', signed=True) + 2
@@ -389,13 +394,21 @@ class CustomSongProcessor(SongProcessor):
         return sum(x is not None for x in beat.strings) > 1
 
     def is_rest(self, beat):
-        g_string = __find_match__(beat.strings, lambda x: x is not None)
+        g_string = __find_match_idx__(beat.strings, lambda x: x is not None)
         return g_string is None or beat.strings[g_string].noteType is None
+
+    def get_valid_track(self, song):
+        idx = __find_match_idx__(song.tracks,lambda x: re.search(self.track_name, x.name, flags=re.IGNORECASE))
+        track= song.tracks[idx]
+        if idx is not None and track.numStrings == 6:
+            song.dropAllTracksBut(idx)
+            return song.beatLists
+        return None
 
     def compute_note(self, beat):
         string_to_base_note = {6: 4, 5: 9, 4: 2, 3: 7, 2: 11, 1: 4}
         note_mod = 12
-        g_string = __find_match__(beat.strings, lambda x: x is not None)
+        g_string = __find_match_idx__(beat.strings, lambda x: x is not None)
         base_note = string_to_base_note[g_string]
         offset = beat.strings[g_string].noteType[1]
         return (base_note + offset) % note_mod
@@ -435,4 +448,4 @@ if __name__ == "__main__":
         track_name,
         test_rate
     )
-    parser.get_track_insight()
+    parser.process_songs()
