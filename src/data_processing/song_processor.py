@@ -36,9 +36,9 @@ def clean_tabs():
             )
 
     def get_unique_file_dict(path_list):
-        def is_acceptable(filepath, extension):
-            if extension not in ('.gp3', '.gp4', '.gp5', ".gtp") \
-                    or os.path.getsize(filepath) <= 1024:
+        def is_acceptable(song_path, fmt):
+            if fmt not in ('.gp3', '.gp4', '.gp5', ".gtp") \
+                    or os.path.getsize(song_path) <= 1024:
                 return False
             return True
 
@@ -46,11 +46,11 @@ def clean_tabs():
         for filepath in path_list:
             # avoid duplicates
             name = os.path.basename(filepath)
-            key, extension = os.path.splitext(name)
+            k, extension = os.path.splitext(name)
             if not is_acceptable(filepath, extension):
                 continue
-            if not files_dict.get(key):
-                files_dict[key] = filepath
+            if not files_dict.get(k):
+                files_dict[k] = filepath
         return files_dict
 
     filepaths_1 = utils.get_file_paths(
@@ -191,6 +191,10 @@ class SongProcessor:
         self.beat_thr = beat_thr
         self.track_name = wanted_track_name
         self.split_rate = split_rate
+        self.note_range = 13
+        self.duration_range = 7
+        self.note_mod = self.note_range - 1
+        self.beat_range = self.note_range + self.duration_range
 
     def get_track_insight(self):
         losses = 0
@@ -209,7 +213,6 @@ class SongProcessor:
                     tracks[key] = 1
                 else:
                     tracks[key] += 1
-
             print("Losses:", losses, "Wins:", wins, " Attempts:", idx, " Tracks:", len(tracks))
             wins += 1
 
@@ -217,13 +220,18 @@ class SongProcessor:
             for key in tracks.keys():
                 f.write("%s, %s\n" % (key, tracks[key]))
 
+    def isolate_matching_track(self, song):
+        track_number = __find_match__(song.tracks, lambda x: re.search(self.track_name, x.name, re.IGNORECASE))
+        if track_number is not None:
+            return song.tracks[track_number]
+
     def process_songs(self):
         dist_paths = shuffle_and_split_files(self.file_paths, self.split_rate)
         prepare_dirs(self.output_path)
         for dist_name, self.file_paths in dist_paths.items():
             for i, filepath in enumerate(self.file_paths):
                 print(f'Split attempt: {i + 1}/{len(self.file_paths)}')
-                chunks = self.process_song(filepath, dist_name)
+                chunks = self.process_song(filepath)
                 song_name = self.input_path.split("\\")[-1].split(".")[0]
                 if chunks:
                     __save_chunks__(
@@ -250,13 +258,23 @@ class SongProcessor:
         base_note = string_to_base_note[g_string]
         offset = note.value
         return (base_note + offset) % note_mod
-        return 0
 
     def get_measure_list(self, track):
         return track.measures
 
     def get_beat_list(self, measure):
         return measure.voices[0].beats
+
+    def set_rest(self, beat_vector, duration):
+        beat_vector[self.note_mod] = 1
+        beat_vector[self.note_range + duration] = 1
+
+    def set_note(self, beat_vector, note, duration):
+        beat_vector[note] = 1
+        beat_vector[self.note_range + duration] = 1
+
+    def init_beat_vector(self):
+        return np.zeros(self.beat_range)
 
     def process_track(
             self,
@@ -266,15 +284,11 @@ class SongProcessor:
     ):
         rest_ctr = 0
         rest_acc = []
-        note_range = 13
-        note_mod = note_range - 1
-        duration_range = 7
-        beat_range = note_range + duration_range
         contents = []
         chunks = []
         for measure in self.get_measure_list(track):
             for beat in self.get_beat_list(measure):
-                beat_vector = np.zeros(beat_range)
+                beat_vector = self.init_beat_vector()
                 duration = self.get_duration(beat)
 
                 if self.is_chord(beat):
@@ -284,9 +298,7 @@ class SongProcessor:
                 if self.is_rest(beat):
                     rest_ctr += 1
                     # toggle the indexes of the last note (rest) and the corresponding duration
-                    beat_vector[note_mod] = 1
-                    beat_vector[note_range + duration] = 1
-
+                    self.set_rest(beat_vector, duration)
                     rest_acc.append(beat_vector)
                 # the beat has a single note
                 elif rest_ctr > rest_thr:  # the new note is from a different sample group
@@ -296,10 +308,7 @@ class SongProcessor:
                     rest_ctr = 0
                     rest_acc = []
                     note = self.compute_note(beat)
-                    # toggle the indexes of the last corresponding note and duration
-                    beat_vector[note] = 1
-                    beat_vector[note_range + duration] = 1
-
+                    self.set_note(beat_vector, note, duration)
                     contents = [beat_vector]
 
                 elif rest_ctr > 0:  # new note within the same sample group after a sequence of rests
@@ -308,41 +317,56 @@ class SongProcessor:
                     note = self.compute_note(beat)
 
                     # update accumulator with current note
-                    beat_vector = np.zeros(beat_range)
-                    beat_vector[note] = 1
-                    beat_vector[note_range + duration] = 1
+                    beat_vector = np.zeros(self.beat_range)
+                    self.set_note(beat_vector, note, duration)
                     contents.append(beat_vector)
                     rest_ctr = 0
                     rest_acc = []
                 else:  # new note with no leading rests
                     note = self.compute_note(beat)
-                    # toggle the indexes of the last corresponding note and duration
-                    beat_vector[note] = 1
-                    beat_vector[note_range + duration] = 1
+                    self.set_note(beat_vector, note, duration)
 
                     contents.append(beat_vector)
 
         # dump the last notes of the file
         if len(contents) >= beat_thr:
             chunks.append(np.array(contents))
-        return chunks
+        if chunks:
+            return chunks
+        else:
+            return None
 
-    def process_song(self, song_path, dist_name):
-        song = self.safe_read_song(song_path)
-        if song is not None:
-            track_number = __find_match__(song.tracks, lambda x: re.search(self.track_name, x.name, re.IGNORECASE))
-            if track_number is not None:
-                track = song.tracks[track_number]
-                chunks = self.process_track(track, self.rest_thr, self.beat_thr)
-                if chunks:
-                    return chunks
-        return None
+    def process_song(self, song_path):
+        try:
+            song = self.safe_read_song(song_path)
+            track = self.isolate_matching_track(song)
+        except:
+            return None
+        if track is not None:
+            return self.process_track(track, self.rest_thr, self.beat_thr)
+        else:
+            return None
+
 
     def safe_read_song(self, filepath):
         try:
             return gp.parse(filepath)
         except gp.GPException:
             return None
+
+
+class TupleSongProcessor(SongProcessor):
+
+    def set_rest(self, beat_vector, duration):
+        beat_vector[0] = self.note_mod
+        beat_vector[1] = duration
+
+    def set_note(self, beat_vector, note, duration):
+        beat_vector[0] = note
+        beat_vector[1] = duration
+
+    def init_beat_vector(self):
+        return np.zeros(2)
 
 
 class CustomSongProcessor(SongProcessor):
@@ -352,20 +376,11 @@ class CustomSongProcessor(SongProcessor):
         except EOFError:
             return None
 
-    def process_song(self, song_path, dist_name):
-        # ignore unparsable files
-        try:
-            song = libGPFile.GPFile.read(song_path)
-        except EOFError:
-            return
-        # isolate, process and save guitar track
+    def isolate_matching_track(self, song):
         track = __find_match__(song.tracks, lambda x: re.search(self.track_name, x.name, re.IGNORECASE))
         if track is not None:
             song.dropAllTracksBut(track)
-            chunks = self.process_track(song.beatLists, self.rest_thr, self.beat_thr)
-            if chunks:
-                return chunks
-        return None
+        return song.beatLists
 
     def get_duration(self, beat):
         return int.from_bytes(beat.duration, byteorder='big', signed=True) + 2
