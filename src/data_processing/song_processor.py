@@ -358,7 +358,7 @@ class SongProcessor:
     def read_song(self, filepath):
         try:
             return gp.parse(filepath)
-        except gp.GPException:
+        except:
             raise FileParsingException("Could not parse file: " + filepath)
 
 
@@ -384,7 +384,7 @@ class CustomSongProcessor(SongProcessor):
     def read_song(self, filepath):
         try:
             return libGPFile.GPFile.read(filepath)
-        except EOFError:
+        except:
             raise FileParsingException("Could not read song")
 
     def get_duration(self, beat):
