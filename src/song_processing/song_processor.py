@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import csv
-import json
 import os
 import shutil
 from collections import defaultdict
@@ -8,7 +7,6 @@ from collections.abc import Callable
 from typing import Any
 import numpy as np
 import song_processing.guitarpro as gp
-import time
 
 
 def get_file_paths(route):
@@ -138,7 +136,7 @@ class SimpleBeat:
 def open_song(song_path):
     try:
         return gp.parse(song_path)
-    except gp.GPException:
+    except:
         return None
 
 
