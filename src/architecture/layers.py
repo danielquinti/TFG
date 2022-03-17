@@ -1,6 +1,7 @@
 import tensorflow.keras as keras
 from tensorflow.keras import layers
-import regularizers
+from src.architecture import regularizers
+
 
 def lstm_model(
         inputs,

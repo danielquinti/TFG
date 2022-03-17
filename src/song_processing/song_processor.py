@@ -7,9 +7,16 @@ from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
 import numpy as np
-import guitarpro as gp
-import src.utils as utils
+import song_processing.guitarpro as gp
 import time
+
+
+def get_file_paths(route):
+    name_list = []
+    for root, dirs, files in os.walk(route):
+        for file in files:
+            name_list.append(os.path.join(root, file))
+    return name_list
 
 
 def clean_tabs():
@@ -48,13 +55,13 @@ def clean_tabs():
                 files_dict[k] = filepath
         return files_dict
 
-    filepaths_1 = utils.get_file_paths(
+    filepaths_1 = get_file_paths(
         os.path.join(
             "data",
             "60000Tabs"
         )
     )
-    filepaths_2 = utils.get_file_paths(
+    filepaths_2 = get_file_paths(
         os.path.join(
             "data",
             "Guitar_Pro_Tabs"
@@ -189,7 +196,7 @@ class SongProcessor:
             beat_thr: int,
     ):
         self.input_path = in_path
-        self.file_paths = utils.get_file_paths(self.input_path)
+        self.file_paths = get_file_paths(self.input_path)
         self.output_path = out_path
         self.rest_thr = rest_thr
         self.beat_thr = beat_thr
@@ -262,29 +269,3 @@ class SongProcessor:
                 chunk_name
             )
             np.save(destination, chunk)
-
-
-if __name__ == "__main__":
-    start_time = time.time()
-    with open(
-            os.path.join(
-                "src",
-                "config",
-                "song_processor_config.json"
-            )
-    ) as fp:
-        params = json.load(fp)
-
-    input_path: str = os.path.join(*(params["input_path"].split("\\")[0].split("/")))
-
-    output_path: str = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
-    silence_thr: int = params["silence_thr"]
-    min_beats: int = params["min_beats"]
-    parser = SongProcessor(
-        input_path,
-        output_path,
-        silence_thr,
-        min_beats,
-    )
-    parser.process_songs()
-    print("--- %s seconds ---" % (time.time() - start_time))

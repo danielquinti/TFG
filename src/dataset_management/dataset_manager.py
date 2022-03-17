@@ -3,8 +3,8 @@ import os
 
 import numpy as np
 
-import dataset
-from src import utils
+from src.dataset_management import dataset
+from src.song_processing import utils
 
 
 class DatasetManager:
@@ -13,7 +13,7 @@ class DatasetManager:
             os.path.join(
                 "src",
                 "config",
-                "csv_to_dataset_config.json"
+                "../config/csv_to_dataset_config.json"
             )
         )
         params = json.load(fp)
