@@ -9,6 +9,7 @@ from typing import Any
 import numpy as np
 import guitarpro as gp
 import src.utils as utils
+import time
 
 
 def clean_tabs():
@@ -255,15 +256,16 @@ class SongProcessor:
         target_folder = os.path.join(self.output_path, str(song_number), str(track_number))
         os.makedirs(target_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
-            chunk_name = f"{song_name}({track_number})({idx}).csv"
+            chunk_name = f"{song_name}({track_number})({idx}).npy"
             destination = os.path.join(
                 target_folder,
                 chunk_name
             )
-            np.savetxt(destination, chunk, fmt="%d")
+            np.save(destination, chunk)
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     with open(
             os.path.join(
                 "src",
@@ -285,3 +287,4 @@ if __name__ == "__main__":
         min_beats,
     )
     parser.process_songs()
+    print("--- %s seconds ---" % (time.time() - start_time))
