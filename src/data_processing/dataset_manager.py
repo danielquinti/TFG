@@ -4,7 +4,7 @@ import os
 import numpy as np
 
 import dataset
-import utils
+from src import utils
 
 
 class DatasetManager:
