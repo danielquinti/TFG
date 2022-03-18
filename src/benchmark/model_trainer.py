@@ -7,7 +7,7 @@ import shutil
 from tensorflow.python import keras
 
 from architecture import losses, metrics, layers, optimizers
-from data_processing import dataset_manager, dataset
+from data_management import dataset_manager, dataset
 
 
 def compute_metrics(model, inp, output, batch_size, run_name):

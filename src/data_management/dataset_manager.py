@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 
-from src.dataset_management import dataset
+from src.data_management import dataset
 from src.song_processing import utils
 
 

@@ -2,8 +2,9 @@ import os
 import json
 import time
 from song_processing import song_processor as sp
-# import argparse
+import argparse
 import sys
+
 sys.path.append(
     os.path.join(
         "architecture"
@@ -23,38 +24,18 @@ sys.path.append(
 )
 # from src.benchmark import model_trainer
 
-# def dir_path(string: str):
-#     path = os.path.join(
-#         *(string.split("/"))
-#     )
-#     if os.path.exists(path):
-#         return path
-#     else:
-#         raise FileNotFoundError(path)
+
+def dir_path(string: str):
+    path = os.path.join(
+        *(string.split("/"))
+    )
+    if os.path.exists(path):
+        return path
+    else:
+        raise FileNotFoundError(path)
 
 
-if __name__ == "__main__":
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("path", type=dir_path)
-    # parser.add_argument(
-    #     '--output_path',
-    #     default="results"
-    # )
-    # parser.add_argument(
-    #     '--verbose',
-    #     default=1,
-    # )
-    # args = parser.parse_args()
-    # config_path = args.path
-    # output_path = args.output_path
-    # verbose = args.verbose
-    # mt = model_trainer.ModelTrainer(
-    #     config_path,
-    #     output_path,
-    #     verbose
-    # )
-    # mt.run_all()
-
+def encode():
     if __name__ == "__main__":
         start_time = time.time()
         with open(
@@ -79,3 +60,29 @@ if __name__ == "__main__":
         parser.process_songs()
         print("--- %s seconds ---" % (time.time() - start_time))
 
+
+def train():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("path", type=dir_path)
+    parser.add_argument(
+        '--output_path',
+        default="results"
+    )
+    parser.add_argument(
+        '--verbose',
+        default=1,
+    )
+    args = parser.parse_args()
+    config_path = args.path
+    output_path = args.output_path
+    verbose = args.verbose
+    mt = model_trainer.ModelTrainer(
+        config_path,
+        output_path,
+        verbose
+    )
+    mt.run_all()
+
+
+if __name__ == "__main__":
+    encode()

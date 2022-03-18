@@ -106,31 +106,32 @@ def __find_match_idx__(lst: list, condition: Callable[Any, bool]):
     return None
 
 
-class FileParsingException:
+class FileParsingException(Exception):
     pass
 
 
 class SimpleBeat:
     def __init__(self, beat):
         self.beat = beat
+        self.is_chord = len(self.beat.notes) > 1
+        self.is_rest = not self.beat.notes
+        self.note, self.octave = self.get_pitch()
+        self.duration = self.beat.duration.index
+        self.is_dotted = self.beat.duration.isDotted
+        self.encoding = self.get_encoding()
 
-    def is_chord(self):
-        return len(self.beat.notes) > 1
-
-    def is_rest(self):
-        return not self.beat.notes
+    def get_pitch(self):
+        if self.is_rest:
+            note = -2
+            octave = -2
+        else:
+            real_note = self.beat.notes[0].realValue
+            note = real_note % 12
+            octave = (real_note // 12) - 1
+        return note, octave
 
     def get_encoding(self):
-        if self.is_chord():
-            raise FileParsingException
-        duration = 1 / self.beat.duration.value
-        if self.beat.duration.isDotted:
-            duration = duration * 1.5
-        if self.is_rest():
-            note = -1
-        else:
-            note = self.beat.notes[0].realValue
-        return [note, duration]
+        return [self.note, self.octave, self.duration, self.is_dotted]
 
 
 def open_song(song_path):
@@ -153,27 +154,27 @@ class SimpleTrack:
         for measure in self.track.measures:
             for beat in measure.voices[0].beats:
                 beat = SimpleBeat(beat)
-                if beat.is_chord():
+                if beat.is_chord:
                     # discard tracks with cords
                     return None
-                if beat.is_rest():
-                    rest_acc.append(beat.get_encoding())
+                if beat.is_rest:
+                    rest_acc.append(beat.encoding)
                 # the beat has a single note
                 elif len(rest_acc) > rest_thr:  # the new note is from a different chunk
                     if len(current_chunk) >= beat_thr:  # avoid dumping sequences that are too short
-                        chunks.append(np.array(current_chunk))
+                        chunks.append(np.array(current_chunk, dtype=int))
                     # reset accumulators and parse the current note
                     rest_acc.clear()
-                    current_chunk = [beat.get_encoding()]
+                    current_chunk = [beat.encoding]
 
                 elif len(rest_acc):  # new note within the same chunk after a sequence of rests
                     [current_chunk.append(x) for x in rest_acc]  # update accumulator with rest sequence
                     rest_acc.clear()
                     # parse and compute current note
-                    current_chunk.append(beat.get_encoding())
+                    current_chunk.append(beat.encoding)
 
                 else:  # new note with no leading rests
-                    current_chunk.append(beat.get_encoding())
+                    current_chunk.append(beat.encoding)
 
         # dump the last notes of the file if the sequence is long enough
         if len(current_chunk) >= beat_thr:
@@ -198,10 +199,6 @@ class SongProcessor:
         self.output_path = out_path
         self.rest_thr = rest_thr
         self.beat_thr = beat_thr
-        self.note_range = 13
-        self.duration_range = 7
-        self.note_mod = self.note_range - 1
-        self.beat_range = self.note_range + self.duration_range
 
     def get_track_insight(self):
         losses = 0

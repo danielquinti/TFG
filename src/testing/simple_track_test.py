@@ -1,10 +1,10 @@
 import os
 import unittest
-import numpy as np
 import sys
 
 sys.path.append(
     os.path.join(
+        "..",
         "src",
         "song_processing"
     )
@@ -16,7 +16,6 @@ class SimpleTrackTest(unittest.TestCase):
     def setUp(self):
         self.input_path = os.path.join(
             os.getcwd(),
-            "src",
             "testing",
             "test_input"
         )
@@ -35,21 +34,6 @@ class SimpleTrackTest(unittest.TestCase):
             8,
             6
         )
-
-    def test_notes(self):
-        song_path = os.path.join(
-            self.input_path,
-            "notes.gp3"
-        )
-        song = sp.open_song(song_path)
-        track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.beat_thr, self.processor.rest_thr)
-        obtained = chunks[0]
-        notes = np.arange(12).reshape(-1,1) + 48
-        dur = np.zeros((12,1))
-        dur[:]=0.25
-        expected = np.hstack((notes,dur))
-        np.array_equal(obtained,expected)
 
     def test_rests(self):
         song_path = os.path.join(
@@ -70,22 +54,6 @@ class SimpleTrackTest(unittest.TestCase):
         track = sp.SimpleTrack(song.tracks[0])
         chunks = track.process(self.processor.beat_thr, self.processor.rest_thr)
         self.assertIsNone(chunks)
-
-
-    def test_note_dur(self):
-        song_path = os.path.join(
-            self.input_path,
-            "notes_duration.gp3"
-        )
-        song = sp.open_song(song_path)
-        track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.beat_thr, self.processor.rest_thr)
-        obtained = chunks[0]
-        notes = np.arange(7).reshape(-1,1) + 48
-        indices = np.arange(7).reshape(-1,1)
-        dur = 1/np.power(2,indices)
-        expected = np.hstack((notes,dur))
-        np.array_equal(obtained,expected)
 
     def test_multiple_chunks(self):
         song_path = os.path.join(
