@@ -122,12 +122,12 @@ class SimpleBeat:
 
     def get_pitch(self):
         if self.is_rest:
-            note = -2
-            octave = -2
+            note = 12
+            octave = 10
         else:
             real_note = self.beat.notes[0].realValue
             note = real_note % 12
-            octave = (real_note // 12) - 1
+            octave = (real_note // 12)
         return note, octave
 
     def get_encoding(self):
@@ -144,6 +144,7 @@ def open_song(song_path):
 class SimpleTrack:
     def __init__(self, track):
         self.track = track
+        self.instrument = track.channel.instrument
 
     def process(self, beat_thr, rest_thr):
         if self.track.isPercussionTrack:
@@ -244,21 +245,22 @@ class SongProcessor:
             track = SimpleTrack(track)
             chunks = track.process(self.beat_thr, self.rest_thr)
             if chunks:
-                self.save_chunks(chunks, song_name, song_index, track_index)
+                self.save_chunks(chunks, track.instrument, song_name, song_index, track_index)
 
     def save_chunks(
             self,
             chunks: list,
+            instrument: int,
             song_name: str,
             song_number: int,
             track_number: int
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        target_folder = os.path.join(self.output_path, str(song_number), str(track_number))
+        target_folder = os.path.join(self.output_path, str(instrument), str(song_number), str(track_number))
         os.makedirs(target_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
-            chunk_name = f"{song_name}({track_number})({idx}).npy"
+            chunk_name = f"{song_name}({instrument})({track_number})({idx}).npy"
             destination = os.path.join(
                 target_folder,
                 chunk_name
