@@ -1,6 +1,6 @@
 {
   "input_path": "../data/clean_tabs",
-  "output_path": "../data/song_chunks",
+  "output_path": "../data/inst_grouped",
   "silence_thr": 8,
   "min_beats": 6,
   "test_rate": 0.1

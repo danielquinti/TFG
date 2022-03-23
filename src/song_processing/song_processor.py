@@ -142,9 +142,141 @@ def open_song(song_path):
 
 
 class SimpleTrack:
+    instrument_list = [
+        "Acoustic Grand Piano",
+        "Bright Acoustic Piano",
+        "Electric Grand Piano",
+        "Honky-tonk Piano",
+        "Electric Piano 1 (usually a Rhodes Piano)",
+        "Electric Piano 2 (usually an FM piano patch)",
+        "Harpsichord",
+        "Clavinet",
+        "Celesta",
+        "Glockenspiel",
+        "Music Box",
+        "Vibraphone",
+        "Marimba",
+        "Xylophone",
+        "Tubular Bells",
+        "Dulcimer",
+        "Drawbar Organ",
+        "Percussive Organ",
+        "Rock Organ",
+        "Church Organ",
+        "Reed Organ",
+        "Accordion",
+        "Harmonica",
+        "Tango Accordion",
+        "Acoustic Guitar (nylon)",
+        "Acoustic Guitar (steel)",
+        "Electric Guitar (jazz)",
+        "Electric Guitar (clean)",
+        "Electric Guitar (muted)",
+        "Electric Guitar (overdriven)",
+        "Electric Guitar (distortion)",
+        "Electric Guitar (harmonics)",
+        "Acoustic Bass",
+        "Electric Bass (finger)",
+        "Electric Bass (picked)",
+        "Fretless Bass",
+        "Slap Bass 1",
+        "Slap Bass 2",
+        "Synth Bass 1",
+        "Synth Bass 2",
+        "Violin",
+        "Viola",
+        "Cello",
+        "Contrabass",
+        "Tremolo Strings",
+        "Pizzicato Strings",
+        "Orchestral Harp",
+        "Timpani",
+        "String Ensemble 1",
+        "String Ensemble 2",
+        "Synth Strings 1",
+        "Synth Strings 2",
+        "Choir Aahs",
+        "Voice Oohs (or Doos)",
+        "Synth Voice or Solo Vox",
+        "Orchestra Hit",
+        "Trumpet",
+        "Trombone",
+        "Tuba",
+        "Muted Trumpet",
+        "French Horn",
+        "Brass Section",
+        "Synth Brass 1",
+        "Synth Brass 2",
+        "Soprano Sax",
+        "Alto Sax",
+        "Tenor Sax",
+        "Baritone Sax",
+        "Oboe",
+        "English Horn",
+        "Bassoon",
+        "Clarinet",
+        "Piccolo",
+        "Flute",
+        "Recorder",
+        "Pan Flute",
+        "Blown bottle",
+        "Shakuhachi",
+        "Whistle",
+        "Ocarina",
+        "Lead 1 (square)",
+        "Lead 2 (sawtooth)",
+        "Lead 3 (calliope)",
+        "Lead 4 (chiff)",
+        "Lead 5 (charang, a guitar-like lead)",
+        "Lead 6 (space voice)",
+        "Lead 7 (fifths)",
+        "Lead 8 (bass and lead)",
+        "Pad 1 (new age or fantasia, a warm pad stacked with a bell)",
+        "Pad 2 (warm)",
+        "Pad 3 (polysynth or poly)",
+        "Pad 4 (choir)",
+        "Pad 5 (bowed glass or bowed)",
+        "Pad 6 (metallic)",
+        "Pad 7 (halo)",
+        "Pad 8 (sweep)",
+        "FX 1 (rain)",
+        "FX 2 (soundtrack, a bright perfect fifth pad)",
+        "FX 3 (crystal)",
+        "FX 4 (atmosphere, usually a nylon-like sound)",
+        "FX 5 (brightness)",
+        "FX 6 (goblins)",
+        "FX 7 (echoes or echo drops)",
+        "FX 8 (sci-fi or star theme)",
+        "Sitar",
+        "Banjo",
+        "Shamisen",
+        "Koto",
+        "Kalimba",
+        "Bag pipe",
+        "Fiddle",
+        "Shanai",
+        "Tinkle Bell",
+        "Agogô",
+        "Steel Drums",
+        "Woodblock",
+        "Taiko Drum",
+        "Melodic Tom or 808 Toms",
+        "Synth Drum",
+        "Reverse Cymbal",
+        "Guitar Fret Noise",
+        "Breath Noise",
+        "Seashore",
+        "Bird Tweet",
+        "Telephone Ring",
+        "Helicopter",
+        "Applause",
+        "Gunshot"
+    ]
+
     def __init__(self, track):
         self.track = track
-        self.instrument = track.channel.instrument
+        self.instrument = self.instrument_list[track.channel.instrument]
+
 
     def process(self, beat_thr, rest_thr):
         if self.track.isPercussionTrack:
@@ -201,34 +333,6 @@ class SongProcessor:
         self.rest_thr = rest_thr
         self.beat_thr = beat_thr
 
-    def get_track_insight(self):
-        losses = 0
-        wins = 0
-        track_names = defaultdict(lambda: 0)
-        track_tunings = defaultdict(lambda: 0)
-        for idx, song_path in enumerate(self.file_paths):
-            if idx >= 100:
-                break
-            try:
-                song = gp.parse(song_path)
-            except gp.GPException:
-                losses += 1
-                continue
-            for track in song.tracks:
-                key = track.name.lower()
-                if key not in track_names:
-                    track_names[key] = 1
-                else:
-                    track_names[key] += 1
-            print("Losses:", losses, "Wins:", wins, " Attempts:", idx, " Tracks:", len(track_names))
-            wins += 1
-
-        with open('track_names.csv', 'w') as f:
-            for key, value in track_names.items():
-                f.write("%s, %s\n" % (key, value))
-        with open('track_tunings.csv', 'w') as f:
-            for key, value in track_tunings.items():
-                f.write("%s, %s\n" % (key, value))
 
     def process_songs(self):
         for i, filepath in enumerate(self.file_paths):
@@ -257,7 +361,7 @@ class SongProcessor:
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        target_folder = os.path.join(self.output_path, str(instrument), str(song_number), str(track_number))
+        target_folder = os.path.join(self.output_path, str(song_number), str(track_number))
         os.makedirs(target_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
             chunk_name = f"{song_name}({instrument})({track_number})({idx}).npy"
