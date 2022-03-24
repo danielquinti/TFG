@@ -370,12 +370,12 @@ class SongProcessor:
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        inst_folder = os.path.join(self.output_path, "inst_grouped", instrument, str(song_number), str(track_number))
-        song_folder = os.path.join(self.output_path, "song_grouped", str(song_number), f'track {track_number}')
+        inst_folder = os.path.join(self.output_path, "inst_grouped", instrument, f'song {song_number}', f'track {track_number}')
+        song_folder = os.path.join(self.output_path, "song_grouped", f'song {song_number}', f'track {track_number}')
         os.makedirs(inst_folder, exist_ok=True)
         os.makedirs(song_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
-            chunk_name = f"{song_name}({instrument})({track_number})({idx}).npy"
+            chunk_name = f"{song_name}({instrument})(track {track_number})(chunk {idx}).npy"
             inst_dest = os.path.join(
                 inst_folder,
                 chunk_name
