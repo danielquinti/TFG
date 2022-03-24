@@ -275,11 +275,14 @@ class SimpleTrack:
 
     def __init__(self, track):
         self.track = track
-        self.instrument = self.instrument_list[track.channel.instrument]
+        try:
+            self.instrument=self.instrument_list[track.channel.instrument]
+        except IndexError:
+            self.instrument="Unknown"
 
 
     def process(self, beat_thr, rest_thr):
-        if self.track.isPercussionTrack:
+        if self.track.isPercussionTrack or self.instrument == "Unknown":
             return None
         rest_acc = []
         current_chunk = []
@@ -354,14 +357,14 @@ class SongProcessor:
     def save_chunks(
             self,
             chunks: list,
-            instrument: int,
+            instrument: str,
             song_name: str,
             song_number: int,
             track_number: int
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        target_folder = os.path.join(self.output_path, str(song_number), str(track_number))
+        target_folder = os.path.join(self.output_path, instrument, str(song_number), str(track_number))
         os.makedirs(target_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
             chunk_name = f"{song_name}({instrument})({track_number})({idx}).npy"
