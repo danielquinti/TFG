@@ -303,7 +303,7 @@ class SimpleTrack:
                 # the beat has a single note
                 elif len(rest_acc) > rest_thr:  # the new note is from a different chunk
                     if len(current_chunk) >= min_beat_thr:  # avoid dumping sequences that are too short
-                        chunks.append(np.array(current_chunk, dtype=int))
+                        chunks.append(np.array(current_chunk, dtype=np.int8))
                     # reset accumulators and parse the current note
                     rest_acc.clear()
                     current_chunk = [beat.encoding]
@@ -319,7 +319,7 @@ class SimpleTrack:
 
         # dump the last notes of the file if the sequence is long enough
         if len(current_chunk) >= min_beat_thr:
-            chunks.append(np.array(current_chunk))
+            chunks.append(np.array(current_chunk, dtype=np.int8))
         if chunks:
             return chunks
         else:

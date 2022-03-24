@@ -32,7 +32,8 @@ class SimpleBeatTest(unittest.TestCase):
             self.input_path,
             self.output_path,
             8,
-            6
+            6,
+            1000
         )
 
     def test_notes(self):
@@ -42,7 +43,7 @@ class SimpleBeatTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.beat_thr, self.processor.rest_thr)
+        chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         obtained = [beat[0] for beat in chunks[0]]
         expected = np.arange(12).reshape(-1,1) + 48
         np.array_equal(obtained,expected)
@@ -55,7 +56,7 @@ class SimpleBeatTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.beat_thr, self.processor.rest_thr)
+        chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         obtained = chunks[0]
         expected = np.arange(7).reshape(-1,1)
         np.array_equal(obtained,expected)
