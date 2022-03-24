@@ -281,7 +281,7 @@ class SimpleTrack:
             self.instrument="Unknown"
 
 
-    def process(self, beat_thr, rest_thr):
+    def process(self, min_beat_thr, max_beat_thr, rest_thr):
         if self.track.isPercussionTrack or self.instrument == "Unknown":
             return None
         rest_acc = []
@@ -293,11 +293,16 @@ class SimpleTrack:
                 if beat.is_chord:
                     # discard tracks with cords
                     return None
+                # if the current chunk is too long, add it and stop processing the track
+                if len(current_chunk) >= max_beat_thr:
+                    chunks.append(current_chunk)
+                    return chunks
                 if beat.is_rest:
                     rest_acc.append(beat.encoding)
+
                 # the beat has a single note
                 elif len(rest_acc) > rest_thr:  # the new note is from a different chunk
-                    if len(current_chunk) >= beat_thr:  # avoid dumping sequences that are too short
+                    if len(current_chunk) >= min_beat_thr:  # avoid dumping sequences that are too short
                         chunks.append(np.array(current_chunk, dtype=int))
                     # reset accumulators and parse the current note
                     rest_acc.clear()
@@ -313,7 +318,7 @@ class SimpleTrack:
                     current_chunk.append(beat.encoding)
 
         # dump the last notes of the file if the sequence is long enough
-        if len(current_chunk) >= beat_thr:
+        if len(current_chunk) >= min_beat_thr:
             chunks.append(np.array(current_chunk))
         if chunks:
             return chunks
@@ -328,14 +333,15 @@ class SongProcessor:
             in_path: str,
             out_path: str,
             rest_thr: int,
-            beat_thr: int,
+            min_beat_thr: int,
+            max_beat_thr: int
     ):
         self.input_path = in_path
         self.file_paths = get_file_paths(self.input_path)
         self.output_path = out_path
         self.rest_thr = rest_thr
-        self.beat_thr = beat_thr
-
+        self.min_beat_thr = min_beat_thr
+        self.max_beat_thr = max_beat_thr
 
     def process_songs(self):
         for i, filepath in enumerate(self.file_paths):
@@ -350,7 +356,7 @@ class SongProcessor:
         song_name = os.path.basename(song_path).split('.')[0]
         for track_index, track in enumerate(song.tracks):
             track = SimpleTrack(track)
-            chunks = track.process(self.beat_thr, self.rest_thr)
+            chunks = track.process(self.beat_thr, self.max_beat_thr, self.rest_thr)
             if chunks:
                 self.save_chunks(chunks, track.instrument, song_name, song_index, track_index)
 

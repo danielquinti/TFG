@@ -51,11 +51,13 @@ def encode():
         output_path: str = os.path.join(*(params["output_path"].split("\\")[0].split("/")))
         silence_thr: int = params["silence_thr"]
         min_beats: int = params["min_beats"]
+        max_beats: int = params["max_beats"]
         parser = sp.SongProcessor(
             input_path,
             output_path,
             silence_thr,
             min_beats,
+            max_beats
         )
         parser.process_songs()
         print("--- %s seconds ---" % (time.time() - start_time))
