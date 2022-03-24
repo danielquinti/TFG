@@ -231,22 +231,22 @@ class SimpleTrack:
         "Lead 6 (space voice)",
         "Lead 7 (fifths)",
         "Lead 8 (bass and lead)",
-        "Pad 1 (new age or fantasia, a warm pad stacked with a bell)",
+        "Pad 1 (a warm pad stacked with a bell)",
         "Pad 2 (warm)",
-        "Pad 3 (polysynth or poly)",
+        "Pad 3 (polysynth)",
         "Pad 4 (choir)",
         "Pad 5 (bowed glass or bowed)",
         "Pad 6 (metallic)",
         "Pad 7 (halo)",
         "Pad 8 (sweep)",
         "FX 1 (rain)",
-        "FX 2 (soundtrack, a bright perfect fifth pad)",
+        "FX 2 (a bright perfect fifth pad)",
         "FX 3 (crystal)",
-        "FX 4 (atmosphere, usually a nylon-like sound)",
+        "FX 4 (atmosphere, nylon-like sound)",
         "FX 5 (brightness)",
         "FX 6 (goblins)",
-        "FX 7 (echoes or echo drops)",
-        "FX 8 (sci-fi or star theme)",
+        "FX 7 (echoes)",
+        "FX 8 (sci-fi theme)",
         "Sitar",
         "Banjo",
         "Shamisen",
@@ -375,7 +375,7 @@ class SongProcessor:
         os.makedirs(inst_folder, exist_ok=True)
         os.makedirs(song_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
-            chunk_name = f"{song_name}({instrument})(track {track_number})(chunk {idx}).npy"
+            chunk_name = f"{song_name[:15]}({instrument})(track {track_number})(chunk {idx}).npy"
             inst_dest = os.path.join(
                 inst_folder,
                 chunk_name
