@@ -356,7 +356,7 @@ class SongProcessor:
         song_name = os.path.basename(song_path).split('.')[0]
         for track_index, track in enumerate(song.tracks):
             track = SimpleTrack(track)
-            chunks = track.process(self.beat_thr, self.max_beat_thr, self.rest_thr)
+            chunks = track.process(self.min_beat_thr, self.max_beat_thr, self.rest_thr)
             if chunks:
                 self.save_chunks(chunks, track.instrument, song_name, song_index, track_index)
 
@@ -370,12 +370,19 @@ class SongProcessor:
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        target_folder = os.path.join(self.output_path, instrument, str(song_number), str(track_number))
-        os.makedirs(target_folder, exist_ok=True)
+        inst_folder = os.path.join(self.output_path, "inst_grouped", instrument, str(song_number), str(track_number))
+        song_folder = os.path.join(self.output_path, "song_grouped", str(song_number), f'track {track_number}')
+        os.makedirs(inst_folder, exist_ok=True)
+        os.makedirs(song_folder, exist_ok=True)
         for idx, chunk in enumerate(chunks):
             chunk_name = f"{song_name}({instrument})({track_number})({idx}).npy"
-            destination = os.path.join(
-                target_folder,
+            inst_dest = os.path.join(
+                inst_folder,
                 chunk_name
             )
-            np.save(destination, chunk)
+            song_dest = os.path.join(
+                song_folder,
+                chunk_name
+            )
+            np.save(inst_dest, chunk)
+            np.save(song_dest, chunk)
