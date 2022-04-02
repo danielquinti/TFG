@@ -5,10 +5,10 @@ import os
 from datetime import datetime
 import shutil
 from tensorflow.python import keras
-
+import tensorflow as tf
 from architecture import losses, metrics, layers, optimizers
 from data_management import dataset_manager, dataset
-
+from tensorflow.keras.utils import plot_model
 
 def compute_metrics(model, inp, output, batch_size, run_name):
 
@@ -23,32 +23,31 @@ def compute_metrics(model, inp, output, batch_size, run_name):
 
 
 class RunConfig:
-    def __init__(self, config, data_manager):
+    def __init__(self, config):
         self.run_name = config["run_name"]
         self.optimizer = optimizers.get_optimizer(config["optimizer"])
         self.batch_size = config["batch_size"]
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
-        self.label_beats = config["label_beats"]
-
         raw_loss_weights = config["loss_weights"]
         active_features = {
             feature: raw_loss_weights[feature] > 0 for feature in raw_loss_weights.keys()
         }
-        self.data: dataset = data_manager.get_dataset(
-            config["input_beats"],
-            config["label_beats"],
-            active_features
-        )
+        self.data = dataset.Dataset(config["input_beats"])
+        preprocessed_inputs, preprocessing_model = layers.preprocess_data(self.data.train)
+        input_shape = preprocessed_inputs.shape[1:]
+        # plot_model(preprocessing_model, to_file='model.png')
         self.model: keras.Model = layers.get_model(
             config["model"],
-            self.data.train.inputs.shape[-1],
+            input_shape,
             self.data.number_of_classes,
-            self.input_beats,
-            self.label_beats,
             active_features,
         )
-        self.train_input = self.data.train.inputs
+        train_ds = self.data.train.batch(self.batch_size)
+        train_ds = train_ds.map(
+            lambda x, y: (preprocessing_model(x), y),
+            num_parallel_calls=tf.data.AUTOTUNE
+        ).prefetch(tf.data.AUTOTUNE)
         metric_names: dict = config["metric_names"]
         loss_names: dict = config["loss_function_names"]
 
@@ -98,7 +97,6 @@ class ModelTrainer:
         os.makedirs(self.output_path, exist_ok=True)
         shutil.copy(config_file_path, self.output_path)
         self.verbose = verbose
-        self.dataset_manager = dataset_manager.DatasetManager()
 
     def save_weights(self, model, name):
         folder_path = os.path.join(
@@ -115,7 +113,6 @@ class ModelTrainer:
     def run_one(self, config):
         rc = RunConfig(
             config,
-            self.dataset_manager
         )
         rc.model.compile(
             optimizer=rc.optimizer,

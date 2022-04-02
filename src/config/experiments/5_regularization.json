@@ -2,7 +2,6 @@
   {
     "run_name": "no_reg_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -28,7 +27,6 @@
   {
     "run_name": "no_reg_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -54,7 +52,6 @@
   {
     "run_name": "out_reg_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4,
@@ -81,7 +78,6 @@
   {
     "run_name": "out_reg_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4,
@@ -108,7 +104,6 @@
   {
     "run_name": "both_reg_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4,
@@ -136,7 +131,6 @@
   {
     "run_name": "both_reg_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4,

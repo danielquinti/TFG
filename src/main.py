@@ -22,7 +22,7 @@ sys.path.append(
     )
 
 )
-# from src.benchmark import model_trainer
+from src.benchmark import model_trainer
 
 
 def dir_path(string: str):
@@ -87,4 +87,4 @@ def train():
 
 
 if __name__ == "__main__":
-    encode()
+    train()

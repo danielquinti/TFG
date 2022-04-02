@@ -4,15 +4,19 @@ import os
 import numpy as np
 
 from src.data_management import dataset
-from src.song_processing import utils
 
+
+def get_file_paths(route):
+    name_list = []
+    for root, dirs, files in os.walk(route):
+        for file in files:
+            name_list.append(os.path.join(root, file))
+    return name_list
 
 class DatasetManager:
     def __init__(self):
         fp = open(
             os.path.join(
-                "src",
-                "config",
                 "../config/csv_to_dataset_config.json"
             )
         )
@@ -40,7 +44,7 @@ class DatasetManager:
 
     def read_files(self, distribution_name):
         contents = []
-        file_names = utils.get_file_paths(os.path.join(self.input_path, distribution_name))
+        file_names = get_file_paths(os.path.join(self.input_path, distribution_name))
         if not file_names:
             raise FileNotFoundError(f'Could not find files for {distribution_name} distribution in {self.input_path}.')
         for file_name in file_names:

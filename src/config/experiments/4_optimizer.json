@@ -2,7 +2,6 @@
   {
     "run_name": "adam_1e-3_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -28,7 +27,6 @@
   {
     "run_name": "adam_1e-3_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -54,7 +52,6 @@
   {
     "run_name": "adam_1e-4_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -81,7 +78,6 @@
   {
     "run_name": "adam_1e-4_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -108,7 +104,6 @@
   {
     "run_name": "adam_1e-5_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -135,7 +130,6 @@
   {
     "run_name": "adam_1e-5_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -163,7 +157,6 @@
   {
     "run_name": "rmsprop_1e-4_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -190,7 +183,6 @@
   {
     "run_name": "rmsprop_1e-4_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -217,7 +209,6 @@
   {
     "run_name": "rmsprop_1e-5_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -244,7 +235,6 @@
   {
     "run_name": "rmsprop_1e-5_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -272,7 +262,6 @@
   {
     "run_name": "sgd_1e-2_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -298,7 +287,6 @@
   {
     "run_name": "sgd_1e-2_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -324,7 +312,6 @@
   {
     "run_name": "sgd_1e-3_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -351,7 +338,6 @@
   {
     "run_name": "sgd_1e-3_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4

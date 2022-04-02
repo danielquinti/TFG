@@ -2,7 +2,6 @@
   {
     "run_name": "5_duration",
     "input_beats": 5,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -28,7 +27,6 @@
   {
     "run_name": "10_duration",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -54,7 +52,6 @@
   {
     "run_name": "20_duration",
     "input_beats": 20,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -80,7 +77,6 @@
   {
     "run_name": "30_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -106,7 +102,6 @@
   {
     "run_name": "40_duration",
     "input_beats": 40,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4
@@ -132,7 +127,6 @@
   {
     "run_name": "50_duration",
     "input_beats": 50,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 4

@@ -3,10 +3,11 @@
   {
     "run_name": "lstm",
     "input_beats": 5,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
     "loss_function_names":{
       "notes": "cce",
@@ -29,11 +30,11 @@
   {
     "run_name": "ffwd",
     "input_beats": 5,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 4,
-      "regularizer": 1e-4
+      "layers": [
+        {"units": 4}
+      ]
     },
     "loss_function_names":{
       "notes": "cce",

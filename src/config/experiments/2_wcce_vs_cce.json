@@ -3,8 +3,7 @@
   {
     "run_name": "cce_notes",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -29,8 +28,7 @@
   {
     "run_name": "cce_duration",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -55,8 +53,7 @@
   {
     "run_name": "wcce_notes",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -81,8 +78,7 @@
   {
     "run_name": "wcce_duration",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },

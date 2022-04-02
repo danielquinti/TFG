@@ -3,7 +3,6 @@
   {
     "run_name": "base_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -31,7 +30,6 @@
   {
     "run_name": "base_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -60,7 +58,6 @@
   {
     "run_name": "3_layer_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -90,7 +87,6 @@
   {
     "run_name": "3_layer_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -121,7 +117,6 @@
   {
     "run_name": "4_layer_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -152,7 +147,6 @@
   {
     "run_name": "4_layer_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -184,7 +178,6 @@
   {
     "run_name": "5_layer_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -216,7 +209,6 @@
   {
     "run_name": "5_layer_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -249,7 +241,6 @@
   {
     "run_name": "6_layer_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -282,7 +273,6 @@
   {
     "run_name": "6_layer_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [

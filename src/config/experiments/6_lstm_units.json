@@ -2,7 +2,6 @@
   {
     "run_name": "150_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 150
@@ -28,7 +27,6 @@
   {
     "run_name": "120_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 120
@@ -55,7 +53,6 @@
   {
     "run_name": "175_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 175
@@ -81,7 +78,6 @@
   {
     "run_name": "150_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "units": 150

@@ -2,8 +2,7 @@
   {
     "run_name": "equal_weights",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -28,8 +27,7 @@
   {
     "run_name": "ten_to_one_weights",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -54,8 +52,7 @@
   {
     "run_name": "separate_notes",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },
@@ -80,8 +77,7 @@
   {
     "run_name": "separate_duration",
     "input_beats": 5,
-    "label_beats":1,
-          "model": {
+    "model": {
       "name": "lstm",
       "units": 4
     },

@@ -2,7 +2,6 @@
   {
     "run_name": "5_layer_low_lr_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -35,7 +34,6 @@
   {
     "run_name": "175_units_low_lr_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -64,7 +62,6 @@
   {
     "run_name": "5_layer_low_lr_big_window_notes",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -97,7 +94,6 @@
   {
     "run_name": "175_units_low_lr_big_window_notes",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -126,7 +122,6 @@
   {
     "run_name": "5_layer_low_lr_duration",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -160,7 +155,6 @@
   {
     "run_name": "175_units_low_lr_duration",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -189,7 +183,6 @@
   {
     "run_name": "5_layer_low_lr_big_window_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -222,7 +215,6 @@
   {
     "run_name": "175_units_low_lr_big_window_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -251,7 +243,6 @@
   {
     "run_name": "5_layer_low_lr_big_window_notes_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
@@ -284,7 +275,6 @@
   {
     "run_name": "175_units_low_lr_big_window_notes_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
