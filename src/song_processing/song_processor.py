@@ -345,8 +345,7 @@ class SongProcessor:
 
     def process_songs(self):
         for i, filepath in enumerate(self.file_paths):
-            print(
-                f'Split attempt: {i + 1}/{len(self.file_paths)}')
+            print(len(self.file_paths)-i)
             self.process_song(filepath, i)
 
     def process_song(self, song_path: str, song_index: int):
