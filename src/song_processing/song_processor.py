@@ -122,12 +122,12 @@ class SimpleBeat:
 
     def get_pitch(self):
         if self.is_rest:
-            note = 12
-            octave = 10
+            note = 0
+            octave = 0
         else:
             real_note = self.beat.notes[0].realValue
-            note = real_note % 12
-            octave = (real_note // 12)
+            note = (real_note % 12) + 1
+            octave = (real_note // 12) + 1
         return note, octave
 
     def get_encoding(self):
