@@ -6,9 +6,9 @@ from datetime import datetime
 import shutil
 from tensorflow.python import keras
 import tensorflow as tf
-from architecture import losses, metrics, layers, optimizers
-from data_management import dataset_manager, dataset
-from tensorflow.keras.utils import plot_model
+from architecture import losses, metrics, layers, optimizers, preprocessing
+from data_management import dataset
+
 
 def compute_metrics(model, inp, output, batch_size, run_name):
 
@@ -33,49 +33,29 @@ class RunConfig:
         active_features = {
             feature: raw_loss_weights[feature] > 0 for feature in raw_loss_weights.keys()
         }
-        self.data = dataset.Dataset(config["input_beats"])
-        preprocessed_inputs, preprocessing_model = layers.preprocess_data(self.data.train)
-        input_shape = preprocessed_inputs.shape[1:]
-        # plot_model(preprocessing_model, to_file='model.png')
+        self.data = dataset.Dataset(self.input_beats, self.batch_size, active_features)
         self.model: keras.Model = layers.get_model(
             config["model"],
-            input_shape,
-            self.data.number_of_classes,
-            active_features,
+            self.data.input_shape,
+            self.data.number_of_classes
         )
-        train_ds = self.data.train.batch(self.batch_size)
-        train_ds = train_ds.map(
-            lambda x, y: (preprocessing_model(x), y),
-            num_parallel_calls=tf.data.AUTOTUNE
-        ).prefetch(tf.data.AUTOTUNE)
-        metric_names: dict = config["metric_names"]
-        loss_names: dict = config["loss_function_names"]
 
+        metric_name = config["metric_name"]
+        loss_name = config["loss_function_name"]
         self.metrics = {}
         self.losses = {}
-        self.train_output = {}
-        self.test_output = []
         self.loss_weights = {}
-        for feature, is_active in active_features.items():
-            if is_active:
+        for feature in self.data.number_of_classes.keys():
                 self.metrics[feature] = \
                     [
-                        metrics.get_metric(name, self.data.number_of_classes[feature]) for name in metric_names[feature]
+                        metrics.get_metric(name, self.data.number_of_classes[feature]) for name in metric_name
                     ]
                 self.losses[feature] = losses.get_loss_function(
-                    loss_names[feature],
-                    self.data.weights[feature]
+                    loss_name
                 )
-                self.test_output.append(self.data.test.labels[feature])
-                self.train_output[feature] = self.data.train.labels[feature]
-                self.loss_weights[feature] = raw_loss_weights[feature]
-        self.test_input = self.data.test.inputs
-        self.test_data = (
-            self.data.test.inputs,
-            self.test_output
-        )
 
-# TODO parallelize training, one instance per runconfig
+                self.loss_weights[feature] = 1./len(self.data.number_of_classes.keys())
+        print()
 class ModelTrainer:
     def __init__(
             self,
@@ -129,13 +109,10 @@ class ModelTrainer:
         )
 
         rc.model.fit(
-            x=rc.train_input,
-            y=rc.train_output,
+            rc.data.train,
             epochs=rc.max_epochs,
-            batch_size=rc.batch_size,
             verbose=self.verbose,
-            shuffle=True,
-            validation_data=rc.test_data,
+            validation_data=rc.data.test,
             callbacks=[tensorboard]
         )
         self.save_weights(rc.model, rc.run_name)

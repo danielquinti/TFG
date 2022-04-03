@@ -13,10 +13,9 @@ def weighted_cce(weights):
     return loss
 
 
-def get_loss_function(name, weights):
+def get_loss_function(name):
     losses = {
-        "wcce": weighted_cce(weights),
+        "wcce": tf.keras.losses.CategoricalCrossentropy(),
         "cce": tf.keras.losses.CategoricalCrossentropy(),
-        "1cce": weighted_cce(np.ones_like(weights))
     }
     return losses[name]

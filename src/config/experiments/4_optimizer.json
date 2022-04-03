@@ -4,16 +4,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -29,16 +25,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -54,16 +46,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -80,16 +68,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -106,16 +90,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -132,16 +112,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -159,16 +135,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -185,16 +157,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -211,16 +179,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -237,16 +201,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -264,16 +224,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -289,16 +245,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -314,16 +266,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -340,16 +288,12 @@
     "input_beats": 10,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {"units": 4}
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1

@@ -12,14 +12,8 @@
         {"units": 16}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -40,14 +34,8 @@
         {"units": 175}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -72,14 +60,8 @@
         {"units": 16}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -100,14 +82,8 @@
         {"units": 175}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -132,14 +108,8 @@
         {"units": 16}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -161,14 +131,8 @@
         {"units": 175}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -193,14 +157,8 @@
         {"units": 16}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -221,14 +179,8 @@
         {"units": 175}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 0,
       "duration": 1
@@ -253,14 +205,8 @@
         {"units": 16}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0
@@ -281,14 +227,8 @@
         {"units": 175}
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"wcce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 0

@@ -9,14 +9,8 @@
         {"units": 4}
       ]
     },
-    "loss_function_names":{
-      "notes": "cce",
-      "duration": "cce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"cce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 1
@@ -36,14 +30,8 @@
         {"units": 4}
       ]
     },
-    "loss_function_names":{
-      "notes": "cce",
-      "duration": "cce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name":"cce",
+    "metric_name": ["ba"],
     "loss_weights": {
       "notes": 1,
       "duration": 1
