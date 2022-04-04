@@ -1,4 +1,4 @@
 {
-  "input_path" : "data/windowed/",
-  "output_path" : "data/dataset"
+  "input_path": "data/windowed/",
+  "output_path": "data/dataset"
 }

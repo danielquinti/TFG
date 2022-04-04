@@ -43,7 +43,7 @@ class SimpleTrackTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.min_beat_thr,self.processor.max_beat_thr, self.processor.rest_thr)
+        chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         self.assertIsNone(chunks)
 
     def test_chords(self):
@@ -73,7 +73,7 @@ class SimpleTrackTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.min_beat_thr,self.processor.max_beat_thr, self.processor.rest_thr)
+        chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         self.assertEqual(len(chunks), 1)
 
     def test_too_short(self):
@@ -83,7 +83,7 @@ class SimpleTrackTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        chunks = track.process(self.processor.min_beat_thr,self.processor.max_beat_thr, self.processor.rest_thr)
+        chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         self.assertEqual(len(chunks), 1)
 
     def test_hanging_rests(self):
@@ -93,5 +93,5 @@ class SimpleTrackTest(unittest.TestCase):
         )
         song = sp.open_song(song_path)
         track = sp.SimpleTrack(song.tracks[0])
-        obtained = track.process(self.processor.min_beat_thr,self.processor.max_beat_thr, self.processor.rest_thr)[0]
+        obtained = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)[0]
         self.assertEqual(obtained.shape[0], 31)

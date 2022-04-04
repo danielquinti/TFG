@@ -1,12 +1,10 @@
 import tensorflow as tf
-from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.utils import plot_model
 
-
 def preprocess_inputs(x):
     window_size = x.shape[1]
-    x=tf.reshape(x, (-1, 4))
+    x = tf.reshape(x, (-1, 4))
 
     oh_pitch = notes_and_octaves(x)
     oh_duration = duration_and_dotted(x)
@@ -27,6 +25,7 @@ def preprocess_octaves(x):
     oh_octaves = layers.experimental.preprocessing.CategoryEncoding(num_tokens=10, output_mode="one_hot")(octaves)
     return oh_octaves
 
+
 def notes_and_octaves(x):
     return tf.concat([preprocess_notes(x), preprocess_octaves(x)], axis=1)
 
@@ -40,14 +39,15 @@ def preprocess_durations(x):
 
 def preprocess_dotted(x):
     dotted = x[:, 3]
-    dotted = tf.reshape(tf.cast(dotted, tf.float32),(-1,1))
+    dotted = tf.reshape(tf.cast(dotted, tf.float32), (-1, 1))
     return dotted
+
 
 def duration_and_dotted(x):
     return tf.concat([preprocess_durations(x), preprocess_dotted(x)], axis=1)
 
 
-def preprocess_labels(x,number_of_classes):
+def preprocess_labels(x, number_of_classes):
     options = {
         "notes": preprocess_notes,
         "octaves": preprocess_octaves,
@@ -55,17 +55,18 @@ def preprocess_labels(x,number_of_classes):
         "dotted": preprocess_dotted,
     }
     processed = {}
-    for key,value in number_of_classes.items():
+    for key, value in number_of_classes.items():
         if value:
-            processed[key]=options[key](x)
+            processed[key] = options[key](x)
     return processed
+
 
 def preprocess_data(data: tf.data.Dataset, label_features: dict):
     window_size = data.element_spec[0].shape[0]
     n_features = data.element_spec[0].shape[1]
-    inputs = keras.Input(shape=(window_size, n_features), dtype=data.element_spec[0].dtype)
+    inputs = tf.keras.Input(shape=(window_size, n_features), dtype=data.element_spec[0].dtype)
     preprocessed_inputs = preprocess_inputs(inputs)
-    raw_labels = keras.Input(shape=(n_features), dtype=data.element_spec[0].dtype)
+    raw_labels = tf.keras.Input(shape=(n_features), dtype=data.element_spec[0].dtype)
     preprocessed_labels = preprocess_labels(raw_labels, label_features)
     in_prep_model = tf.keras.Model(inputs=inputs, outputs=preprocessed_inputs)
     out_prep_model = tf.keras.Model(inputs=raw_labels, outputs=preprocessed_labels)

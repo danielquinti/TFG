@@ -2,8 +2,8 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras import layers
-from architecture import regularizers
 from tensorflow.keras.utils import plot_model
+from src.model import regularizers
 
 
 def lstm_model(
@@ -28,6 +28,7 @@ def lstm_model(
     )(x)
     return x
 
+
 def ffwd_model(inputs):
     x = layers.Flatten()(inputs)
     x = layers.Dense(40, activation='relu')(x)
@@ -35,10 +36,11 @@ def ffwd_model(inputs):
     x = layers.Dense(20, activation='relu')(x)
     return x
 
+
 def get_model(
         config: dict,
         input_shape,
-        number_of_classes : dict,
+        number_of_classes: dict,
 ):
     inputs = keras.layers.Input(shape=input_shape)
     try:

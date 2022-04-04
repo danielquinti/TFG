@@ -5,16 +5,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -26,16 +30,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -47,17 +55,21 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ],
       "out_regularizer": 5e-4
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -69,17 +81,21 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ],
       "out_regularizer": 5e-4
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -91,18 +107,22 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ],
       "in_regularizer": 5e-4,
       "out_regularizer": 5e-4
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -114,18 +134,22 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ],
       "in_regularizer": 5e-4,
       "out_regularizer": 5e-4
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,

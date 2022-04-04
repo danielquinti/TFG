@@ -7,7 +7,8 @@ import sys
 
 sys.path.append(
     os.path.join(
-        "architecture"
+        "src",
+        "model"
     )
 )
 sys.path.append(
@@ -17,6 +18,7 @@ sys.path.append(
 )
 sys.path.append(
     os.path.join(
+        "src",
         "song_processing",
         "guitarpro"
     )

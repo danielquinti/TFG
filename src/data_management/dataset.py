@@ -2,10 +2,10 @@ import os
 import tensorflow as tf
 import numpy as np
 
-from architecture import preprocessing
+from src.data_management import preprocessing
 
 def expand_label_features(active_features):
-    result= {}
+    result = {}
     if active_features["notes"]:
         result["notes"] = 13
         result["octaves"] = 10
@@ -13,10 +13,12 @@ def expand_label_features(active_features):
         result["duration"] = 7
         result["dotted"] = 1
     return result
+
+
 class Dataset:
     def __init__(self, input_beats: int, batch_size, active_features: dict):
-        window_path = os.path.join("..", "data", "windowed")
-        self.window_size = input_beats+1
+        window_path = os.path.join("data", "windowed")
+        self.window_size = input_beats + 1
         self.input_beats = input_beats
         self.batch_size = batch_size
         self.number_of_classes = expand_label_features(active_features)

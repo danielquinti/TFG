@@ -6,7 +6,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
 import numpy as np
-import song_processing.guitarpro as gp
+import src.song_processing.guitarpro as gp
 
 
 def get_file_paths(route):
@@ -276,10 +276,9 @@ class SimpleTrack:
     def __init__(self, track):
         self.track = track
         try:
-            self.instrument=self.instrument_list[track.channel.instrument]
+            self.instrument = self.instrument_list[track.channel.instrument]
         except IndexError:
-            self.instrument="Unknown"
-
+            self.instrument = "Unknown"
 
     def process(self, min_beat_thr, max_beat_thr, rest_thr):
         if self.track.isPercussionTrack or self.instrument == "Unknown":
@@ -370,7 +369,8 @@ class SongProcessor:
     ):
 
         song_name = song_name.lower().lstrip().rstrip()
-        inst_folder = os.path.join(self.output_path, "inst_grouped", instrument, f'song {song_number}', f'track {track_number}')
+        inst_folder = os.path.join(self.output_path, "inst_grouped", instrument, f'song {song_number}',
+                                   f'track {track_number}')
         song_folder = os.path.join(self.output_path, "song_grouped", f'song {song_number}', f'track {track_number}')
         os.makedirs(inst_folder, exist_ok=True)
         os.makedirs(song_folder, exist_ok=True)

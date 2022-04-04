@@ -1,4 +1,3 @@
-
 [
   {
     "run_name": "lstm",
@@ -6,16 +5,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"cce",
-    "metric_name": ["ba"],
+    "loss_function_name": "cce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -27,16 +30,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"cce",
-    "metric_name": ["ba"],
+    "loss_function_name": "cce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,

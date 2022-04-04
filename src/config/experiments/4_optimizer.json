@@ -5,16 +5,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -26,16 +30,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -47,16 +55,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 1e-4
     },
@@ -69,16 +81,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 1e-4
     },
@@ -91,16 +107,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 1e-5
     },
@@ -113,39 +133,46 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 1e-5
     },
     "batch_size": 32,
     "max_epochs": 150
   },
-
   {
     "run_name": "rmsprop_1e-4_notes",
     "input_beats": 10,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "rmsprop",
       "learning_rate": 1e-4
     },
@@ -158,16 +185,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "rmsprop",
       "learning_rate": 1e-4
     },
@@ -180,16 +211,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "rmsprop",
       "learning_rate": 1e-5
     },
@@ -202,39 +237,46 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "rmsprop",
       "learning_rate": 1e-5
     },
     "batch_size": 32,
     "max_epochs": 150
   },
-
   {
     "run_name": "sgd_1e-2_notes",
     "input_beats": 10,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "sgd"
     },
     "batch_size": 32,
@@ -246,16 +288,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "sgd"
     },
     "batch_size": 32,
@@ -267,16 +313,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "sgd",
       "learning_rate": 1e-3
     },
@@ -289,16 +339,20 @@
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 4}
+        {
+          "units": 4
+        }
       ]
     },
-    "loss_function_name":"wcce",
-    "metric_name": ["ba"],
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "sgd",
       "learning_rate": 1e-3
     },
