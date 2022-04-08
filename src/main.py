@@ -14,6 +14,18 @@ sys.path.append(
 sys.path.append(
     os.path.join(
         "src",
+        "pipeline"
+    )
+)
+sys.path.append(
+    os.path.join(
+        "src",
+        "preprocessing"
+    )
+)
+sys.path.append(
+    os.path.join(
+        "src",
         "song_processing"
     )
 )
@@ -23,7 +35,6 @@ sys.path.append(
         "song_processing",
         "guitarpro"
     )
-
 )
 from src.pipeline import pipeline
 from src.song_processing import song_processor as sp
