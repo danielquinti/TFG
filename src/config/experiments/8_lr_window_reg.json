@@ -2,30 +2,35 @@
   {
     "run_name": "5_layer_low_lr_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16}
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -35,26 +40,23 @@
   {
     "run_name": "175_units_low_lr_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 175}
+        {
+          "units": 175
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -64,30 +66,35 @@
   {
     "run_name": "5_layer_low_lr_big_window_notes",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16}
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -97,26 +104,23 @@
   {
     "run_name": "175_units_low_lr_big_window_notes",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 175}
+        {
+          "units": 175
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -126,60 +130,61 @@
   {
     "run_name": "5_layer_low_lr_duration",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16}
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
     "batch_size": 32,
     "max_epochs": 150
   },
-
   {
     "run_name": "175_units_low_lr_duration",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 175}
+        {
+          "units": 175
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -189,30 +194,35 @@
   {
     "run_name": "5_layer_low_lr_big_window_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16}
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -222,26 +232,23 @@
   {
     "run_name": "175_units_low_lr_big_window_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 175}
+        {
+          "units": 175
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -251,30 +258,35 @@
   {
     "run_name": "5_layer_low_lr_big_window_notes_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16},
-        {"units": 16}
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        },
+        {
+          "units": 16
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },
@@ -284,26 +296,23 @@
   {
     "run_name": "175_units_low_lr_big_window_notes_duration",
     "input_beats": 30,
-    "label_beats":1,
     "model": {
       "name": "lstm",
       "layers": [
-        {"units": 175}
+        {
+          "units": 175
+        }
       ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam",
       "learning_rate": 0.0001
     },

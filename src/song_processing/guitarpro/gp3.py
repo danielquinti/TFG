@@ -1083,6 +1083,7 @@ class GP3File(GPFileBase):
             if default.isPercussionChannel:
                 default.instrument = 0
             return default
+
         for channel in map(getTrackChannelByChannel, range(64)):
             if channel.isPercussionChannel and channel.instrument == 0:
                 self.writeInt(-1)

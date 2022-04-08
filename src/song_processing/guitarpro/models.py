@@ -290,7 +290,7 @@ class RSEMasterEffect:
 
 @hashableAttrs(repr=False)
 class Song:
-    """The top-level node of the song model.
+    """The top-level node of the song models.
 
     It contains basic information about the stored song.
     """
@@ -650,7 +650,7 @@ class GuitarString:
     def __str__(self):
         notes = 'C C# D D# E F F# G G# A A# B'.split()
         octave, semitone = divmod(self.value, 12)
-        return '{note}{octave}'.format(note=notes[semitone], octave=octave-1)
+        return '{note}{octave}'.format(note=notes[semitone], octave=octave - 1)
 
 
 class MeasureClef(Enum):

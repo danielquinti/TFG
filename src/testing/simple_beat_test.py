@@ -45,9 +45,8 @@ class SimpleBeatTest(unittest.TestCase):
         track = sp.SimpleTrack(song.tracks[0])
         chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         obtained = [beat[0] for beat in chunks[0]]
-        expected = np.arange(12).reshape(-1,1) + 48
-        np.array_equal(obtained,expected)
-
+        expected = np.arange(12).reshape(-1, 1) + 48
+        np.array_equal(obtained, expected)
 
     def test_duration(self):
         song_path = os.path.join(
@@ -58,8 +57,8 @@ class SimpleBeatTest(unittest.TestCase):
         track = sp.SimpleTrack(song.tracks[0])
         chunks = track.process(self.processor.min_beat_thr, self.processor.max_beat_thr, self.processor.rest_thr)
         obtained = chunks[0]
-        expected = np.arange(7).reshape(-1,1)
-        np.array_equal(obtained,expected)
+        expected = np.arange(7).reshape(-1, 1)
+        np.array_equal(obtained, expected)
 
     def test_chord(self):
         song_path = os.path.join(

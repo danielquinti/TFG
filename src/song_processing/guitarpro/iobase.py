@@ -6,7 +6,6 @@ import attr
 
 from . import models as gp
 
-
 logger = logging.getLogger(__name__)
 
 

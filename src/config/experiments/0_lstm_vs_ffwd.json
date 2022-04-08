@@ -1,26 +1,24 @@
-
 [
   {
     "run_name": "lstm",
     "input_beats": 5,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 4
+      "layers": [
+        {
+          "units": 4
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "cce",
-      "duration": "cce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "cce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -29,25 +27,23 @@
   {
     "run_name": "ffwd",
     "input_beats": 5,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 4,
-      "regularizer": 1e-4
+      "layers": [
+        {
+          "units": 4
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "cce",
-      "duration": "cce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "cce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,

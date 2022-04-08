@@ -1,28 +1,32 @@
 import os
 import json
 import time
-from song_processing import song_processor as sp
 import argparse
 import sys
-
+import csv
+sys.path.append("src")
 sys.path.append(
     os.path.join(
-        "architecture"
+        "src",
+        "models"
     )
 )
 sys.path.append(
     os.path.join(
+        "src",
         "song_processing"
     )
 )
 sys.path.append(
     os.path.join(
+        "src",
         "song_processing",
         "guitarpro"
     )
 
 )
-# from src.benchmark import model_trainer
+from src.pipeline import pipeline
+from src.song_processing import song_processor as sp
 
 
 def dir_path(string: str):
@@ -68,7 +72,7 @@ def train():
     parser.add_argument("path", type=dir_path)
     parser.add_argument(
         '--output_path',
-        default="results"
+        default="report"
     )
     parser.add_argument(
         '--verbose',
@@ -78,13 +82,24 @@ def train():
     config_path = args.path
     output_path = args.output_path
     verbose = args.verbose
-    mt = model_trainer.ModelTrainer(
+    reports = pipeline.Pipeline(
         config_path,
         output_path,
         verbose
-    )
-    mt.run_all()
+    ).run()
+    with open(
+            os.path.join(
+                output_path,
+                "metrics_report.csv"
+            ),
+            'w',
+    ) as csv_file:
+        writer = csv.writer(csv_file)
+        for report in reports:
+            writer.writerow(report[0])
+            writer.writerow(report[1])
+
 
 
 if __name__ == "__main__":
-    encode()
+    train()

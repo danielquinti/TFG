@@ -2,24 +2,23 @@
   {
     "run_name": "150_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 150
+      "layers": [
+        {
+          "units": 150
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -28,51 +27,48 @@
   {
     "run_name": "120_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 120
+      "layers": [
+        {
+          "units": 120
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
     "max_epochs": 150
   },
-
   {
     "run_name": "175_notes",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 175
+      "layers": [
+        {
+          "units": 175
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 1,
       "duration": 0
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
@@ -81,24 +77,23 @@
   {
     "run_name": "150_durations",
     "input_beats": 10,
-    "label_beats":1,
     "model": {
       "name": "lstm",
-      "units": 150
+      "layers": [
+        {
+          "units": 150
+        }
+      ]
     },
-    "loss_function_names":{
-      "notes": "wcce",
-      "duration": "wcce"
-    },
-    "metric_names":{
-      "notes": ["ba"],
-      "duration": ["ba"]
-    },
+    "loss_function_name": "wcce",
+    "metric_name": [
+      "ba"
+    ],
     "loss_weights": {
       "notes": 0,
       "duration": 1
     },
-    "optimizer":{
+    "optimizer": {
       "name": "adam"
     },
     "batch_size": 32,
