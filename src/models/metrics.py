@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-
+#TODO name precision
 class BalancedAccuracy(tf.keras.metrics.Metric):
 
     def __init__(self, shape: int, name='balanced_accuracy', **kwargs):
@@ -73,6 +73,7 @@ def get_metric(name, shape: int):
     metrics = {
         "ba": BalancedAccuracy(shape),
         "ga": GeometricAccuracy(shape),
-        'ac': "accuracy"
+        'ac': "accuracy",
+        're': tf.keras.metrics.Recall(),
     }
     return metrics[name]

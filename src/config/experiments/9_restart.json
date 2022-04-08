@@ -1,0 +1,50 @@
+[
+    {
+        "run_name": "5_last",
+        "input_beats": 5,
+        "model": {
+          "name": "last"
+        },
+        "encodings": ["np","as"]
+    },
+    {
+        "run_name": "10_last",
+        "input_beats": 10,
+        "model": {
+          "name": "last"
+        },
+        "encodings": ["np","as"]
+    },
+    {
+        "run_name": "20_last",
+        "input_beats": 20,
+        "model": {
+          "name": "last"
+        },
+        "encodings": ["np","as"]
+    },
+    {
+      "run_name": "30_last",
+      "input_beats": 30,
+      "model": {
+        "name": "last"
+      },
+        "encodings": ["np","as"]
+    },
+    {
+        "run_name": "40_last",
+        "input_beats": 40,
+        "model": {
+          "name": "last"
+        },
+        "encodings": ["np","as"]
+    },
+    {
+        "run_name": "50_last",
+        "input_beats": 50,
+        "model": {
+          "name": "last"
+        },
+        "encodings": ["np","as"]
+    }
+]

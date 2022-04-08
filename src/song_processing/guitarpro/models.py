@@ -290,7 +290,7 @@ class RSEMasterEffect:
 
 @hashableAttrs(repr=False)
 class Song:
-    """The top-level node of the song model.
+    """The top-level node of the song models.
 
     It contains basic information about the stored song.
     """
