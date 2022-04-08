@@ -7,8 +7,9 @@ from preprocessing import preprocessing
 
 
 class Dataset:
-    def __init__(self, input_beats: int, batch_size: int, in_prep_name: str, out_prep_name: str):
+    def __init__(self, input_beats: int, batch_size: int, output_path: str, in_prep_name: str, out_prep_name: str):
         self.window_path = os.path.join("data", "windowed")
+        self.output_path = output_path
         self.window_size = input_beats + 1
         self.input_beats = input_beats
         self.batch_size = batch_size
@@ -37,8 +38,22 @@ class Dataset:
             in_prep_name,
             out_prep_name
         ).preprocess()
-        #plot_model(in_prep_model, to_file="in_prep_model.png", show_shapes=True)
-        #plot_model(out_prep_model, to_file="out_prep_model.png", show_shapes=True)
+        # plot_model(
+        #     in_prep_model,
+        #     to_file=os.path.join(
+        #        self.output_path,
+        #        'in_prep_model.png'
+        #     ),
+        #     show_shapes=True, show_layer_names=False
+        # )
+        # plot_model(
+        #     out_prep_model,
+        #     to_file=os.path.join(
+        #         self.output_path,
+        #         'out_prep_model.png'
+        #     ),
+        #     show_shapes=True, show_layer_names=False
+        # )
         ds = ds.shuffle(buffer_size=self.batch_size * 2)
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(

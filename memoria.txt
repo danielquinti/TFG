@@ -1,0 +1,22 @@
+memoria
+	representación
+		duración y nota
+		duración, octava, nota, isdotted
+		diferencia de notas y diferencia de duración
+	metodo
+		duración y nota regresión, escala lineal, precisión normal.
+		duración y nota regresión, escala logarítmica para la duración
+		duración y nota categórico, one hot encoded
+		wcce y balanced accuracy
+	arquitecturas
+		FFWD
+		LSTM
+		STACKED
+		ATTENTION
+		TRANSFORMERS
+
+	parser
+		libgp solo guitarra sin acordes nota y duración, chunks separados por silencios con longitud mínima, separado y shuffled por canciones
+		pygp todo lo que no sea percusión y no tenga acordes, [note,octave,duration,dotted], chunks separados por silencios con longitud mínima y máxima
+
+		

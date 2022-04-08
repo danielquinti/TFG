@@ -9,6 +9,8 @@ class WindowPreprocessor:
         self.prep = prep
 
     def process(self, x):
+        if type(self.prep) is bp.NoPreprocessor:
+            return x
         window_size = x.shape[1]
         x = tf.reshape(x, (-1, 4))
         x = self.prep.process(x)
