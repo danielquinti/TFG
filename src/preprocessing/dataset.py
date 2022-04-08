@@ -17,7 +17,7 @@ class Dataset:
         self.test = self.extract_and_preprocess("test", in_prep_name, out_prep_name)
         self.number_of_classes = {
             "semitone": 13,
-            "octave": 10,
+            "octave": 11,
             "dur_log": 7,
             "dotted": 2
         }

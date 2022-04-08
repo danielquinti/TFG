@@ -44,7 +44,7 @@ class OctaveOHPreprocessor(BeatPreprocessor):
     def process(self, x):
         x = tf.cast(x, tf.int32)
         octave = x[:, 1]
-        return tf.one_hot(octave, 10)
+        return tf.one_hot(octave, 11)
 
 
 class DurLogOHPreprocessor(BeatPreprocessor):
@@ -77,7 +77,7 @@ class AllOHPreprocessor(BeatPreprocessor):
 class AllSingleValuePreprocessor(BeatPreprocessor):
     def process(self, x):
         return \
-            10 * SemitoneExtractor().process(x) + \
+            11 * SemitoneExtractor().process(x) + \
             7 * OctaveExtractor().process(x) + \
             2 * DurLogExtractor().process(x) + \
             DottedExtractor().process(x)

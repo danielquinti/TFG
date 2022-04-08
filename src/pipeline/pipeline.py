@@ -15,25 +15,25 @@ def expand_config(config):
             "semitone": {
                 "loss": "cce",
                 "metrics": ["ba", "ac"],
-                "loss_weight": 70 / 910
+                "loss_weight": 154/1623
 
             },
             "octave": {
                 "loss": "cce",
                 "metrics": ["ba", "ac"],
-                "loss_weight": 91 / 910
+                "loss_weight": 182/1623
 
             },
             "dur_log": {
                 "loss": "cce",
                 "metrics": ["ba", "ac"],
-                "loss_weight": 130 / 910
+                "loss_weight": 286/1623
 
             },
             "dotted": {
                 "loss": "cce",
                 "metrics": ["ba", "ac"],
-                "loss_weight": 455 / 910
+                "loss_weight": 1001/1623
 
             }
         }
