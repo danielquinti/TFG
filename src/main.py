@@ -1,10 +1,10 @@
 import os
 import json
 import time
-from song_processing import song_processor as sp
 import argparse
 import sys
 import csv
+sys.path.append("src")
 sys.path.append(
     os.path.join(
         "src",
@@ -13,6 +13,7 @@ sys.path.append(
 )
 sys.path.append(
     os.path.join(
+        "src",
         "song_processing"
     )
 )
@@ -25,6 +26,7 @@ sys.path.append(
 
 )
 from src.pipeline import pipeline
+from src.song_processing import song_processor as sp
 
 
 def dir_path(string: str):
