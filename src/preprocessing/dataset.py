@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.python.keras.utils.vis_utils import plot_model
 
-from src.preprocessing import preprocessing
+from preprocessing import preprocessing
 
 
 class Dataset:
@@ -37,8 +37,8 @@ class Dataset:
             in_prep_name,
             out_prep_name
         ).preprocess()
-        plot_model(in_prep_model, to_file="in_prep_model.png", show_shapes=True)
-        plot_model(out_prep_model, to_file="out_prep_model.png", show_shapes=True)
+        #plot_model(in_prep_model, to_file="in_prep_model.png", show_shapes=True)
+        #plot_model(out_prep_model, to_file="out_prep_model.png", show_shapes=True)
         ds = ds.shuffle(buffer_size=self.batch_size * 2)
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(

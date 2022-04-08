@@ -3,7 +3,7 @@ import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.python.keras.utils.vis_utils import plot_model
 
-from src.models import regularizers
+from models import regularizers
 
 def lstm_model(
         input_shape,

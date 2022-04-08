@@ -4,9 +4,7 @@ import os
 from datetime import datetime
 import shutil
 
-from src.models.my_model import MyModel
-import optuna
-
+from models.my_model import MyModel
 
 def expand_config(config):
     config["optimizer"] = {

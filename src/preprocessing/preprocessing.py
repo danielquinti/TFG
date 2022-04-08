@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.utils import plot_model
-from src.preprocessing import beat_preprocessors as bp
+from preprocessing import beat_preprocessors as bp
 
 
 # decorator pattern
@@ -57,6 +57,4 @@ class DataPreprocessor:
         preprocessed_labels = self.out_prep.process(raw_labels)
         in_prep_model = tf.keras.Model(inputs=inputs, outputs=preprocessed_inputs)
         out_prep_model = tf.keras.Model(inputs=raw_labels, outputs=preprocessed_labels)
-        plot_model(in_prep_model, to_file='input.png')
-        plot_model(out_prep_model, to_file='label.png')
         return in_prep_model, out_prep_model

@@ -2,9 +2,9 @@ import os
 
 import tensorflow.keras as keras
 from tensorflow.keras.utils import plot_model
-from src.models import optimizers, models, metrics, losses
+from models import optimizers, models, metrics, losses
 
-from src.preprocessing import dataset
+from preprocessing import dataset
 
 
 class MyModel:
@@ -24,7 +24,7 @@ class MyModel:
         )
         outputs = config["outputs"]
         print(self.model.summary())
-        plot_model(self.model, to_file='train_model.png', show_shapes=True, show_layer_names=False)
+        #plot_model(self.model, to_file='train_model.png', show_shapes=True, show_layer_names=False)
         self.metrics = {}
         self.losses = {}
         self.loss_weights = {}

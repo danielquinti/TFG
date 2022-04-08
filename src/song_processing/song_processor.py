@@ -6,7 +6,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
 import numpy as np
-import src.song_processing.guitarpro as gp
+import song_processing.guitarpro as gp
 
 
 def get_file_paths(route):
