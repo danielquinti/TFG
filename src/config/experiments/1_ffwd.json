@@ -1,0 +1,11 @@
+[
+  {
+      "run_name": "ffwd",
+      "input_beats": 30,
+      "model": {
+        "name": "ffwd"
+      },
+      "encodings": ["np","as"],
+      "max_epochs": 50
+  }
+]

@@ -71,9 +71,9 @@ def ffwd_model(input_shape, number_of_classes: dict, config: dict):
         in_regularizer = None
 
     x = layers.Flatten()(e_inputs)
-    x = layers.Dense(256, activation='relu')(x)
     x = layers.Dense(128, activation='relu')(x)
     x = layers.Dense(64, activation='relu')(x)
+    x = layers.Dense(32, activation='relu')(x)
     outputs = []
     for feature, n_classes in number_of_classes.items():
         outputs.append(

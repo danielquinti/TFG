@@ -1,0 +1,11 @@
+[
+  {
+    "run_name": "last",
+    "input_beats": 30,
+    "model": {
+      "name": "last"
+    },
+    "encodings": ["np","as"],
+    "max_epochs": 1
+  }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "run_name": "s_lstm",
+        "input_beats": 30,
+        "model": {
+          "name": "lstm",
+            "layers": [
+                {"units": 128},
+                {"units": 64},
+                {"units": 32}
+                ]
+        },
+        "encodings": ["np","as"],
+        "max_epochs": 50
+    }
+]
