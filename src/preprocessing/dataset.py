@@ -28,7 +28,7 @@ class Dataset:
         data_path = os.path.join(folder_path, "windows.npy")
         data = np.load(data_path).reshape((-1, self.window_size, 4))
         n_examples = data.shape[0]
-        picked = n_examples//2
+        picked = n_examples//4
         ds = tf.data.Dataset.from_tensor_slices(
             (
                 data[:, :self.input_beats, :],

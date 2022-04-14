@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 import shutil
-
+import tensorflow as tf
 from models.my_model import MyModel
 
 def expand_config(config):
@@ -62,6 +62,9 @@ class Pipeline:
 
     def run(self):
         reports = []
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
         for run_config in self.run_configs:
             reports.append(MyModel(run_config, self.output_path, self.verbose).run())
         return reports
