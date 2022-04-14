@@ -27,6 +27,7 @@ class Dataset:
         folder_path = os.path.join(self.window_path, dist_name, str(self.window_size))
         data_path = os.path.join(folder_path, "windows.npy")
         data = np.load(data_path).reshape((-1, self.window_size, 4))
+        n_examples = data.shape[0]
         ds = tf.data.Dataset.from_tensor_slices(
             (
                 data[:, :self.input_beats, :],
@@ -38,23 +39,23 @@ class Dataset:
             in_prep_name,
             out_prep_name
         ).preprocess()
-        # plot_model(
-        #     in_prep_model,
-        #     to_file=os.path.join(
-        #        self.output_path,
-        #        'in_prep_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
-        # plot_model(
-        #     out_prep_model,
-        #     to_file=os.path.join(
-        #         self.output_path,
-        #         'out_prep_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
-        ds = ds.shuffle(buffer_size=self.batch_size * 2)
+        plot_model(
+            in_prep_model,
+            to_file=os.path.join(
+               self.output_path,
+               'in_prep_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
+        plot_model(
+            out_prep_model,
+            to_file=os.path.join(
+                self.output_path,
+                'out_prep_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
+        ds = ds.shuffle(buffer_size=n_examples)
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(
             lambda x, y: (in_prep_model(x), out_prep_model(y)),

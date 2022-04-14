@@ -8,8 +8,7 @@ from models.my_model import MyModel
 
 def expand_config(config):
     config["optimizer"] = {
-        "name": "adam",
-        "learning_rate": 1e-4
+        "name": "adam"
     }
     config["outputs"] = {
             "semitone": {

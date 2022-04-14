@@ -14,7 +14,7 @@ class MyModel:
         self.run_name = config["run_name"]
         self.optimizer = optimizers.get_optimizer(config["optimizer"])
         self.batch_size = 32
-        # self.max_epochs = config["max_epochs"]
+        self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.data = dataset.Dataset(self.input_beats, self.batch_size, self.output_path, *config["encodings"])
         self.model: keras.Model = models.get_model(
@@ -24,14 +24,14 @@ class MyModel:
         )
         outputs = config["outputs"]
         print(self.model.summary())
-        # plot_model(
-        #     self.model,
-        #     to_file=os.path.join(
-        #        self.output_path,
-        #        'train_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
+        plot_model(
+            self.model,
+            to_file=os.path.join(
+               self.output_path,
+               'train_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
         self.metrics = {}
         self.losses = {}
         self.loss_weights = {}
@@ -81,12 +81,12 @@ class MyModel:
             log_dir=os.path.join(log_folder, self.run_name)
         )
 
-        # self.model.fit(
-        #     self.data.train,
-        #     epochs=self.max_epochs,
-        #     verbose=self.verbose,
-        #     validation_data=self.data.test,
-        #     callbacks=[tensorboard]
-        # )
-        # self.save_weights(self.model, self.run_name)
+        self.model.fit(
+            self.data.train,
+            epochs=self.max_epochs,
+            verbose=self.verbose,
+            validation_data=self.data.test,
+            callbacks=[tensorboard]
+        )
+        self.save_weights(self.model, self.run_name)
         return self.compute_metrics()

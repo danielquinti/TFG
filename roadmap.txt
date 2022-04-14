@@ -135,3 +135,14 @@ dotted->precision e recall
 log inicial, intermedio y final
 
 graphviz pydot optuna
+
+dotted
+    salida None,1
+    pérdida BCE
+    métrica accuracy, recall
+
+
+shuffle whole dataset size
+learning rate and batch size are related
+
+batch size until 512

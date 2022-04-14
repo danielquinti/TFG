@@ -1,8 +1,6 @@
 from tensorflow.keras import layers
 import tensorflow as tf
 import tensorflow.keras as keras
-from tensorflow.python.keras.utils.vis_utils import plot_model
-
 from models import regularizers
 
 def lstm_model(
@@ -72,10 +70,10 @@ def ffwd_model(input_shape, number_of_classes: dict, config: dict):
     except KeyError:
         in_regularizer = None
 
-    x = layers.Flatten()(inputs)
-    x = layers.Dense(40, activation='relu')(x)
-    x = layers.Dense(30, activation='relu')(x)
-    x = layers.Dense(20, activation='relu')(x)
+    x = layers.Flatten()(e_inputs)
+    x = layers.Dense(256, activation='relu')(x)
+    x = layers.Dense(128, activation='relu')(x)
+    x = layers.Dense(64, activation='relu')(x)
     outputs = []
     for feature, n_classes in number_of_classes.items():
         outputs.append(
@@ -114,7 +112,7 @@ def get_model(
     models = {
         "last": last_model,
         "ffwd": ffwd_model,
-        "lstm": last_model
+        "lstm": lstm_model
         # "trans": transformer_model
     }
     return models[config["name"]](input_shape, number_of_classes, config)
