@@ -28,6 +28,7 @@ class Dataset:
         data_path = os.path.join(folder_path, "windows.npy")
         data = np.load(data_path).reshape((-1, self.window_size, 4))
         n_examples = data.shape[0]
+        picked = n_examples//2
         ds = tf.data.Dataset.from_tensor_slices(
             (
                 data[:, :self.input_beats, :],
@@ -56,6 +57,8 @@ class Dataset:
         #     show_shapes=True, show_layer_names=False
         # )
         ds = ds.shuffle(buffer_size=n_examples)
+        ds = ds.take(picked)
+        print(f"Picked {picked} examples")
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(
             lambda x, y: (in_prep_model(x), out_prep_model(y)),

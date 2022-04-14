@@ -13,7 +13,7 @@ class MyModel:
         self.verbose = verbose
         self.run_name = config["run_name"]
         self.optimizer = optimizers.get_optimizer(config["optimizer"])
-        self.batch_size = 32
+        self.batch_size = 256
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
         self.data = dataset.Dataset(self.input_beats, self.batch_size, self.output_path, *config["encodings"])
