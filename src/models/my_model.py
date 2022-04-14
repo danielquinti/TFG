@@ -28,7 +28,7 @@ class MyModel:
             self.model,
             to_file=os.path.join(
                self.output_path,
-               'train_model.png'
+               f'{self.run_name}_train_model.png'
             ),
             show_shapes=True, show_layer_names=False
         )

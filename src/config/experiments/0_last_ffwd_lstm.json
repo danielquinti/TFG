@@ -1,4 +1,22 @@
 [
+  {
+    "run_name": "last",
+    "input_beats": 30,
+    "model": {
+      "name": "last"
+    },
+    "encodings": ["np","as"],
+    "max_epochs": 1
+  },
+    {
+        "run_name": "ffwd",
+        "input_beats": 30,
+        "model": {
+          "name": "ffwd"
+        },
+        "encodings": ["np","as"],
+        "max_epochs": 1
+    },
     {
         "run_name": "lstm",
         "input_beats": 30,
@@ -9,7 +27,7 @@
                 ]
         },
         "encodings": ["np","as"],
-        "max_epochs": 150
+        "max_epochs": 1
     },
     {
         "run_name": "s_lstm",
@@ -23,7 +41,6 @@
                 ]
         },
         "encodings": ["np","as"],
-        "max_epochs": 150
+        "max_epochs": 1
     }
-
 ]
