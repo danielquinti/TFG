@@ -15,7 +15,7 @@
           "name": "ffwd"
         },
         "encodings": ["np","as"],
-        "max_epochs": 1
+        "max_epochs": 150
     },
     {
         "run_name": "lstm",
@@ -27,7 +27,7 @@
                 ]
         },
         "encodings": ["np","as"],
-        "max_epochs": 1
+        "max_epochs": 150
     },
     {
         "run_name": "s_lstm",
@@ -41,6 +41,6 @@
                 ]
         },
         "encodings": ["np","as"],
-        "max_epochs": 1
+        "max_epochs": 150
     }
 ]
