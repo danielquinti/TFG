@@ -8,7 +8,7 @@ from preprocessing import preprocessing
 
 class Dataset:
     def __init__(self, input_beats: int, batch_size: int, output_path: str, in_prep_name: str, out_prep_name: str):
-        self.window_path = os.path.join("data", "windowed")
+        self.window_path = os.path.join("data", "modest")
         self.output_path = output_path
         self.window_size = input_beats + 1
         self.input_beats = input_beats
@@ -27,8 +27,6 @@ class Dataset:
         folder_path = os.path.join(self.window_path, dist_name, str(self.window_size))
         data_path = os.path.join(folder_path, "windows.npy")
         data = np.load(data_path).reshape((-1, self.window_size, 4))
-        n_examples = data.shape[0]
-        picked = n_examples//4
         ds = tf.data.Dataset.from_tensor_slices(
             (
                 data[:, :self.input_beats, :],
@@ -56,9 +54,7 @@ class Dataset:
         #     ),
         #     show_shapes=True, show_layer_names=False
         # )
-        ds = ds.shuffle(buffer_size=n_examples)
-        ds = ds.take(picked)
-        print(f"Picked {picked} examples")
+        ds = ds.shuffle(buffer_size=1000)
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(
             lambda x, y: (in_prep_model(x), out_prep_model(y)),

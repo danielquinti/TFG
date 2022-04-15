@@ -46,10 +46,7 @@ class MyModel:
             self.loss_weights[feature] = outputs[feature]["loss_weight"]
 
     def compute_metrics(self):
-        evaluation = self.model.evaluate(
-            self.data.test,
-            batch_size=self.batch_size
-        )
+        evaluation = self.model.evaluate(self.data.test)
         row = [self.run_name] + evaluation
         headers = ["run_name"] + self.model.metrics_names
         return [headers, row]
