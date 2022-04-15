@@ -5,6 +5,7 @@
       "model": {
         "name": "ffwd"
       },
+      "batch_size": 32,
       "encodings": ["np","as"],
       "max_epochs": 50
   }

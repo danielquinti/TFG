@@ -5,6 +5,7 @@
     "model": {
       "name": "last"
     },
+    "batch_size": 32,
     "encodings": ["np","as"],
     "max_epochs": 1
   }
