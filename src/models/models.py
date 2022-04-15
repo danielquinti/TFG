@@ -23,7 +23,7 @@ def lstm_model(
         in_regularizer = regularizers.get_regularizer(config["in_regularizer"])
     except KeyError:
         in_regularizer = None
-    x = inputs
+    x = e_inputs
     for layer in config["layers"][:-1]:
         x = layers.LSTM(
             layer["units"],
@@ -61,14 +61,6 @@ def ffwd_model(input_shape, number_of_classes: dict, config: dict):
     dur_log = keras.layers.Embedding(7, 7)(dur_log)
     dotted = keras.layers.Embedding(2, 2)(dotted)
     e_inputs = keras.layers.Concatenate()([semitone, octave, dur_log, dotted])
-    try:
-        out_regularizer = regularizers.get_regularizer(config["out_regularizer"])
-    except KeyError:
-        out_regularizer = None
-    try:
-        in_regularizer = regularizers.get_regularizer(config["in_regularizer"])
-    except KeyError:
-        in_regularizer = None
 
     x = layers.Flatten()(e_inputs)
     x = layers.Dense(128, activation='relu')(x)
@@ -80,8 +72,7 @@ def ffwd_model(input_shape, number_of_classes: dict, config: dict):
             layers.Dense(
                 n_classes,
                 activation='softmax',
-                name=feature,
-                kernel_regularizer=out_regularizer
+                name=feature
             )
             (x)
         )
