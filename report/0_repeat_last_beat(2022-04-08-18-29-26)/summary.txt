@@ -1,0 +1,35 @@
+batch size = 32
+adam(lr=0.001)
+epochs = 100
+
+ffwd layers (128,64,32)
+single lstm number of units 128
+stacked lstm layers (128,64,32)
+
+
+semitone
+    ffwd
+        beats last, plateaus after 20 it, train and val really close together
+        loss looks normal, but train loss grows after 50 it and val loss is unstable
+    lstm and s_lstm
+        train and val really close together
+        start leading but drops train and val performance after 10 it, maybe lower learning rate or lr decay
+        lstm loss skyrockets after 10 it (expected)
+        s_lstm loss skyrockets and then goes to nan
+    NOTE: lstm drops once, whereas s_lstm drops twice, the second one at 50it.
+octave
+    ffwd
+        overfits but doesn't plateau, val loss increases
+    lstm and s_lstm
+        same as semitone
+
+dur_log
+    ffwd
+        overfits but doesn't plateau, val loss increases
+    lstm and s_lstm
+        same as semitone
+dotted
+    ffwd
+        overfits but doesn't plateau, val loss increases
+    lstm and s_lstm
+        same as semitone
