@@ -24,14 +24,14 @@ class MyModel:
         )
         outputs = config["outputs"]
         print(self.model.summary())
-        plot_model(
-            self.model,
-            to_file=os.path.join(
-               self.output_path,
-               f'{self.run_name}_train_model.png'
-            ),
-            show_shapes=True, show_layer_names=False
-        )
+        # plot_model(
+        #     self.model,
+        #     to_file=os.path.join(
+        #        self.output_path,
+        #        f'{self.run_name}_train_model.png'
+        #     ),
+        #     show_shapes=True, show_layer_names=False
+        # )
         self.metrics = {}
         self.losses = {}
         self.loss_weights = {}
