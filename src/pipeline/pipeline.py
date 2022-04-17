@@ -7,9 +7,6 @@ import tensorflow as tf
 from models.my_model import MyModel
 
 def expand_config(config):
-    config["optimizer"] = {
-        "name": "adam"
-    }
     config["outputs"] = {
             "semitone": {
                 "loss": "cce",
