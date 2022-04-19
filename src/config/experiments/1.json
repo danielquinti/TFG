@@ -3,10 +3,12 @@
     "run_name": "last",
     "input_beats": 30,
     "model": {
-      "name": "last"
+      "name": "last",
+      "embedding_size": 8
     },
     "optimizer": {
-      "name": "adam"
+      "name": "adam",
+      "learning_rate": 1e-4
     },
     "batch_size": 32,
     "encodings": ["np","as"],
@@ -16,10 +18,12 @@
       "run_name": "ffwd",
       "input_beats": 30,
       "model": {
-        "name": "ffwd"
+        "name": "ffwd",
+        "embedding_size": 8
       },
       "optimizer": {
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
       "encodings": ["np","as"],
@@ -32,31 +36,35 @@
         "name": "lstm",
           "layers": [
               {"units": 128}
-          ]
+          ],
+        "embedding_size": 8
       },
       "optimizer": {
-        "name": "adam"
+        "name": "adam",
+        "learning_rate": 1e-4
       },
       "batch_size": 32,
-      "encodings": ["np","as"],
-      "max_epochs": 100
+      "encodings": ["np","as"]
   },
   {
     "run_name": "s_lstm",
     "input_beats": 30,
     "model": {
       "name": "lstm",
-        "layers": [
-            {"units": 128},
-            {"units": 64},
-            {"units": 32}
-            ]
+      "layers":
+        [
+          {"units": 128},
+          {"units": 64},
+          {"units": 32}
+        ],
+      "embedding_size": 8
     },
     "optimizer": {
-      "name": "adam"
+      "name": "adam",
+      "learning_rate": 1e-4
     },
     "batch_size": 32,
     "encodings": ["np","as"],
     "max_epochs": 100
-    }
+  }
 ]

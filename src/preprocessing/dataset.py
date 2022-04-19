@@ -16,12 +16,14 @@ class Dataset:
         self.train = self.extract_and_preprocess("train", in_prep_name, out_prep_name)
         self.input_shape = (self.input_beats, 4)
         self.test = self.extract_and_preprocess("test", in_prep_name, out_prep_name)
-        self.number_of_classes = {
-            "semitone": 13,
-            "octave": 11,
-            "dur_log": 7,
-            "dotted": 2
+        folder_path = os.path.join(self.window_path, "train", str(self.window_size))
+        self.class_weights = {
+            "semitone": np.load(os.path.join(folder_path, "semitone_weights.npy")),
+            "octave": np.load(os.path.join(folder_path, "octave_weights.npy")),
+            "dur_log": np.load(os.path.join(folder_path, "dur_log_weights.npy")),
+            "dotted": np.load(os.path.join(folder_path, "dotted_weights.npy"))
         }
+        self.number_of_classes = {feature: self.class_weights[feature].shape[-1] for feature in self.class_weights}
 
     def extract_and_preprocess(self, dist_name: str, in_prep_name: str, out_prep_name: str):
         folder_path = os.path.join(self.window_path, dist_name, str(self.window_size))

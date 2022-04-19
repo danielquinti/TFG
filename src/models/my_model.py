@@ -41,7 +41,7 @@ class MyModel:
                     metrics.get_metric(name, self.data.number_of_classes[feature])
                     for name in outputs[feature]["metrics"]
                 ]
-            self.losses[feature] = losses.get_loss_function(outputs[feature]["loss"])
+            self.losses[feature] = losses.get_loss_function(outputs[feature]["loss"], self.data.class_weights[feature])
 
             self.loss_weights[feature] = outputs[feature]["loss_weight"]
 

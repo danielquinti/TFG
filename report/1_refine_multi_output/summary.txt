@@ -1,0 +1,10 @@
+batch size = 32
+adam(lr=1e-4)
+epochs = 100
+
+ffwd layers (128,64,32)
+single lstm number of units 128
+stacked lstm layers (128,64,32)
+
+change embeddings so all of them have the same length
+add class weights to the loss function

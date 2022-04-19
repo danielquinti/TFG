@@ -1,27 +1,12 @@
 [
   {
-    "run_name": "trans",
-    "input_beats": 30,
-    "model": {
-      "name": "trans"
-    },
-    "optimizer": {
-      "name": "adam",
-      "learning_rate": 1e-4
-    },
-    "batch_size": 32,
-    "encodings": ["np","as"],
-    "max_epochs": 100
-  },
-  {
     "run_name": "last",
     "input_beats": 30,
     "model": {
       "name": "last"
     },
     "optimizer": {
-      "name": "adam",
-      "learning_rate": 1e-4
+      "name": "adam"
     },
     "batch_size": 32,
     "encodings": ["np","as"],
@@ -34,8 +19,7 @@
         "name": "ffwd"
       },
       "optimizer": {
-        "name": "adam",
-        "learning_rate": 1e-4
+        "name": "adam"
       },
       "batch_size": 32,
       "encodings": ["np","as"],
@@ -51,8 +35,7 @@
           ]
       },
       "optimizer": {
-        "name": "adam",
-        "learning_rate": 1e-4
+        "name": "adam"
       },
       "batch_size": 32,
       "encodings": ["np","as"],
@@ -70,8 +53,7 @@
             ]
     },
     "optimizer": {
-      "name": "adam",
-      "learning_rate": 1e-4
+      "name": "adam"
     },
     "batch_size": 32,
     "encodings": ["np","as"],

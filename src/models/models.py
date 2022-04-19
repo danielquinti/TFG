@@ -8,12 +8,13 @@ def lstm_model(
         number_of_classes: dict,
         config: list
 ):
+    embedding_size = config["embedding_size"]
     inputs = layers.Input(shape=input_shape)
     semitone, octave, dur_log, dotted = tf.unstack(inputs, axis=-1)
-    semitone = keras.layers.Embedding(13, 13)(semitone)
-    octave = keras.layers.Embedding(11, 11)(octave)
-    dur_log = keras.layers.Embedding(7, 7)(dur_log)
-    dotted = keras.layers.Embedding(2, 2)(dotted)
+    semitone = keras.layers.Embedding(13, embedding_size)(semitone)
+    octave = keras.layers.Embedding(11, embedding_size)(octave)
+    dur_log = keras.layers.Embedding(7, embedding_size)(dur_log)
+    dotted = keras.layers.Embedding(2, embedding_size)(dotted)
     e_inputs = keras.layers.Concatenate()([semitone, octave, dur_log, dotted])
     try:
         out_regularizer = regularizers.get_regularizer(config["out_regularizer"])
@@ -54,12 +55,13 @@ def lstm_model(
 
 
 def ffwd_model(input_shape, number_of_classes: dict, config: dict):
+    embedding_size = config["embedding_size"]
     inputs = layers.Input(shape=input_shape)
     semitone, octave, dur_log, dotted = tf.unstack(inputs, axis=-1)
-    semitone = keras.layers.Embedding(13, 13)(semitone)
-    octave = keras.layers.Embedding(11, 11)(octave)
-    dur_log = keras.layers.Embedding(7, 7)(dur_log)
-    dotted = keras.layers.Embedding(2, 2)(dotted)
+    semitone = keras.layers.Embedding(13, embedding_size)(semitone)
+    octave = keras.layers.Embedding(11, embedding_size)(octave)
+    dur_log = keras.layers.Embedding(7, embedding_size)(dur_log)
+    dotted = keras.layers.Embedding(2, embedding_size)(dotted)
     e_inputs = keras.layers.Concatenate()([semitone, octave, dur_log, dotted])
 
     x = layers.Flatten()(e_inputs)
