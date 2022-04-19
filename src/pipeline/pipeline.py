@@ -9,25 +9,25 @@ from models.my_model import MyModel
 def expand_config(config):
     config["outputs"] = {
             "semitone": {
-                "loss": "cce",
+                "loss": "wcce",
                 "metrics": ["ba", "ac"],
                 "loss_weight": 154/1623
 
             },
             "octave": {
-                "loss": "cce",
+                "loss": "wcce",
                 "metrics": ["ba", "ac"],
                 "loss_weight": 182/1623
 
             },
             "dur_log": {
-                "loss": "cce",
+                "loss": "wcce",
                 "metrics": ["ba", "ac"],
                 "loss_weight": 286/1623
 
             },
             "dotted": {
-                "loss": "cce",
+                "loss": "wcce",
                 "metrics": ["ba", "ac"],
                 "loss_weight": 1001/1623
 
