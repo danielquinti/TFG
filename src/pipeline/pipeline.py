@@ -63,5 +63,5 @@ class Pipeline:
         for gpu in gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
         for run_config in self.run_configs:
-            reports.append(MyModel(run_config, self.output_path, self.verbose))
+            reports.append(MyModel(run_config, self.output_path, self.verbose).run())
         return reports
