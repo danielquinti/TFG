@@ -7,7 +7,8 @@ from preprocessing import preprocessing
 
 
 class Dataset:
-    def __init__(self, input_beats: int, batch_size: int, output_path: str, in_prep_name: str, out_prep_name: str):
+    def __init__(self, input_beats: int, batch_size: int, output_path: str, in_prep_name: str, out_prep_name: str,\
+                 out_cfg: dict):
         self.window_path = os.path.join("data", "modest")
         self.output_path = output_path
         self.window_size = input_beats + 1
@@ -23,7 +24,7 @@ class Dataset:
             "dur_log": np.load(os.path.join(folder_path, "dur_log_weights.npy")),
             "dotted": np.load(os.path.join(folder_path, "dotted_weights.npy"))
         }
-        self.number_of_classes = {feature: self.class_weights[feature].shape[-1] for feature in self.class_weights}
+        self.number_of_classes = {feature: self.class_weights[feature].shape[-1] for feature in out_cfg}
 
     def extract_and_preprocess(self, dist_name: str, in_prep_name: str, out_prep_name: str):
         folder_path = os.path.join(self.window_path, dist_name, str(self.window_size))
@@ -40,22 +41,22 @@ class Dataset:
             in_prep_name,
             out_prep_name
         ).preprocess()
-        # plot_model(
-        #     in_prep_model,
-        #     to_file=os.path.join(
-        #        self.output_path,
-        #        'in_prep_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
-        # plot_model(
-        #     out_prep_model,
-        #     to_file=os.path.join(
-        #         self.output_path,
-        #         'out_prep_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
+        plot_model(
+            in_prep_model,
+            to_file=os.path.join(
+               self.output_path,
+               'in_prep_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
+        plot_model(
+            out_prep_model,
+            to_file=os.path.join(
+                self.output_path,
+                'out_prep_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
         ds = ds.shuffle(buffer_size=1000)
         ds = ds.batch(self.batch_size, drop_remainder=True)
         ds = ds.map(

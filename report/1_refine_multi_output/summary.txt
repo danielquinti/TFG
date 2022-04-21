@@ -8,3 +8,18 @@ stacked lstm layers (128,64,32)
 
 change embeddings so all of them have the same length
 add class weights to the loss function
+
+
+lstm drops at iteration 70 in both training and test
+dotted
+    s_lstm beats everyone (really close to ffwd in balanced accuracy) but overfits
+    lstm drops at iteration 70
+dur_log
+    same as dotted
+
+octave
+   can't beat baseline, lstm comes close in training but drops at it70
+
+semitone
+    lstm drops at iteration 70
+    s_lstm beats baseline but plateaus

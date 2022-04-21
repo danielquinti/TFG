@@ -16,7 +16,8 @@ class MyModel:
         self.batch_size = config["batch_size"]
         self.max_epochs = config["max_epochs"]
         self.input_beats = config["input_beats"]
-        self.data = dataset.Dataset(self.input_beats, self.batch_size, self.output_path, *config["encodings"])
+        self.data = dataset.Dataset(self.input_beats, self.batch_size, self.output_path, *config["encodings"],
+                                    config["outputs"])
         self.model: keras.Model = models.get_model(
             config["model"],
             self.data.input_shape,
@@ -24,14 +25,14 @@ class MyModel:
         )
         outputs = config["outputs"]
         print(self.model.summary())
-        # plot_model(
-        #     self.model,
-        #     to_file=os.path.join(
-        #        self.output_path,
-        #        f'{self.run_name}_train_model.png'
-        #     ),
-        #     show_shapes=True, show_layer_names=False
-        # )
+        plot_model(
+            self.model,
+            to_file=os.path.join(
+               self.output_path,
+               f'{self.run_name}_train_model.png'
+            ),
+            show_shapes=True, show_layer_names=False
+        )
         self.metrics = {}
         self.losses = {}
         self.loss_weights = {}

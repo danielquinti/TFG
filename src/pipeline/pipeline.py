@@ -45,7 +45,7 @@ class Pipeline:
     ):
         config_file_name = os.path.basename(config_file_path).split(".")[0]
         with open(config_file_path) as fp:
-            self.run_configs: list = [expand_config(x) for x in json.load(fp)]
+            self.run_configs: list = json.load(fp)
 
         current_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         folder_name = f'{config_file_name}({current_date})'
@@ -63,5 +63,5 @@ class Pipeline:
         for gpu in gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
         for run_config in self.run_configs:
-            reports.append(MyModel(run_config, self.output_path, self.verbose).run())
+            reports.append(MyModel(run_config, self.output_path, self.verbose))
         return reports

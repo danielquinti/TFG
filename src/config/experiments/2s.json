@@ -1,0 +1,103 @@
+[
+  {
+    "run_name": "last",
+    "input_beats": 30,
+    "model": {
+      "name": "last",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","soh"],
+    "max_epochs": 1,
+    "outputs" : {
+            "semitone": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  },
+    {
+      "run_name": "ffwd",
+      "input_beats": 30,
+      "model": {
+        "name": "ffwd",
+        "embedding_size": 8
+      },
+      "optimizer": {
+        "name": "adam",
+        "learning_rate": 1e-4
+      },
+      "batch_size": 32,
+      "encodings": ["np","soh"],
+      "max_epochs": 100,
+      "outputs" : {
+              "semitone": {
+                  "loss": "wcce",
+                  "metrics": ["ba", "ac"],
+                  "loss_weight": 1
+
+              }
+      }
+  },
+  {
+      "run_name": "lstm",
+      "input_beats": 30,
+      "model": {
+        "name": "lstm",
+          "layers": [
+              {"units": 128}
+          ],
+        "embedding_size": 8
+      },
+      "optimizer": {
+        "name": "adam",
+        "learning_rate": 1e-4
+      },
+      "batch_size": 32,
+      "encodings": ["np","soh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "semitone": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  },
+  {
+    "run_name": "s_lstm",
+    "input_beats": 30,
+    "model": {
+      "name": "lstm",
+      "layers":
+        [
+          {"units": 128},
+          {"units": 64},
+          {"units": 32}
+        ],
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","soh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "semitone": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  }
+]
