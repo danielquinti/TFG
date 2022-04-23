@@ -22,35 +22,35 @@ class WindowPreprocessor:
 class DataPreprocessor:
     def __init__(self, data: tf.data.Dataset, in_criteria: str, out_criteria: str):
         processors = {
-            "se": bp.SemitoneExtractor(),
-            "oe": bp.OctaveExtractor(),
-            "dle": bp.DurLogExtractor(),
-            "dte": bp.DottedExtractor(),
+            "se": bp.SemitoneExtractor,
+            "oe": bp.OctaveExtractor,
+            "dle": bp.DurLogExtractor,
+            "dte": bp.DottedExtractor,
 
-            "soh": bp.SemitoneOHPreprocessor(),
-            "ooh": bp.OctaveOHPreprocessor(),
-            "dloh": bp.DurLogOHPreprocessor(),
-            "dtoh": bp.DottedOHPreprocessor(),
+            "soh": bp.SemitoneOHPreprocessor,
+            "ooh": bp.OctaveOHPreprocessor,
+            "dloh": bp.DurLogOHPreprocessor,
+            "dtoh": bp.DottedOHPreprocessor,
 
-            "aoh": bp.AllOHPreprocessor(),
+            "aoh": bp.AllOHPreprocessor,
 
-            "asv": bp.AllSingleValuePreprocessor(),
-            "psv": bp.PitchSingleValuePreprocessor(),
-            "dsv": bp.DurationSingleValuePreprocessor(),
+            "asv": bp.AllSingleValuePreprocessor,
+            "psv": bp.PitchSingleValuePreprocessor,
+            "dsv": bp.DurationSingleValuePreprocessor,
 
-            "aohsv": bp.AllOHSingleValuePreprocessor(),
-            "dohc": bp.DurationOHConcatPreprocessor(),
-            "pohc": bp.PitchOHConcatPreprocessor(),
+            "aohsv": bp.AllOHSingleValuePreprocessor,
+            "dohc": bp.DurationOHConcatPreprocessor,
+            "pohc": bp.PitchOHConcatPreprocessor,
 
-            "as": bp.AllSeparatePreprocessor(),
-            "np": bp.NoPreprocessor()
+            "as": bp.AllSeparatePreprocessor,
+            "np": bp.NoPreprocessor
         }
         self.window_size = data.element_spec[0].shape[0]
         self.n_features = data.element_spec[0].shape[1]
         self.data = data
 
-        self.in_prep = WindowPreprocessor(processors[in_criteria])
-        self.out_prep: bp.BeatPreprocessor = processors[out_criteria]
+        self.in_prep = WindowPreprocessor(processors[in_criteria]())
+        self.out_prep: bp.BeatPreprocessor = processors[out_criteria]()
 
     def preprocess(self):
         inputs = tf.keras.Input(shape=(self.window_size, self.n_features), dtype=self.data.element_spec[0].dtype)

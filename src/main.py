@@ -62,6 +62,7 @@ def train():
     config_path = args.path
     output_path = args.output_path
     verbose = args.verbose
+    config_name = os.path.splitext(os.path.basename(config_path))[0]
     reports = pipeline.Pipeline(
         config_path,
         output_path,
@@ -70,7 +71,7 @@ def train():
     with open(
             os.path.join(
                 output_path,
-                "metrics_report.csv"
+                f'{config_name}_metrics_report.csv'
             ),
             'w',
     ) as csv_file:
@@ -78,7 +79,6 @@ def train():
         for report in reports:
             writer.writerow(report[0])
             writer.writerow(report[1])
-
 
 
 if __name__ == "__main__":
