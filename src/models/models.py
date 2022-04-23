@@ -87,11 +87,17 @@ def last_model(input_shape, number_of_classes: dict, config: dict):
     window_beats = tf.unstack(inputs, axis=1)
     raw_outputs = tf.unstack(window_beats[-1], axis=-1)
     oh_outputs = [tf.one_hot(raw_output, depth=n_classes) for raw_output, n_classes in zip(raw_outputs, number_of_classes.values())]
+    feature_indices = {
+        "semitone": 0,
+        "octave": 1,
+        "dur_log": 2,
+        "dotted": 3
+    }
     outputs = [
         layers.Layer(
             trainable=False,
             name=name
-        )(data) for name, data in zip(number_of_classes.keys(), oh_outputs)]
+        )(oh_outputs[feature_indices[name]]) for name in number_of_classes.keys()]
     model = keras.Model(inputs=inputs, outputs=outputs)
     return model
 

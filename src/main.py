@@ -80,6 +80,59 @@ def train():
             writer.writerow(report[0])
             writer.writerow(report[1])
 
+def test():
+    from tensorflow.keras import layers
+    import tensorflow as tf
+    import numpy as np
+    input_shape=(30,4)
+    number_of_classes = {
+        # "octave" :11,
+        "semitone" :13,
+    }
+    window_size=31
+    input_beats=30
+    batch_size=32
+    def out_prep():
+        x=tf.keras.layers.Input(shape=4)
+        y=x[:,2]
+        y=tf.cast(y,tf.int32)
+        y=tf.one_hot(y,depth=number_of_classes["semitone"])
+        return tf.keras.Model(inputs=x,outputs=y)
+
+
+    inputs = layers.Input(shape=input_shape, dtype=tf.uint8)
+    window_beats = tf.unstack(inputs, axis=1)
+    raw_outputs = tf.unstack(window_beats[-1], axis=-1)
+    oh_outputs = [tf.one_hot(raw_output, depth=n_classes) for raw_output, n_classes in zip(raw_outputs, number_of_classes.values())]
+    outputs = [
+        layers.Layer(
+            trainable=False,
+            name=name
+        )(data) for name, data in zip(number_of_classes.keys(), oh_outputs)]
+    model = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+    folder_path = os.path.join("data","modest", "train", str(window_size))
+    data_path = os.path.join(folder_path, "windows.npy")
+    data = np.load(data_path).reshape((-1, window_size, 4))
+    ds = tf.data.Dataset.from_tensor_slices(
+        (
+            data[:, :input_beats, :],
+            data[:, input_beats, :]
+        )
+    )
+    ds = ds.shuffle(buffer_size=1000)
+    ds = ds.batch(32, drop_remainder=True)
+    ds = ds.map(
+        lambda x, y: (x, out_prep()(y)),
+        num_parallel_calls=tf.data.AUTOTUNE
+    ).prefetch(tf.data.AUTOTUNE)
+    model.compile(
+        optimizer="adam",
+        loss="categorical_crossentropy",
+        metrics=["accuracy"]
+    )
+    model.fit(ds, epochs=1)
+
 
 if __name__ == "__main__":
     train()
