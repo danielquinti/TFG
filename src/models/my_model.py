@@ -1,9 +1,11 @@
 import os
 
+import numpy as np
+import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras.utils import plot_model
-from models import optimizers, models, metrics, losses
 
+from models import optimizers, models, metrics, losses
 from preprocessing import dataset
 
 
@@ -88,3 +90,20 @@ class MyModel:
         )
         self.save_weights(self.model, self.run_name)
         return self.compute_metrics()
+
+    def load_weights(self):
+        weight_filename = os.path.join(
+            "weights",
+            f'{self.run_name}.h5'
+        )
+        self.model.load_weights(weight_filename)
+
+    def predict(self, data, length):
+        music=data.as_numpy_iterator().next()[0,:,:].reshape(1,30,4)
+        inp= np.copy(music)
+        for i in range(length):
+            prediction=self.model.predict(inp)
+            beat = np.array([np.argmax(x[0,:]) for x in prediction]).reshape(1,1,4)
+            inp = np.concatenate((inp[:,i+1:,:], beat), axis=1)
+            music = np.concatenate((music, beat), axis=1)
+        return music.reshape(-1,4)

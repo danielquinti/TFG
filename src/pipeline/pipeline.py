@@ -7,7 +7,8 @@ import tensorflow as tf
 from models.my_model import MyModel
 
 def expand_config(config):
-    config["outputs"] = {
+    if config["outputs"]=="all":
+        config["outputs"] = {
             "semitone": {
                 "loss": "wcce",
                 "metrics": ["ba", "ac"],
@@ -45,7 +46,7 @@ class Pipeline:
     ):
         config_file_name = os.path.basename(config_file_path).split(".")[0]
         with open(config_file_path) as fp:
-            self.run_configs: list = json.load(fp)
+            self.run_configs: list = [expand_config(x) for x in json.load(fp)]
             # self.run_configs = [expand_config(run_config) for run_config in self.run_configs]
         current_date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         folder_name = f'{config_file_name}({current_date})'

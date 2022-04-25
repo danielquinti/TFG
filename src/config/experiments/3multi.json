@@ -1,0 +1,21 @@
+[
+  {
+    "run_name": "trans_s",
+    "input_beats": 30,
+    "model": {
+      "name": "trans",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": [
+      "np",
+      "as"
+    ],
+    "max_epochs": 100,
+    "outputs": "all"
+  }
+]

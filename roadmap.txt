@@ -135,10 +135,12 @@ dotted
 batch size = 32
 adam(lr=1e-4)
 epochs = 100
+wcce
 
 ffwd layers (128,64,32)
 single lstm number of units 128
 stacked lstm layers (128,64,32)
+same width embeddings
 
 multi output
     last
@@ -153,11 +155,19 @@ single_output
     lstm
     s_lstm
     transformers
+--------------------------------
+only piano
+88 keys each 1/16th beat
+binary classification
+models
+    last
+    ffwd
+    lstm
+    s_lstm
+    transformers
 
-with and without wcce
-
-tuning
-(optional)
-single value embedding
-transfer training
-gan
+Symbolic repr vs natural(audio)
+enharmony
+many to one, many to many should use encoder-decoder
+for generation use vae-gan
+data should be preselected by genre and instrument

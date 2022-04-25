@@ -1,0 +1,94 @@
+[
+  {
+    "run_name": "trans_s",
+    "input_beats": 30,
+    "model": {
+      "name": "trans",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","soh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "semitone": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  },
+  {
+    "run_name": "trans_o",
+    "input_beats": 30,
+    "model": {
+      "name": "trans",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","ooh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "octave": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  },
+  {
+    "run_name": "trans_dl",
+    "input_beats": 30,
+    "model": {
+      "name": "trans",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","dloh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "dur_log": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  },
+  {
+    "run_name": "trans_dt",
+    "input_beats": 30,
+    "model": {
+      "name": "trans",
+      "embedding_size": 8
+    },
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 1e-4
+    },
+    "batch_size": 32,
+    "encodings": ["np","dtoh"],
+    "max_epochs": 100,
+    "outputs" : {
+            "octave": {
+                "loss": "wcce",
+                "metrics": ["ba", "ac"],
+                "loss_weight": 1
+
+            }
+    }
+  }
+]

@@ -136,8 +136,15 @@ def transformer_model(
     mlp_dropout=0.4,
     dropout=0.25,
 ):
+    embedding_size = config["embedding_size"]
     inputs = keras.Input(shape=input_shape)
-    x = inputs
+    semitone, octave, dur_log, dotted = tf.unstack(inputs, axis=-1)
+    semitone = keras.layers.Embedding(13, embedding_size)(semitone)
+    octave = keras.layers.Embedding(11, embedding_size)(octave)
+    dur_log = keras.layers.Embedding(7, embedding_size)(dur_log)
+    dotted = keras.layers.Embedding(2, embedding_size)(dotted)
+    e_inputs = keras.layers.Concatenate()([semitone, octave, dur_log, dotted])
+    x = e_inputs
     for _ in range(num_transformer_blocks):
         x = transformer_encoder(x, head_size, num_heads, ff_dim, dropout)
 
