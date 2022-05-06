@@ -157,7 +157,8 @@ single_output
     transformers
 --------------------------------
 only piano
-88 keys each 1/16th beat
+88 keys, ignore duration.
+optional seq2seq and chords
 binary classification
 models
     last
@@ -165,7 +166,7 @@ models
     lstm
     s_lstm
     transformers
-
+--------------------------
 Symbolic repr vs natural(audio)
 enharmony
 many to one, many to many should use encoder-decoder

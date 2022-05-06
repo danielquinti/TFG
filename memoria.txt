@@ -1,3 +1,78 @@
+introduccion
+    music
+    automatic music
+    Symbolic repr vs natural(audio)
+    enharmony
+    deep learning
+
+
+capitulo 1: first approach
+    dataset
+        representation
+        distribution of lengths and features
+    parser
+        Qué hace el parser viejo?
+        Intenta leer las canciones
+        Busca una pista cuyo nombre contuviera la palabra "guitar" pero sin acordes.
+        Codifica la música en 12 notas, 1 silencio y 7 valores de duración. (one hot)
+            weighted cce
+            remove classes not in training
+            balanced accuracy
+        Si hay demasiados silencios, corta la pista en dos trozos.
+        Si un trozo es demasiado corto, lo descarto
+    pipeline
+        1.shuffle and split songs in train-test
+        1.parser->csv
+        2.csv->concatenate into windows
+        3.feed into model as np arrays
+    models
+        architecture
+        activation functions
+    evaluation
+        loss function
+        metric
+        setup
+    results
+
+chapter 2: change of parser and tf.data
+    dataset
+        representation
+        distribution of lengths and features
+    pipeline
+        0. Clean tabs: remove broken or unsupported files from 60Ktabs
+        1.song_processor
+            50k gp files -> 90K npy files (chunks)
+                [note[0,12],octave[0,10],dur_log[0,7],is_dotted(0..1)]
+                [note,octave,dur_log,is_dotted]
+                [note,octave,dur_log,is_dotted]
+                ...
+            split into big enough sequences (60-1000) without lots of rests
+            Ispercussiontrack quitar
+            group by midi instrument, song, track, chunk
+        2.jupyter
+            get insight
+                instrument distribution
+                chunk length distribution
+                Distribución de notas, octavas y duraciones
+            select interesting instruments
+            npy files -> shuffle -> split into train and test folders
+            for each model configuration
+                apply windowing
+                perfect shuffle
+                trim to 2M train 200k test
+
+
+        3.model_trainer(all in the same python execution)
+            for each model configuration
+                select the label features we want to train (notes/dur_log/both)
+                load windowed dataset and weights
+                for training inputs
+                    apply one-hot encoding or embedding and concatenate beat features into a single vector representation
+                        input[....], label[.]
+                    feed into the model
+
+
+
 memoria
 	representación
 		duración y nota
