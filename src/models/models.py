@@ -6,7 +6,7 @@ from models import regularizers
 def lstm_model(
         input_shape,
         number_of_classes: dict,
-        config: list
+        config: dict
 ):
     embedding_size = config["embedding_size"]
     inputs = layers.Input(shape=input_shape)
@@ -28,14 +28,14 @@ def lstm_model(
     for layer in config["layers"][:-1]:
         x = layers.LSTM(
             layer["units"],
-            activation='relu',
+            activation=config["activation"],
             return_sequences=True,
             input_shape=inputs.shape[1:],
             kernel_regularizer=in_regularizer
         )(x)
     x = layers.LSTM(
         config["layers"][-1]["units"],
-        activation='relu',
+        activation=config["activation"],
         input_shape=inputs.shape[1:],
         kernel_regularizer=in_regularizer
     )(x)
