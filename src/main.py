@@ -157,6 +157,11 @@ def raw_insight():
     with open('inst.json', 'w') as fp:
         json.dump(inst_dict, fp)
     print(len(file_names))
-
+    inst=json.load(open('inst.json'))
+    inst=list(zip(map(lambda x:int(x),inst.keys()),inst.values()))
+    inst.sort()
+    inst={k:v for k,v in inst}
+    with open('inst.json', 'w') as fp:
+        json.dump(inst, fp)
 if __name__ == "__main__":
-    raw_insight()
+    train()
