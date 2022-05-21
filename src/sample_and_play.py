@@ -8,6 +8,7 @@ import math
 sys.path.append("src")
 from pipeline import pipeline
 from song_processing import song_processor as sp
+from tensorflow import keras
 
 
 def dir_path(string: str):
@@ -78,12 +79,13 @@ def predict():
     output_path = args.output_path
     verbose = args.verbose
     with open(config_path) as fp:
-        run_configs: list = [expand_config(x) for x in json.load(fp)]
+        run_configs: list = json.load(fp)
     model=MyModel(run_configs[0], output_path, verbose)
     model.load_weights()
-
+    intermediate_layer_model = keras.Model(inputs=model.model.input,
+                                     outputs=model.model.get_layer("lstm").output)
     data=model.data.test.map(lambda x,y: x).take(1)
-    output = model.predict(data, 20)
+    output = intermediate_layer_model.predict(data, 20)
     np.save("music.npy",output)
 
 def to_midi():
@@ -117,4 +119,4 @@ def to_midi():
     with open("major-scale.mid", "wb") as output_file:
         MyMIDI.writeFile(output_file)
 
-to_midi()
+predict()

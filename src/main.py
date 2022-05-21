@@ -4,6 +4,10 @@ import time
 import argparse
 import sys
 import csv
+from collections import defaultdict
+
+from src.song_processing.song_processor import get_file_paths, open_song
+
 sys.path.append("src")
 from pipeline import pipeline
 from song_processing import song_processor as sp
@@ -24,6 +28,7 @@ def encode():
         start_time = time.time()
         with open(
                 os.path.join(
+                    "src",
                     "config",
                     "song_processor_config.json"
                 )
@@ -133,6 +138,155 @@ def test():
     )
     model.fit(ds, epochs=1)
 
+def raw_insight():
+    # read all files from dirty tabs, get how many tracks per instrument
+    instrument_list = [
+        "Acoustic Grand Piano",
+        "Bright Acoustic Piano",
+        "Electric Grand Piano",
+        "Honky-tonk Piano",
+        "Electric Piano 1 (usually a Rhodes Piano)",
+        "Electric Piano 2 (usually an FM piano patch)",
+        "Harpsichord",
+        "Clavinet",
+        "Celesta",
+        "Glockenspiel",
+        "Music Box",
+        "Vibraphone",
+        "Marimba",
+        "Xylophone",
+        "Tubular Bells",
+        "Dulcimer",
+        "Drawbar Organ",
+        "Percussive Organ",
+        "Rock Organ",
+        "Church Organ",
+        "Reed Organ",
+        "Accordion",
+        "Harmonica",
+        "Tango Accordion",
+        "Acoustic Guitar (nylon)",
+        "Acoustic Guitar (steel)",
+        "Electric Guitar (jazz)",
+        "Electric Guitar (clean)",
+        "Electric Guitar (muted)",
+        "Electric Guitar (overdriven)",
+        "Electric Guitar (distortion)",
+        "Electric Guitar (harmonics)",
+        "Acoustic Bass",
+        "Electric Bass (finger)",
+        "Electric Bass (picked)",
+        "Fretless Bass",
+        "Slap Bass 1",
+        "Slap Bass 2",
+        "Synth Bass 1",
+        "Synth Bass 2",
+        "Violin",
+        "Viola",
+        "Cello",
+        "Contrabass",
+        "Tremolo Strings",
+        "Pizzicato Strings",
+        "Orchestral Harp",
+        "Timpani",
+        "String Ensemble 1",
+        "String Ensemble 2",
+        "Synth Strings 1",
+        "Synth Strings 2",
+        "Choir Aahs",
+        "Voice Oohs (or Doos)",
+        "Synth Voice or Solo Vox",
+        "Orchestra Hit",
+        "Trumpet",
+        "Trombone",
+        "Tuba",
+        "Muted Trumpet",
+        "French Horn",
+        "Brass Section",
+        "Synth Brass 1",
+        "Synth Brass 2",
+        "Soprano Sax",
+        "Alto Sax",
+        "Tenor Sax",
+        "Baritone Sax",
+        "Oboe",
+        "English Horn",
+        "Bassoon",
+        "Clarinet",
+        "Piccolo",
+        "Flute",
+        "Recorder",
+        "Pan Flute",
+        "Blown bottle",
+        "Shakuhachi",
+        "Whistle",
+        "Ocarina",
+        "Lead 1 (square)",
+        "Lead 2 (sawtooth)",
+        "Lead 3 (calliope)",
+        "Lead 4 (chiff)",
+        "Lead 5 (charang, a guitar-like lead)",
+        "Lead 6 (space voice)",
+        "Lead 7 (fifths)",
+        "Lead 8 (bass and lead)",
+        "Pad 1 (a warm pad stacked with a bell)",
+        "Pad 2 (warm)",
+        "Pad 3 (polysynth)",
+        "Pad 4 (choir)",
+        "Pad 5 (bowed glass or bowed)",
+        "Pad 6 (metallic)",
+        "Pad 7 (halo)",
+        "Pad 8 (sweep)",
+        "FX 1 (rain)",
+        "FX 2 (a bright perfect fifth pad)",
+        "FX 3 (crystal)",
+        "FX 4 (atmosphere, nylon-like sound)",
+        "FX 5 (brightness)",
+        "FX 6 (goblins)",
+        "FX 7 (echoes)",
+        "FX 8 (sci-fi theme)",
+        "Sitar",
+        "Banjo",
+        "Shamisen",
+        "Koto",
+        "Kalimba",
+        "Bag pipe",
+        "Fiddle",
+        "Shanai",
+        "Tinkle Bell",
+        "Agogô",
+        "Steel Drums",
+        "Woodblock",
+        "Taiko Drum",
+        "Melodic Tom or 808 Toms",
+        "Synth Drum",
+        "Reverse Cymbal",
+        "Guitar Fret Noise",
+        "Breath Noise",
+        "Seashore",
+        "Bird Tweet",
+        "Telephone Ring",
+        "Helicopter",
+        "Applause",
+        "Gunshot"
+    ]
+    inst_dict=dict.fromkeys(instrument_list,0)
+    track_counter=0
+    song_counter=0
+    in_path=os.path.join("data","dirty_tabs")
+    file_names =get_file_paths(in_path)
+    for song_path in file_names:
+        song = open_song(song_path)
+        if song is None:
+            continue
+        for track in song.tracks:
+            inst_dict[instrument_list[track.channel.instrument]]+=1
+            track_counter+=1
+            print(f'{song_counter} songs analyzed and {track_counter} tracks')
+        song_counter+=1
+    with open('inst.json', 'w') as fp:
+        json.dump(inst_dict, fp)
+    print(len(file_names))
 
 if __name__ == "__main__":
-    train()
+    raw_insight()
