@@ -12,7 +12,8 @@
     },
     "batch_size": 32,
     "encodings": ["np","as"],
-    "max_epochs": 1
+    "max_epochs": 1,
+    "outputs" : "all"
   },
     {
       "run_name": "ffwd",
@@ -27,7 +28,8 @@
       },
       "batch_size": 32,
       "encodings": ["np","as"],
-      "max_epochs": 100
+      "max_epochs": 100,
+      "outputs" : "all"
   },
   {
       "run_name": "lstm",
@@ -45,7 +47,8 @@
       },
       "batch_size": 32,
       "encodings": ["np","as"],
-    "max_epochs": 100
+    "max_epochs": 100,
+    "outputs" : "all"
   },
   {
     "run_name": "s_lstm",
@@ -66,6 +69,7 @@
     },
     "batch_size": 32,
     "encodings": ["np","as"],
-    "max_epochs": 100
+    "max_epochs": 100,
+    "outputs": "all"
   }
 ]
