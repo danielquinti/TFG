@@ -13,3 +13,5 @@ The Strategy pattern allows us to write a highly configurable training pipeline 
 The metrics of each model are saved for every epoch as **Tensorboard** logs.
 Tensorboard provides an intuitive dashboard comparing the metric graphs for a given set of models.
 For the stages of the project that required interactive data manipulation, **Pandas** and **Seaborn** were used within a **Jupyter Notebook**.
+
+For more details, read report.pdf
